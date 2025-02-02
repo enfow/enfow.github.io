@@ -34,11 +34,19 @@ export const generateStaticParams = async () => {
   }))
 }
 
-export default async function TagPage(props: { params: Promise<{ tag: string }> }) {
-  const params = await props.params
-  
-  console.log('params:', params)
+// export default async function tagpage(props: { params: promise<{ tag: string }> }) {
+export default async function TagPage({
+  params,
+}: {
+  params: Promise<{ tag: string; category: string }>;
+}) {
+
+  const {category} = await params
+
+  console.log('params:', category)
+
   const tag = decodeURI(params.tag)
+  console.log('tag:', tag)
   const title = tag[0].toUpperCase() + tag.split(' ').join('-').slice(1)
   const filteredPosts = allCoreContent(
     sortPosts(allBlogs.filter((post) => post.tags && post.tags.map((t) => slug(t)).includes(tag)))
