@@ -4,29 +4,22 @@ import { genPageMetadata } from 'app/seo'
 import { notFound } from 'next/navigation'
 import ListLayout from '@/layouts/ListLayoutWithTags'
 
-const POSTS_PER_PAGE = 5
-const VALID_CONTENT_TYPES = ['tech', 'daily', 'finance']
+const POSTS_PER_PAGE = 10
+const VALID_CATEGORIES = ['tech', 'daily', 'finance']
 
 export const metadata = genPageMetadata({ title: 'Blog' })
 
 export default async function BlogPage(props: { searchParams: Promise<{ page: string }> }) {
 
-  let {contentType, category} = await props.params
+  let {category} = await props.params
 
-  console.log(contentType)
-  console.log(category)
-  
-  if (!VALID_CONTENT_TYPES.includes(contentType)) {
+  if (!VALID_CATEGORIES.includes(category)) {
     notFound()
   }
 
-  const path = `${contentType}/${category}`
+  const path = `blog/${category}`
 
   const filteredBlogs = allBlogs.filter(blog => blog.path.startsWith(path));
-  console.log(filteredBlogs)
-  // const filteredBlogs = allBlogs.filter((blog) => 
-  //   blog.path.startsWith(path) && blog. === category
-  // );
   const posts = allCoreContent(sortPosts(filteredBlogs))
 
   const pageNumber = 1
