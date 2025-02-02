@@ -17,7 +17,7 @@ export default async function BlogPage(props: { searchParams: Promise<{ page: st
     notFound()
   }
 
-  const path = `blog/${category}/${subCategory}`
+  const path = `${category}/${subCategory}`
 
   const filteredBlogs = allBlogs.filter((blog) => 
     blog.path.startsWith(path)

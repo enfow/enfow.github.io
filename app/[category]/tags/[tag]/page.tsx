@@ -17,7 +17,7 @@ export default async function TagPage(props: { searchParams: Promise<{ page: str
     notFound()
   }
 
-  const path = `blog/${category}`
+  const path = `${category}`
 
   const filteredBlogs = allBlogs.filter((blog) => 
     blog.path.startsWith(path) && blog.tags.some(blogTag => blogTag.toLowerCase() === tag.toLowerCase())
