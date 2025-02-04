@@ -1,11 +1,12 @@
 const headerNavLinks = [
-  { href: '/', title: 'Home', blog: false },
-  { href: '/tech', title: 'Tech', blog: true },
-  { href: '/finance', title: 'Finance', blog: true },
+  { href: '/', title: 'Home', type: "page" },
+  { href: '/tech', title: 'Tech', type: 'category', header: true },
+  { href: '/finance', title: 'Finance', type: 'category', header: true },
+  { href: '/tech/paper-review', title: 'Paper-Review', type: "sub-category", header: false },
   // { href: '/daily', title: 'Daily' },
-  { href: '/tags', title: 'Tags', blog: false },
+  // { href: '/tags', title: 'Tags', type: "page", header: true },
   // { href: '/projects', title: 'Projects' },
-  { href: '/about', title: 'About', blog: false },
+  { href: '/about', title: 'About', type: "page", header: true },
 ]
 
 export default headerNavLinks

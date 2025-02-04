@@ -71,6 +71,66 @@ function Pagination({ totalPages, currentPage }: PaginationProps) {
   )
 }
 
+const CategoryLinkList = (props) => {
+  const categoryLinks = headerNavLinks.filter((link) => link.type === 'category')
+
+  // init subCategoryLink, key is category, value is empty array
+  const subCategoryLinks = new Map<string, string[]>()
+  headerNavLinks
+    .filter((link) => link.type == 'sub-category')
+    .forEach((link) => {
+      const category = link.href.split('/')[1]
+      if (!subCategoryLinks.has(category)) {
+        subCategoryLinks.set(category, [])
+      }
+      subCategoryLinks.get(category).push(link)
+    })
+
+  return (
+    <>
+      {categoryLinks.map((link) => {
+        const isActiveCategory = props.pathname === link.href
+        const subCategories = subCategoryLinks.get(link.href.split('/')[1])
+        return (
+          <li key={link.title} className="my-2">
+            <Link
+              href={link.href}
+              className={`text-sm ${
+                isActiveCategory
+                  ? 'inline py-2 font-bold text-primary-500 dark:text-primary-400'
+                  : 'px-1 py-2 font-medium text-gray-500 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-500'
+              }`}
+            >
+              {link.title}
+            </Link>
+            {subCategories && (
+              <ul>
+                {subCategories.map((subCategory) => {
+                  const isActiveSubCategory = props.pathname === subCategory.href
+                  return (
+                    <li key={subCategory.title} className="my-2 px-3">
+                      <Link
+                        href={subCategory.href}
+                        className={`text-sm ${
+                          isActiveSubCategory
+                            ? 'inline py-2 font-bold text-primary-500 dark:text-primary-400'
+                            : 'px-1 py-2 font-medium text-gray-500 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-500'
+                        }`}
+                      >
+                        {subCategory.title}
+                      </Link>
+                    </li>
+                  )
+                })}
+              </ul>
+            )}
+          </li>
+        )
+      })}
+    </>
+  )
+}
+
 export default function ListLayoutWithTags({
   posts,
   title,
@@ -88,6 +148,10 @@ export default function ListLayoutWithTags({
   const pathname = usePathname()
   const tagCounts = tagData as Record<string, number>
   const tagKeys = Object.keys(tagCounts)
+
+  const categoryAndSubCategories = new Set(
+    posts.map((post) => post.path.split('/').slice(0, 2).join('/'))
+  )
 
   // category extraction e.g. "tech" <- "http://localhost:3000/tech""
   const regexForBlog = new RegExp(
@@ -130,26 +194,7 @@ export default function ListLayoutWithTags({
               {/* Categories */}
               <h3 className="font-bold uppercase">Categories</h3>
               <ul>
-                {headerNavLinks.map((link) => {
-                  if (link.blog) {
-                    const isActiveCategory = pathname.split('/')[1] === link.href.split('/')[1]
-
-                    return (
-                      <li key={link.title} className="my-2">
-                        <Link
-                          href={link.href}
-                          className={`text-sm ${
-                            isActiveCategory
-                              ? 'inline py-2 font-bold text-primary-500 dark:text-primary-400'
-                              : 'px-1 py-2 font-medium text-gray-500 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-500'
-                          }`}
-                        >
-                          {link.title}
-                        </Link>
-                      </li>
-                    )
-                  }
-                })}
+                <CategoryLinkList pathname={pathname} />
               </ul>
               <h3 className="pt-5 font-bold uppercase">Tag</h3>
               <ul>
