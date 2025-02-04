@@ -56,11 +56,11 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
             </div>
             <div>
               {tags && (
-                <div className="py-4 xl:py-8 text-center">
+                <div className="py-4 text-center xl:py-8">
                   {/* <h2 className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
                     Tags
                   </h2> */}
-                  <div className="flex flex-wrap justify-center mt-2">
+                  <div className="mt-2 flex flex-wrap justify-center">
                     {tags.map((tag) => (
                       <Tag key={tag} text={tag} />
                     ))}

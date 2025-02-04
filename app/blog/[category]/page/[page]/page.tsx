@@ -16,7 +16,7 @@ export default async function Page(props: { params: Promise<{ page: string }> })
   const params = await props.params
   const path = `blog/${params.category}`
 
-  const filteredBlogs = allBlogs.filter(blog => blog.path.startsWith(path));
+  const filteredBlogs = allBlogs.filter((blog) => blog.path.startsWith(path))
   const posts = allCoreContent(sortPosts(filteredBlogs))
 
   const pageNumber = parseInt(params.page as string)

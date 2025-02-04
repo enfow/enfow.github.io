@@ -77,19 +77,32 @@ export const generateStaticParams = async () => {
   return allBlogs.map((p) => ({ slug: p.slug.split('/').map((name) => decodeURI(name)) }))
 }
 
-export default async function Page(props: { params: Promise<{ category: string, slug: string[] }> }) {
+export default async function Page(props: {
+  params: Promise<{ category: string; slug: string[] }>
+}) {
   const params = await props.params
-  const slug = decodeURI(params.category + "/" + params.slug.join('/'))
+
+  function matchFormat(category, slug, inputText) {
+    // why use this: we have no idea what the subcategory is on this page.
+    const regex = new RegExp(`^${category}/[^/]+/${slug}$`)
+    return regex.test(inputText)
+  }
+
+  const slug = decodeURI(params.category + '/' + params.slug.join('/'))
   // Filter out drafts in production
   const sortedCoreContents = allCoreContent(sortPosts(allBlogs))
-  const postIndex = sortedCoreContents.findIndex((p) => p.slug === slug)
+  const postIndex = sortedCoreContents.findIndex((p) => {
+    return matchFormat(params.category, params.slug.join('/'), p.slug)
+  })
   if (postIndex === -1) {
     return notFound()
   }
 
   const prev = sortedCoreContents[postIndex + 1]
   const next = sortedCoreContents[postIndex - 1]
-  const post = allBlogs.find((p) => p.slug === slug) as Blog
+  const post = allBlogs.find((p) =>
+    matchFormat(params.category, params.slug.join('/'), p.slug)
+  ) as Blog
   const authorList = post?.authors || ['default']
   const authorDetails = authorList.map((author) => {
     const authorResults = allAuthors.find((p) => p.slug === author)

@@ -23,9 +23,8 @@ interface ListLayoutProps {
   pagination?: PaginationProps
 }
 
-
 function removeLeadingSlash(str) {
-  return str.startsWith("/") ? str.slice(1) : str;
+  return str.startsWith('/') ? str.slice(1) : str
 }
 
 function Pagination({ totalPages, currentPage }: PaginationProps) {
@@ -78,31 +77,34 @@ export default function ListLayoutWithTags({
   initialDisplayPosts = [],
   pagination,
 }: ListLayoutProps) {
-
-  const blogNavLinks = headerNavLinks.map((link) => {
-    if (link.blog) {
-      return link.href
-    }
-  }).filter((link) => link !== undefined)
+  const blogNavLinks = headerNavLinks
+    .map((link) => {
+      if (link.blog) {
+        return link.href
+      }
+    })
+    .filter((link) => link !== undefined)
 
   const pathname = usePathname()
   const tagCounts = tagData as Record<string, number>
   const tagKeys = Object.keys(tagCounts)
 
   // category extraction e.g. "tech" <- "http://localhost:3000/tech""
-  const regexForBlog = new RegExp(`^(${blogNavLinks.map(path => path.replace("/", "\\/")).join("|")})(\\/([^/]+))?$`);
-  const matchWithBlog = pathname.match(regexForBlog);
+  const regexForBlog = new RegExp(
+    `^(${blogNavLinks.map((path) => path.replace('/', '\\/')).join('|')})(\\/([^/]+))?$`
+  )
+  const matchWithBlog = pathname.match(regexForBlog)
   // tag extraction e.g. "tech" <- "http://localhost:3000/tech/tags/reinforcement-learning""
-  const matchWithTag = pathname.match(/^\/([^/]+)\/tags\//);
+  const matchWithTag = pathname.match(/^\/([^/]+)\/tags\//)
   let filteredTagKeys: string[] = []
-  let category: string = ""
+  let category: string = ''
 
   if (matchWithBlog !== null) {
     category = removeLeadingSlash(matchWithBlog[1])
-    filteredTagKeys = tagKeys.filter((tagKey) => tagKey.startsWith(category)) 
+    filteredTagKeys = tagKeys.filter((tagKey) => tagKey.startsWith(category))
   } else if (matchWithTag !== null) {
     category = matchWithTag[1]
-    filteredTagKeys = tagKeys.filter((tagKey) => tagKey.startsWith(category)) 
+    filteredTagKeys = tagKeys.filter((tagKey) => tagKey.startsWith(category))
   } else {
     filteredTagKeys = tagKeys
   }
@@ -111,7 +113,7 @@ export default function ListLayoutWithTags({
   const displayPosts = initialDisplayPosts.length > 0 ? initialDisplayPosts : posts
 
   const extractTagName = (tag: string) => {
-    return tag.split("/")[1]
+    return tag.split('/')[2]
   }
 
   return (
@@ -128,11 +130,10 @@ export default function ListLayoutWithTags({
               {/* Categories */}
               <h3 className="font-bold uppercase">Categories</h3>
               <ul>
-              {
-                headerNavLinks.map((link) => {
+                {headerNavLinks.map((link) => {
                   if (link.blog) {
                     const isActiveCategory = pathname.split('/')[1] === link.href.split('/')[1]
-                    
+
                     return (
                       <li key={link.title} className="my-2">
                         <Link
@@ -141,15 +142,14 @@ export default function ListLayoutWithTags({
                             isActiveCategory
                               ? 'inline py-2 font-bold text-primary-500 dark:text-primary-400'
                               : 'px-1 py-2 font-medium text-gray-500 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-500'
-                            }`}
-                          >
+                          }`}
+                        >
                           {link.title}
                         </Link>
                       </li>
                     )
                   }
-                })
-              }
+                })}
               </ul>
               <h3 className="pt-5 font-bold uppercase">Tag</h3>
               <ul>

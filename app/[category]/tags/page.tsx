@@ -38,10 +38,9 @@ export const generateStaticParams = async () => {
 export default async function TagPage({
   params,
 }: {
-  params: Promise<{ tag: string; category: string }>;
+  params: Promise<{ tag: string; category: string }>
 }) {
-
-  const {category} = await params
+  const { category } = await params
 
   console.log('params:', category)
 

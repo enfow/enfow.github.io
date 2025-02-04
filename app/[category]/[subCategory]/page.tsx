@@ -10,18 +10,15 @@ const VALID_CATEGORIES = ['tech', 'daily', 'finance']
 export const metadata = genPageMetadata({ title: 'Blog' })
 
 export default async function BlogPage(props: { searchParams: Promise<{ page: string }> }) {
+  const { subCategory, category } = await props.params
 
-  let {subCategory, category} = await props.params
-  
   if (!VALID_CATEGORIES.includes(category)) {
     notFound()
   }
 
   const path = `${category}/${subCategory}`
 
-  const filteredBlogs = allBlogs.filter((blog) => 
-    blog.path.startsWith(path)
-  );
+  const filteredBlogs = allBlogs.filter((blog) => blog.path.startsWith(path))
   const posts = allCoreContent(sortPosts(filteredBlogs))
 
   const pageNumber = 1

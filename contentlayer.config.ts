@@ -65,11 +65,11 @@ const computedFields: ComputedFields = {
 async function createTagCount(allBlogs) {
   const tagCount: Record<string, number> = {}
   allBlogs.forEach((file) => {
-    console.log(file.path)
     if (file.tags && (!isProduction || file.draft !== true)) {
       file.tags.forEach((tag) => {
-        const category = file.path.split("/")[1]
-        const formattedTag = category + "/" + slug(tag)
+        const category = file.path.split("/")[0]
+        const subCategory = file.path.split("/")[1]
+        const formattedTag = category + "/" + subCategory + "/" + slug(tag)
         if (formattedTag in tagCount) {
           tagCount[formattedTag] += 1
         } else {
