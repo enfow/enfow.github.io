@@ -139,7 +139,7 @@ export default function ListLayoutWithTags({
 }: ListLayoutProps) {
   const blogNavLinks = headerNavLinks
     .map((link) => {
-      if (link.blog) {
+      if (link.type == 'category') {
         return link.href
       }
     })
@@ -148,10 +148,6 @@ export default function ListLayoutWithTags({
   const pathname = usePathname()
   const tagCounts = tagData as Record<string, number>
   const tagKeys = Object.keys(tagCounts)
-
-  const categoryAndSubCategories = new Set(
-    posts.map((post) => post.path.split('/').slice(0, 2).join('/'))
-  )
 
   // category extraction e.g. "tech" <- "http://localhost:3000/tech""
   const regexForBlog = new RegExp(
@@ -172,6 +168,7 @@ export default function ListLayoutWithTags({
   } else {
     filteredTagKeys = tagKeys
   }
+
   const sortedTags = filteredTagKeys.sort((a, b) => tagCounts[b] - tagCounts[a])
 
   const displayPosts = initialDisplayPosts.length > 0 ? initialDisplayPosts : posts
@@ -179,7 +176,6 @@ export default function ListLayoutWithTags({
   const extractTagName = (tag: string) => {
     return tag.split('/')[2]
   }
-
   return (
     <>
       <div>
@@ -243,7 +239,7 @@ export default function ListLayoutWithTags({
                             </Link>
                           </h2>
                           <div className="flex flex-wrap">
-                            {tags?.map((tag) => <Tag key={tag} text={tag} />)}
+                            {tags?.map((tag) => <Tag key={tag} category={category} text={tag} />)}
                           </div>
                         </div>
                         <div className="prose max-w-none text-gray-500 dark:text-gray-400">

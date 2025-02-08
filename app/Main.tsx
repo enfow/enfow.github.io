@@ -23,7 +23,10 @@ const PostRow = ({ category, post }) => {
             <div className="space-y-6">
               <div>
                 <h2 className="text-2xl font-bold leading-8 tracking-tight">
-                  <Link href={`/blog/${slug}`} className="text-gray-900 dark:text-gray-100 hover:text-primary-500">
+                  <Link
+                    href={`/blog/${slug}`}
+                    className="text-gray-900 hover:text-primary-500 dark:text-gray-100"
+                  >
                     {title}
                   </Link>
                 </h2>
@@ -76,8 +79,11 @@ export default function Home({ posts }) {
           {Object.keys(categoryToPosts).map((category) => (
             <>
               <li>
-                <h2 className="text-xl font-bold leading-9 hover:text-primary-500 tracking-tight text-gray-900 dark:text-gray-100 sm:text-xl sm:leading-10 md:text-3xl md:leading-14">
-                  <Link href={`/${category}`} className="text-gray-900 dark:text-gray-100 hover:text-primary-500">
+                <h2 className="text-xl font-bold leading-9 tracking-tight text-gray-900 hover:text-primary-500 dark:text-gray-100 sm:text-xl sm:leading-10 md:text-3xl md:leading-14">
+                  <Link
+                    href={`/${category}`}
+                    className="text-gray-900 hover:text-primary-500 dark:text-gray-100"
+                  >
                     {category} ({categoryToPosts[category].length})
                   </Link>
                 </h2>
