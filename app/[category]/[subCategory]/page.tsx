@@ -14,14 +14,14 @@ export const generateStaticParams = async () => {
     allBlogs
       .filter((blog) => blog.path.startsWith(category))
       .map((blog) => {
-        const parts = blog.path.split('/');
+        const parts = blog.path.split('/')
         return {
           category,
           subCategory: parts[1] || '',
-        };
+        }
       })
-  );
-};
+  )
+}
 
 export default async function BlogPage({
   params,
