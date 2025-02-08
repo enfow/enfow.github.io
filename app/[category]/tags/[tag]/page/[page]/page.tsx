@@ -7,9 +7,7 @@ import { notFound } from 'next/navigation'
 
 const POSTS_PER_PAGE = 10
 
-export const generateStaticParams = async (): Promise<
-  { category: string; tag: string; page: string }[]
-> => {
+export const generateStaticParams = async () => {
   const tagCounts = tagData as Record<string, number>
   const staticParams: { category: string; tag: string; page: string }[] = []
 
