@@ -21,6 +21,12 @@ interface ListLayoutProps {
   initialDisplayPosts?: CoreContent<Blog>[]
   pagination?: PaginationProps
 }
+type CategoryLink = {
+  type: string
+  title: string
+  href: string
+  header: boolean
+}
 
 function removeLeadingSlash(str) {
   return str.startsWith('/') ? str.slice(1) : str
@@ -70,25 +76,26 @@ function Pagination({ totalPages, currentPage }: PaginationProps) {
   )
 }
 
-const CategoryLinkList = (props) => {
+const CategoryLinkList = ({ pathname }) => {
   const categoryLinks = headerNavLinks.filter((link) => link.type === 'category')
 
-  // init subCategoryLink, key is category, value is empty array
-  const subCategoryLinks = new Map<string, string[]>()
+  // Init subCategoryLink, key is category, value is an array of links
+  const subCategoryLinks = new Map<string, CategoryLink[]>()
+
   headerNavLinks
-    .filter((link) => link.type == 'sub-category')
+    .filter((link) => link.type === 'sub-category')
     .forEach((link) => {
       const category = link.href.split('/')[1]
       if (!subCategoryLinks.has(category)) {
         subCategoryLinks.set(category, [])
       }
-      subCategoryLinks.get(category).push(link)
+      subCategoryLinks.get(category)?.push(link)
     })
 
   return (
     <>
       {categoryLinks.map((link) => {
-        const isActiveCategory = props.pathname === link.href
+        const isActiveCategory = pathname === link.href
         const subCategories = subCategoryLinks.get(link.href.split('/')[1])
         return (
           <li key={link.title} className="my-2">
@@ -105,7 +112,7 @@ const CategoryLinkList = (props) => {
             {subCategories && (
               <ul>
                 {subCategories.map((subCategory) => {
-                  const isActiveSubCategory = props.pathname === subCategory.href
+                  const isActiveSubCategory = pathname === subCategory.href
                   return (
                     <li key={subCategory.title} className="my-2 px-3">
                       <Link
