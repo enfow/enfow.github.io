@@ -39,6 +39,10 @@ jobs:
           EXPORT: 1
           UNOPTIMIZED: 1
           BASE_PATH: ${{ steps.configurepages.outputs.base_path }}
+      - name: Ensure 'out' directory exists
+        run: mkdir -p out
+      - name: Generate RSS feed
+        run: node scripts/rss.mjs
       - uses: actions/upload-pages-artifact@v3
         with:
           path: ./out
