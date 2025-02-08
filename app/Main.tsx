@@ -50,7 +50,8 @@ export default function Home({ posts }) {
   }
   const categoryToPosts = {}
 
-  const sortedPosts = posts.sort((a, b) => new Date(a.date) - new Date(b.date))
+  // const sortedPosts = posts.sort((a, b) => new Date(a.date) - new Date(b.date))
+  const sortedPosts = posts.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
 
   sortedPosts.forEach((post) => {
     const category = extractCategoryFromSlug(post.slug)
