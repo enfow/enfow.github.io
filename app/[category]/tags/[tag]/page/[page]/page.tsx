@@ -13,23 +13,23 @@ export const generateStaticParams = async (): Promise<
   const tagCounts = tagData as Record<string, number>
   const staticParams: { category: string; tag: string; page: string }[] = []
 
-  for (const tag in tagCounts) {
-    const postCount = tagCounts[tag]
-    const totalPages = Math.ceil(postCount / POSTS_PER_PAGE)
+  for (const post of allBlogs) {
+    const parts = post.path.split('/')
+    const category = parts[0] || ''
 
-    // Ensure each tag is included in all valid categories
-    for (const post of allBlogs) {
-      const parts = post.path.split('/')
-      const category = parts[0] || ''
+    if (!category) continue // Ensure category exists
 
-      if (post.tags?.map((t) => slug(t)).includes(tag)) {
-        for (let page = 1; page <= totalPages; page++) {
-          staticParams.push({
-            category,
-            tag: encodeURI(tag),
-            page: page.toString(),
-          })
-        }
+    for (const tag of post.tags || []) {
+      const encodedTag = encodeURI(slug(tag))
+      const postCount = tagCounts[tag] || 0
+      const totalPages = Math.ceil(postCount / POSTS_PER_PAGE)
+
+      for (let page = 1; page <= totalPages; page++) {
+        staticParams.push({
+          category,
+          tag: encodedTag,
+          page: page.toString(),
+        })
       }
     }
   }
