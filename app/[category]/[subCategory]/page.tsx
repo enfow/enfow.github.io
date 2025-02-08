@@ -9,12 +9,25 @@ const VALID_CATEGORIES = ['tech', 'daily', 'finance']
 
 export const metadata = genPageMetadata({ title: 'Blog' })
 
-export default async function BlogPage(props: {
-  params: { subCategory: string; category: string }
-  searchParams: Promise<{ page: string }>
-}) {
+// export default async function BlogPage(props: {
+//   params: { subCategory: string; category: string }
+//   searchParams: Promise<{ page: string }>
+// }) {
 
-  const { subCategory, category } = await props.params
+//   const { subCategory, category } = await props.params
+
+// export default function BlogPage(props: {
+//   // params: { subCategory: string; category: string }
+//   params: Promise<{ subCategory: string; category: string }>;
+//   // searchParams: { page?: string } // Remove Promise
+// }) {
+
+export default async function BlogPage({
+  params,
+}: {
+  params: Promise<{ subCategory: string; category: string }>;
+}) {
+  const { subCategory, category } = await params;
 
   if (!VALID_CATEGORIES.includes(category)) {
     notFound()
