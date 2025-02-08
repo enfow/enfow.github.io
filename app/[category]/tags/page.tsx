@@ -1,65 +1,53 @@
+import Link from '@/components/Link'
+import Tag from '@/components/Tag'
 import { slug } from 'github-slugger'
-import { allCoreContent, sortPosts } from 'pliny/utils/contentlayer'
-import siteMetadata from '@/data/siteMetadata'
-import ListLayout from '@/layouts/ListLayoutWithTags'
-import { allBlogs } from 'contentlayer/generated'
 import tagData from 'app/tag-data.json'
 import { genPageMetadata } from 'app/seo'
-import { Metadata } from 'next'
 
-const POSTS_PER_PAGE = 5
+export const metadata = genPageMetadata({ title: 'Tags', description: 'Things I blog about' })
 
-export async function generateMetadata(props: {
-  params: Promise<{ tag: string }>
-}): Promise<Metadata> {
-  const params = await props.params
-  const tag = decodeURI(params.tag)
-  return genPageMetadata({
-    title: tag,
-    description: `${siteMetadata.title} ${tag} tagged content`,
-    alternates: {
-      canonical: './',
-      types: {
-        'application/rss+xml': `${siteMetadata.siteUrl}/tags/${tag}/feed.xml`,
-      },
-    },
-  })
-}
-
-export const generateStaticParams = async () => {
-  const tagCounts = tagData as Record<string, number>
-  const tagKeys = Object.keys(tagCounts)
-  return tagKeys.map((tag) => ({
-    tag: encodeURI(tag),
-  }))
-}
-
-// export default async function tagpage(props: { params: promise<{ tag: string }> }) {
 export default async function TagPage({
   params,
 }: {
-  params: Promise<{ tag: string; category: string }>
+  params: Promise<{ category: string }>
 }) {
-  const { category, tag } = await params
 
-  const tag = decodeURI(params.tag)
-  const title = tag[0].toUpperCase() + tag.split(' ').join('-').slice(1)
-  const filteredPosts = allCoreContent(
-    sortPosts(allBlogs.filter((post) => post.tags && post.tags.map((t) => slug(t)).includes(tag)))
-  )
-  const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE)
-  const initialDisplayPosts = filteredPosts.slice(0, POSTS_PER_PAGE)
-  const pagination = {
-    currentPage: 1,
-    totalPages: totalPages,
+  const {category} = await params
+
+  const tagCounts = tagData as Record<string, number>
+  const tagKeys = Object.keys(tagCounts)
+  const sortedTags = tagKeys.sort((a, b) => tagCounts[b] - tagCounts[a])
+
+  const extractTagName = (tag: string) => {
+    return tag.split('/').at(-1) || "";
   }
 
   return (
-    <ListLayout
-      posts={filteredPosts}
-      initialDisplayPosts={initialDisplayPosts}
-      pagination={pagination}
-      title={title}
-    />
+    <>
+      <div className="flex flex-col items-start justify-start divide-y divide-gray-200 dark:divide-gray-700 md:mt-24 md:flex-row md:items-center md:justify-center md:space-x-6 md:divide-y-0">
+        <div className="space-x-2 pb-8 pt-6 md:space-y-5">
+          <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:border-r-2 md:px-6 md:text-6xl md:leading-14">
+            {category}
+          </h1>
+        </div>
+        <div className="flex max-w-lg flex-wrap">
+          {tagKeys.length === 0 && 'No tags found.'}
+          {sortedTags.map((t) => {
+            return (
+              <div key={t} className="mb-2 mr-5 mt-2">
+                <Tag category={category} text={extractTagName(t)} />
+                <Link
+                  href={`/tags/${slug(extractTagName(t))}`}
+                  className="-ml-2 text-sm font-semibold uppercase text-gray-600 dark:text-gray-300"
+                  aria-label={`View posts tagged ${t}`}
+                >
+                  {` (${tagCounts[t]})`}
+                </Link>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+    </>
   )
 }
