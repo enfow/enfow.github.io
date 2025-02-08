@@ -9,8 +9,32 @@ const VALID_CATEGORIES = ['tech', 'daily', 'finance']
 
 export const metadata = genPageMetadata({ title: 'Blog' })
 
-// export default async function TagPage(props: { searchParams: Promise<{ page: string }> }) {
-//   const { category, tag } = await props.params
+export const generateStaticParams = async () => {
+  const tagSet = new Set();
+
+  // Collect all valid category-tag pairs
+  const staticParams = allBlogs.flatMap((blog) => {
+    const { path, tags = [] } = blog;
+    const parts = path.split('/');
+    const category = parts[0] || '';
+
+    if (!VALID_CATEGORIES.includes(category)) {
+      return [];
+    }
+
+    return tags.map((tag) => {
+      const tagLower = tag.toLowerCase();
+      if (!tagSet.has(`${category}-${tagLower}`)) {
+        tagSet.add(`${category}-${tagLower}`);
+        return { category, tag: tagLower };
+      }
+      return null;
+    }).filter(Boolean);
+  });
+
+  return staticParams;
+};
+
 export default async function TagPage({
   params,
 }: {
