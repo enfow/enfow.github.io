@@ -6,20 +6,15 @@ import { genPageMetadata } from 'app/seo'
 
 export const metadata = genPageMetadata({ title: 'Tags', description: 'Things I blog about' })
 
-export default async function TagPage({
-  params,
-}: {
-  params: Promise<{ category: string }>
-}) {
-
-  const {category} = await params
+export default async function TagPage({ params }: { params: Promise<{ category: string }> }) {
+  const { category } = await params
 
   const tagCounts = tagData as Record<string, number>
   const tagKeys = Object.keys(tagCounts)
   const sortedTags = tagKeys.sort((a, b) => tagCounts[b] - tagCounts[a])
 
   const extractTagName = (tag: string) => {
-    return tag.split('/').at(-1) || "";
+    return tag.split('/').at(-1) || ''
   }
 
   return (
