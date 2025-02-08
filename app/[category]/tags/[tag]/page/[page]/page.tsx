@@ -15,6 +15,7 @@ export const generateStaticParams = async () => {
   for (const post of allBlogs) {
     const parts = post.path.split('/')
     const category = parts[0] || ''
+    const extractedTag = parts[0] || ''
 
     if (!category) continue
 
@@ -26,7 +27,7 @@ export const generateStaticParams = async () => {
       for (let page = 1; page <= totalPages; page++) {
         staticParams.push({
           category,
-          tag: encodedTag,
+          tag: extractedTag,
           page: page.toString(),
         })
       }
