@@ -73,9 +73,20 @@ export async function generateMetadata(props: {
   }
 }
 
+// export const generateStaticParams = async () => {
+//   return allBlogs.map((p) => ({ slug: p.slug.split('/').map((name) => decodeURI(name)) }))
+// }
+
 export const generateStaticParams = async () => {
-  return allBlogs.map((p) => ({ slug: p.slug.split('/').map((name) => decodeURI(name)) }))
-}
+  return allBlogs.map((post) => {
+    const parts = post.slug.split('/');
+    return {
+      category: parts[0] || '',
+      subCategory: parts[1] || '',
+      slug: parts.slice(2).map((name) => decodeURI(name)),
+    };
+  });
+};
 
 export default async function Page(props: {
   params: Promise<{ category: string; slug: string[] }>
