@@ -39,6 +39,8 @@ jobs:
           EXPORT: 1
           UNOPTIMIZED: 1
           BASE_PATH: ${{ steps.configurepages.outputs.base_path }}
+      - name: Disable Jekyll on GitHub Pages
+        run: touch out/.nojekyll
       - name: Ensure 'out' directory exists
         run: mkdir -p out
       - name: Generate RSS feed
