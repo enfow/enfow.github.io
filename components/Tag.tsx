@@ -1,7 +1,9 @@
 import Link from 'next/link'
 import { slug } from 'github-slugger'
+
 interface Props {
   text: string
+  category: string // Ensure category is part of Props
 }
 
 const Tag = ({ category, text }: Props) => {
