@@ -1,4 +1,5 @@
 format:
+	yarn prettier --write app/**/*
 	npm run lint
 
 dev:
