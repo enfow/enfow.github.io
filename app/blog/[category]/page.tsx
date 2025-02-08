@@ -24,7 +24,6 @@ export default async function BlogPage(props: { searchParams: Promise<{ page: st
 
   return (
     <ListLayout
-      path={path}
       posts={posts}
       initialDisplayPosts={initialDisplayPosts}
       pagination={pagination}

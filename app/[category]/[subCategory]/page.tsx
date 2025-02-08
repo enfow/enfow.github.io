@@ -35,8 +35,6 @@ export default async function BlogPage({
 
   return (
     <ListLayout
-      path={path}
-      posts={posts}
       initialDisplayPosts={initialDisplayPosts}
       pagination={pagination}
       title="All Posts"

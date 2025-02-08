@@ -37,7 +37,6 @@ export default async function Page(props: { params: Promise<{ page: string }> })
 
   return (
     <ListLayout
-      path={path}
       posts={posts}
       initialDisplayPosts={initialDisplayPosts}
       pagination={pagination}

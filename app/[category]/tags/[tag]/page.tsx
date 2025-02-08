@@ -42,7 +42,6 @@ export default async function TagPage({
 
   return (
     <ListLayout
-      path={path}
       posts={posts}
       initialDisplayPosts={initialDisplayPosts}
       pagination={pagination}

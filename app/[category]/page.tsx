@@ -31,7 +31,6 @@ export default async function BlogPage({ params }: { params: Promise<{ category:
 
   return (
     <ListLayout
-      path={path}
       posts={posts}
       initialDisplayPosts={initialDisplayPosts}
       pagination={pagination}
