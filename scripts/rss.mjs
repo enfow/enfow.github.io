@@ -14,14 +14,23 @@ const generateRssItem = (config, post) => `
     <guid>${config.siteUrl}/blog/${post.slug}</guid>
     <title>${escape(post.title)}</title>
     <link>${config.siteUrl}/blog/${post.slug}</link>
-    ${post.summary && `<description>${escape(post.summary)}</description>`}
+    ${post.summary ? `<description>${escape(post.summary)}</description>` : ''}
     <pubDate>${new Date(post.date).toUTCString()}</pubDate>
     <author>${config.email} (${config.author})</author>
-    ${post.tags && post.tags.map((t) => `<category>${t}</category>`).join('')}
+    ${post.tags ? post.tags.map((t) => `<category>${t}</category>`).join('') : ''}
   </item>
 `
 
-const generateRss = (config, posts, page = 'feed.xml') => `
+const generateRss = (config, posts, page = 'feed.xml') => {
+  if (posts.length === 0) {
+    console.warn(`⚠️ No posts found for RSS feed: ${page}`)
+    return ''
+  }
+
+  const lastBuildDate =
+    posts.length > 0 ? new Date(posts[0].date).toUTCString() : new Date().toUTCString()
+
+  return `
   <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
       <title>${escape(config.title)}</title>
@@ -30,46 +39,57 @@ const generateRss = (config, posts, page = 'feed.xml') => `
       <language>${config.language}</language>
       <managingEditor>${config.email} (${config.author})</managingEditor>
       <webMaster>${config.email} (${config.author})</webMaster>
-      <lastBuildDate>${new Date(posts[0].date).toUTCString()}</lastBuildDate>
+      <lastBuildDate>${lastBuildDate}</lastBuildDate>
       <atom:link href="${config.siteUrl}/${page}" rel="self" type="application/rss+xml"/>
       ${posts.map((post) => generateRssItem(config, post)).join('')}
     </channel>
   </rss>
-`
+  `
+}
 
 async function generateRSS(config, allBlogs, page = 'feed.xml') {
-  const publishPosts = allBlogs.filter((post) => post.draft !== true)
+  if (!allBlogs || allBlogs.length === 0) {
+    console.error('🚨 Error: allBlogs is empty or not loaded properly!')
+    return
+  }
 
-  // ✅ Ensure the output folder exists before writing
+  const publishPosts = allBlogs.filter((post) => post.draft !== true)
+  console.log(`✅ Generating RSS feed for ${publishPosts.length} published posts...`)
+
+  // Ensure the output folder exists
   if (!existsSync(outputFolder)) {
     mkdirSync(outputFolder, { recursive: true })
   }
 
-  // RSS for blog posts
   if (publishPosts.length > 0) {
-    const rss = generateRss(config, sortPosts(publishPosts))
-    writeFileSync(`./${outputFolder}/${page}`, rss)
+    const rssContent = generateRss(config, sortPosts(publishPosts))
+    if (rssContent) {
+      writeFileSync(`./${outputFolder}/${page}`, rssContent)
+      console.log(`✅ RSS feed saved: ${outputFolder}/${page}`)
+    }
   }
 
-  if (publishPosts.length > 0) {
-    for (const tag of Object.keys(tagData)) {
-      const filteredPosts = allBlogs.filter((post) => post.tags.map((t) => slug(t)).includes(tag))
-      const rss = generateRss(config, filteredPosts, `tags/${tag}/${page}`)
-      const rssPath = path.join(outputFolder, 'tags', tag)
+  // Generate RSS feeds for tags
+  for (const tag of Object.keys(tagData)) {
+    const filteredPosts = allBlogs.filter((post) => post.tags?.map((t) => slug(t)).includes(tag))
+    const rssContent = generateRss(config, filteredPosts, `tags/${tag}/${page}`)
+    const rssPath = path.join(outputFolder, 'tags', tag)
 
-      // ✅ Ensure the tag RSS folder exists before writing
+    if (filteredPosts.length > 0) {
       if (!existsSync(rssPath)) {
         mkdirSync(rssPath, { recursive: true })
       }
-
-      writeFileSync(path.join(rssPath, page), rss)
+      writeFileSync(path.join(rssPath, page), rssContent)
+      console.log(`✅ RSS feed saved: ${rssPath}/${page}`)
+    } else {
+      console.warn(`⚠️ No posts found for tag: ${tag}`)
     }
   }
 }
 
 const rss = () => {
   generateRSS(siteMetadata, allBlogs)
-  console.log('✅ RSS feed generated successfully!')
+  console.log('✅ RSS feed generation completed!')
 }
 
 export default rss
