@@ -9,6 +9,12 @@ const VALID_CATEGORIES = ['tech', 'daily', 'finance']
 
 export const metadata = genPageMetadata({ title: 'Blog' })
 
+export const generateStaticParams = async () => {
+  return VALID_CATEGORIES.map((category) => ({
+    category,
+  }))
+}
+
 export default async function BlogPage({ params }: { params: Promise<{ category: string }> }) {
   const { category } = await params
 
