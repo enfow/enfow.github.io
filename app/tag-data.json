@@ -30,7 +30,7 @@
   "tech/paper-review/batch-rl": 2,
   "tech/paper-review/distributional-rl": 1,
   "tech/paper-review/model-based-rl": 4,
-  "tech/paper-review/multi-agent-rl": 1,
   "tech/paper-review/model-free-rl": 11,
+  "tech/paper-review/multi-agent-rl": 1,
   "tech/paper-review/parallel-rl": 2
 }
