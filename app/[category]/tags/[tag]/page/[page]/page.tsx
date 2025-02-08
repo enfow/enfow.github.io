@@ -9,14 +9,30 @@ const POSTS_PER_PAGE = 10
 
 export const generateStaticParams = async () => {
   const tagCounts = tagData as Record<string, number>
-  return Object.keys(tagCounts).flatMap((tag) => {
+  const staticParams = []
+
+  for (const tag in tagCounts) {
     const postCount = tagCounts[tag]
     const totalPages = Math.ceil(postCount / POSTS_PER_PAGE)
-    return Array.from({ length: totalPages - 1 }, (_, i) => ({
-      tag: encodeURI(tag),
-      page: (i + 2).toString(),
-    }))
-  })
+
+    // Ensure each tag is included in all valid categories
+    for (const post of allBlogs) {
+      const parts = post.path.split('/')
+      const category = parts[0] || ''
+
+      if (post.tags?.map((t) => slug(t)).includes(tag)) {
+        for (let page = 1; page <= totalPages; page++) {
+          staticParams.push({
+            category,
+            tag: encodeURI(tag),
+            page: page.toString(),
+          })
+        }
+      }
+    }
+  }
+
+  return staticParams
 }
 
 export default async function TagPage(props: { params: Promise<{ tag: string; page: string }> }) {
