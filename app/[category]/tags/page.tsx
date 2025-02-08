@@ -40,12 +40,9 @@ export default async function TagPage({
 }: {
   params: Promise<{ tag: string; category: string }>
 }) {
-  const { category } = await params
-
-  console.log('params:', category)
+  const { category, tag } = await params
 
   const tag = decodeURI(params.tag)
-  console.log('tag:', tag)
   const title = tag[0].toUpperCase() + tag.split(' ').join('-').slice(1)
   const filteredPosts = allCoreContent(
     sortPosts(allBlogs.filter((post) => post.tags && post.tags.map((t) => slug(t)).includes(tag)))

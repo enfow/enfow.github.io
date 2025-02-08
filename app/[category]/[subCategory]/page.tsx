@@ -12,9 +12,9 @@ export const metadata = genPageMetadata({ title: 'Blog' })
 export default async function BlogPage({
   params,
 }: {
-  params: Promise<{ subCategory: string; category: string }>;
+  params: Promise<{ subCategory: string; category: string }>
 }) {
-  const { subCategory, category } = await params;
+  const { subCategory, category } = await params
 
   if (!VALID_CATEGORIES.includes(category)) {
     notFound()

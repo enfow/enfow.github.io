@@ -9,12 +9,9 @@ const VALID_CATEGORIES = ['tech', 'daily', 'finance']
 
 export const metadata = genPageMetadata({ title: 'Blog' })
 
-export default async function BlogPage({
-  params,
-}: {
-  params: Promise<{ category: string }>;
-}) {
-  const { category } = await params;
+export default async function BlogPage({ params }: { params: Promise<{ category: string }> }) {
+  const { category } = await params
+
   if (!VALID_CATEGORIES.includes(category)) {
     notFound()
   }
