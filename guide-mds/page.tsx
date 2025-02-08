@@ -30,7 +30,7 @@ export default async function TagPage({ params }: { params: Promise<{ category: 
           {sortedTags.map((t) => {
             return (
               <div key={t} className="mb-2 mr-5 mt-2">
-                <Tag category={category} text={extractTagName(t)} />
+                <Tag key={t} category={category} text={extractTagName(t)} />
                 <Link
                   href={`/tags/${slug(extractTagName(t))}`}
                   className="-ml-2 text-sm font-semibold uppercase text-gray-600 dark:text-gray-300"
