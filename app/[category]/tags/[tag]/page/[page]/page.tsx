@@ -34,6 +34,11 @@ export const generateStaticParams = async () => {
     }
   }
 
+  if (staticParams.length === 0) {
+    console.warn('⚠ No static params generated. Returning placeholder...')
+    return [{ category: 'default', tag: 'test', page: '1' }]
+  }
+
   console.log('Static params generated:', staticParams)
   return staticParams
 }
