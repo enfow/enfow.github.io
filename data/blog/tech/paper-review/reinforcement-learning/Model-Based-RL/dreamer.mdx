@@ -1,21 +1,20 @@
 ---
-title: "[Dreamer] Dream to Control: Learning Behaviors by Latent Imagination"
+title: '[Dreamer] Dream to Control: Learning Behaviors by Latent Imagination'
 date: '2020-10-04'
 tags: ['Reinforcement-Learning', 'Model-Based-RL']
 draft: false
-summary: ""
+summary: ''
 ---
 
 - Danijar Hafner, Timothy Lillicrap, Jimmy Ba, Mohammad Norouzi
 - 2020
-- [논문 링크](<https://arxiv.org/abs/1912.01603>)
+- [논문 링크](https://arxiv.org/abs/1912.01603)
 
 ## Summary
 
 - 2020년 기준 Model-Based Algorithm의 SOTA로 알려져 있는 모델 **Dreamer**를 제시한다.
 - Latent Space에서 Trajectory를 Prediction하고 Action을 결정하여 Image에 대해서도 효율적으로 학습이 가능하다. 이를 위해 3개의 모델로 **Latent Dynamcis**를 학습한다.
 - Actor-Critic 구조의 알고리즘을 사용하여 Latent Space 상에서 Value를 극대화할 것으로 예상되는 Action을 선택한다. Value를 사용하기 때문에 Horizon의 제약이 없다는 장점을 가지고 있다.
-
 
 ## Introduction
 
@@ -29,7 +28,10 @@ summary: ""
 
 ### Latent Dynamics Model
 
-<img src="/static/images/paper-review/dreamer_latent_dynamics_model.png" className="w-[24em] block mx-auto my-4" />
+<img
+  src="/static/images/paper-review/dreamer_latent_dynamics_model.png"
+  className="mx-auto my-4 block w-[24em]"
+/>
 
 **Latent Dynamics Model**은 현재의 Policy가 실제 Environment와 상호작용하며 얻은 Trajectory들을 대상으로 학습한다. 이를 통해 Environment로부터 주어지는 Observation이 어떠한 Latent State로 매핑되는지, Latent State에서 Action이 주어졌을 때 Next Latent State는 어떻게 되는지, 그리고 각각의 Latent State에서 주어지는 Reward는 어떠한지 학습하게 된다. 수식으로 이를 표현하면 아래 세 가지가 된다.
 
@@ -45,7 +47,10 @@ Representation model은 확률 함수가 $$p$$로 표기되어 있지만 Transit
 
 ### Action & Value Model
 
-<img src="/static/images/paper-review/dreamer_behavior_in_imagination.png" className="w-[24em] block mx-auto my-4" />
+<img
+  src="/static/images/paper-review/dreamer_behavior_in_imagination.png"
+  className="mx-auto my-4 block w-[24em]"
+/>
 
 Latent Dynamics Model을 만드는 이유는 결국 좋은 Aciton이 무엇인지 정확히 Prediction 할 수 있는 모델을 만들기 위함이다. Dreamer에서는 이러한 Action을 계산하는 알고리즘으로 **Actor-Critic 구조**를 사용하고 있으며, 따라서 Action Model과 Value Model 두 모델을 학습시켜야 한다. 구체적으로 Action Model은 Latent Space 상에서 Reward를 극대화할 것으로 예상되는 Action을 선택하는 Policy이고, Value Model은 Latent Space 상에서 Action Model이 선택한 Action과 그에 따라 결정된 다음 Latent Space에서 기대 Reward가 어떻게 되는지 예측하는 역할을 한다.
 
@@ -93,11 +98,17 @@ $$
 
 ## Algorithm
 
-<img src="/static/images/paper-review/dreamer_3_part_of_algorithm.png" className="w-[40em] block mx-auto my-4" />
+<img
+  src="/static/images/paper-review/dreamer_3_part_of_algorithm.png"
+  className="mx-auto my-4 block w-[40em]"
+/>
 
 Dreamer의 알고리즘은 위의 그림과 같이 크게 **Dynamic Learning, Behavior Learning, Environment Interaction** 세 부분으로 구성된다. Dynamic Learning에서는 Latent Dynamics를 정확하게 알기 위해 $$\theta$$를 업데이트하게 되고, Behavior Learning에서는 Trajectory를 예측하고 그에 따라 Action Model과 Value Model을 업데이트하게 된다. 마지막으로 Environment Interaction에서는 학습한 Action Model으로 실제 Environment와 상호작용하며 학습에 사용할 실제 Trajectory를 쌓게 된다.
 
 - Dynamic Learning: Update Representation, Trasition, Reward Model -> Make Prediction Correct
 - Behavior Learning: Update Action, Value Model -> Make Policy Correct According to Prediction
 
-<img src="/static/images/paper-review/dreamer_algorithm.png" className="w-[40em] block mx-auto my-4" />
+<img
+  src="/static/images/paper-review/dreamer_algorithm.png"
+  className="mx-auto my-4 block w-[40em]"
+/>

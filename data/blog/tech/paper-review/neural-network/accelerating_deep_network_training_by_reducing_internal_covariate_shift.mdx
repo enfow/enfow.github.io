@@ -1,14 +1,14 @@
 ---
-title: "Accelerating Deep Network Training by Reducing Internal Covariate Shift"
+title: 'Accelerating Deep Network Training by Reducing Internal Covariate Shift'
 date: '2020-10-04'
 tags: ['Neural-Network', 'Batch Normalization']
 draft: false
-summary: ""
+summary: ''
 ---
 
 - Sergey Ioffe, Christian Szegedy
 - 2015
-- [논문 링크](<https://arxiv.org/abs/1502.03167>)
+- [논문 링크](https://arxiv.org/abs/1502.03167)
 
 ## Summary
 
@@ -30,7 +30,10 @@ $$
 \text{Sigmoid: } a(x) = {1 \over e^{-x} + 1}
 $$
 
-<img src="/static/images/paper-review/batch_norm_sigmoid_function_gradient_vanishing.png" className="w-[35em] block mx-auto" />
+<img
+  src="/static/images/paper-review/batch_norm_sigmoid_function_gradient_vanishing.png"
+  className="mx-auto block w-[35em]"
+/>
 
 물론 이에 대한 해결책으로 다음과 같이 다양한 방법들이 제시되어왔다.
 
@@ -53,7 +56,7 @@ Batch Normalization의 목표는 각 레이어의 입력값의 평균과 분산�
 
 ### Whitening Transformation
 
-**Whitening Transformation**이란 전처리의 일종으로 데이터의 변수 간에 존재하는 Correlation을 없애고 분산을 1로 맞추는 작업을 말한다. 입력 데이터를 White Noise Vector로 만든다는 점에서 Whitening Transformation 이라고 한다([Quora](<https://www.quora.com/What-is-whitening-of-data-in-Neural-Networks>)).
+**Whitening Transformation**이란 전처리의 일종으로 데이터의 변수 간에 존재하는 Correlation을 없애고 분산을 1로 맞추는 작업을 말한다. 입력 데이터를 White Noise Vector로 만든다는 점에서 Whitening Transformation 이라고 한다([Quora](https://www.quora.com/What-is-whitening-of-data-in-Neural-Networks)).
 
 그러나 Whitening을 레이어 입력값마다 적용하는 것은 현실적으로 어렵다. 이유는 크게 두 가지인데 첫 번째는 전체 데이터셋의 데이터 포인트들을 함께 고려해야 하기 때문이고, 두 번째는 Whitening은 Covariance 계산과 그에 대한 Inverse Square Root를 계산해야 하는데, BackPropagation 시에는 이에 대한 미분을 구해야 한다는 점에서 연산 비용이 매우 많이 들기 때문이다. 따라서 논문에서는 Batch Normalization을 고안하는데 있어 전체 데이터셋을 고려하지 않아도 되면서 쉽게 미분이 가능한지 고려했다고 한다.
 
@@ -73,7 +76,10 @@ $$
 
 즉 레이어의 입력값을 다음과 같이 전처리하게 되면 데이터의 분포를 일정하게 유지할 수 있다. 하지만 이를 바로 적용하게 되면 몇 가지 문제점이 발생한다. 대표적인 것이 평균과 분산이 0, 1로 고정되는 경우 Sigmoid Function의 Non Linear Function으로서의 특성이 줄어든다는 점이다. 아래의 이미지를 보면 보다 확실한데 0 주변에서는 Sigmoid가 선형 함수인 $$y=0.225x + 0.5$$와 매우 유사함을 알 수 있다.
 
-<img src="/static/images/paper-review/batch_norm_sigmoid_function_nonlinearity.png" className="w-[35em] block mx-auto" />
+<img
+  src="/static/images/paper-review/batch_norm_sigmoid_function_nonlinearity.png"
+  className="mx-auto block w-[35em]"
+/>
 
 이러한 문제를 해결하기 위해서 Batch Normalization에서는 Normalizing 함수 뒤에 필요에 따라 Shifting과 Scaling이 가능하도록 Linear Transformation을 붙이게 된다. 즉 필요하다면 원 분포대로 복원할 수 있도록(identity transform) 하겠다는 것이다.
 
@@ -104,11 +110,14 @@ $$
 
 Mini-Batch Statistics을 사용하는 Batch Normalization Transform 알고리즘은 아래와 같다.
 
-<img src="/static/images/paper-review/batch_norm_algorithm1.png" className="w-[24em] block mx-auto" />
+<img
+  src="/static/images/paper-review/batch_norm_algorithm1.png"
+  className="mx-auto block w-[24em]"
+/>
 
 그리고 Mini-Batch의 크기가 $$m$$이라고 했을 때 각각의 Gradient는 Chain Rule에 따라 다음과 같이 구해진다. 즉 Batch Normalization Transform은 미분 가능하며 모든 파라미터들인 Back Propagation에 따라 업데이트된다.
 
-<img src="/static/images/paper-review/batch_norm_gradient.png" className="w-[28em] block mx-auto" />
+<img src="/static/images/paper-review/batch_norm_gradient.png" className="mx-auto block w-[28em]" />
 
 ### Difference between Train Time and Inference Time
 
@@ -125,7 +134,10 @@ $$
 
 아래 알고리즘을 보면 Batch Normalization이 적용되는 과정을 알 수 있다.
 
-<img src="/static/images/paper-review/batch_norm_algorithm2.png" className="w-[24em] block mx-auto" />
+<img
+  src="/static/images/paper-review/batch_norm_algorithm2.png"
+  className="mx-auto block w-[24em]"
+/>
 
 - line 2,3,4: 각 Layer마다 Batch Normalization Transformation 적용
 - line 6: 모델의 파라미터 $$\theta$$와 Batch Normalization의 파라미터를 함께 업데이트

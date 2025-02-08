@@ -1,14 +1,14 @@
 ---
-title: "Learning Phrase Representations using RNN Encoder–Decoder for Statistical Machine Translation"
+title: 'Learning Phrase Representations using RNN Encoder–Decoder for Statistical Machine Translation'
 date: '2020-06-27'
 tags: ['Sequence-to-Sequence']
 draft: false
-summary: ""
+summary: ''
 ---
 
 - Kyunghyun Cho, Dzmitry Bahdanau, Fethi Bougares,Holger Schwenk, Yoshua Bengio
 - 2014
-- [논문 링크](<https://arxiv.org/abs/1406.1078>)
+- [논문 링크](https://arxiv.org/abs/1406.1078)
 
 ## 세 줄 요약
 
@@ -20,7 +20,7 @@ summary: ""
 
 `Sequence to Sequence`란 말 그대로 sequence를 받아서 다른 sequence를 출력하는 것을 말한다. Sequence to Sequence model이 적용되는 대표적인 문제로는 기계번역이 있다.
 
-<img src="/static/images/paper-review/papago.png" className="w-[35em] block mx-auto my-4" />
+<img src="/static/images/paper-review/papago.png" className="mx-auto my-4 block w-[35em]" />
 
 예를 들어 한국어 단어의 sequence라 할 수 있는 다음 문장을
 
@@ -38,7 +38,10 @@ This sentence is translated through the Sequence to Sequence model.
 
 ## RNN Encoder-Decoder architecture
 
-<img src="/static/images/paper-review/rnn_encoder_decoder.png" className="w-[35em] block mx-auto my-4" />
+<img
+  src="/static/images/paper-review/rnn_encoder_decoder.png"
+  className="mx-auto my-4 block w-[35em]"
+/>
 
 ### RNN(Recurrnet Neural Network)
 
@@ -60,7 +63,7 @@ Encoder Decoder 구조는 이러한 특성을 반영하고 있다. 즉 Encoder�
 
 - Variable-length sequence to fixed length vector
 
-Encoder는 입력 sequence 전체의 특성을 담고 있는 fixed-length vector를 추출하는 역할을 가지고 있다. 이를 위해 Encoder는 입력 sequence의 길이에 상관없이 처음부터 끝까지 순차적으로 입력 값을 받는다. 그런데 RNN의 hidden state는 최근 입력 값의 영향을 많이 받는다는 특성을 가지고 있으며, 이는 입력 sequence의 길이가 길어질수록 전체 문장의 특성을 최종 hidden state가 제대로 반영할 수 없다는 문제로 이어진다. 이러한 한계를 해결하기 위해 제시된 방법이 [Attention mechanism](<https://enfow.github.io/paper-review/sequence-to-sequence/2020/06/28/neural_machine_translation_by_jointly_learning_to_align_and_translate/>)이다.
+Encoder는 입력 sequence 전체의 특성을 담고 있는 fixed-length vector를 추출하는 역할을 가지고 있다. 이를 위해 Encoder는 입력 sequence의 길이에 상관없이 처음부터 끝까지 순차적으로 입력 값을 받는다. 그런데 RNN의 hidden state는 최근 입력 값의 영향을 많이 받는다는 특성을 가지고 있으며, 이는 입력 sequence의 길이가 길어질수록 전체 문장의 특성을 최종 hidden state가 제대로 반영할 수 없다는 문제로 이어진다. 이러한 한계를 해결하기 위해 제시된 방법이 [Attention mechanism](https://enfow.github.io/paper-review/sequence-to-sequence/2020/06/28/neural_machine_translation_by_jointly_learning_to_align_and_translate/)이다.
 
 참고로 마지막 hidden state vector를 부르는 이름은 논문에 따라 다양한데 입력 sequence의 길이에 상관없이 고정적인 길이를 가진다는 점에서 fixed length vector라고 하기도 하고, 전체 문장의 특성을 가지고 있다 하여 context vector라 부르기도 한다. Encoder Decoder 구조에 집중하여 latent라고도 한다.
 

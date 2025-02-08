@@ -1,14 +1,14 @@
 ---
-title: "[OAC] Better Exploration with Optimistic Actor-Critic"
+title: '[OAC] Better Exploration with Optimistic Actor-Critic'
 date: '2019-12-17'
 tags: ['Reinforcement-Learning', 'Model-Free-RL']
 draft: false
-summary: ""
+summary: ''
 ---
 
 - Kamil Ciosek, Quan Vuong 등
 - 2019
-- [논문 링크](<https://arxiv.org/abs/1910.12807>)
+- [논문 링크](https://arxiv.org/abs/1910.12807)
 
 ## Summary
 
@@ -30,15 +30,15 @@ Actor-Critic과 같이 q value를 이용한 강화학습 알고리즘의 오랜 
 
 gaussian policy를 이용하여 탐색을 하는 경우 평균을 중심으로 정방향과 역방향의 action들이 모두 둥일한 확률분포를 가지고 있다. 하지만 gradient algorithm에 따라 점진적으로 발전하는 policy network의 특성상 과거에 지나온 영역과 그렇지 않은 영역을 동일한 수준으로 exploration하는 것은 비효율적이다. 논문에서는 이를 두고 "Exploration in both directions is wasteful"이라고 언급한다.
 
-<img src="/static/images/paper-review/oac_fig1.png" className="w-full mx-auto block" />
+<img src="/static/images/paper-review/oac_fig1.png" className="mx-auto block w-full" />
 
 exploration과 관련된 위의 두 가지 문제는 논문에 제시되어 있는 위의 그림을 참고하면 보다 쉽게 이해할 수 있다. 기본적으로 위의 그림은 어떤 고정된 state $$s$$에서 action $$a$$에 따른 Q function 값의 변화를 보여주고 있다.
 
- 우선 왼쪽 그림을 보면, 과거의 policy $$\pi_{past}$$에서 학습을 통해 $$\pi_{current}$$로 나아가는 모습을 표현하고 있다. 기존의 알고리즘은 모두 Lower bound를 기준으로 했으므로, lower bound q function $$Q_{LB}(s,a)$$가 극대화되는 지점을 평균으로 하는 위치에 머무르게 된다. 그런데 학습 경로 상에 $$\pi_{past}$$부터 $$\pi_{current}$$에 이르는 영역 사이의 action에 대해서는 충분히 학습했지만 그보다 왼쪽에 위치한 action들은 선택해 본 경험이 없다. 이러한 문제를 논문에서는 pessimistic underexploration 문제라고 하는 것이다.
+우선 왼쪽 그림을 보면, 과거의 policy $$\pi_{past}$$에서 학습을 통해 $$\pi_{current}$$로 나아가는 모습을 표현하고 있다. 기존의 알고리즘은 모두 Lower bound를 기준으로 했으므로, lower bound q function $$Q_{LB}(s,a)$$가 극대화되는 지점을 평균으로 하는 위치에 머무르게 된다. 그런데 학습 경로 상에 $$\pi_{past}$$부터 $$\pi_{current}$$에 이르는 영역 사이의 action에 대해서는 충분히 학습했지만 그보다 왼쪽에 위치한 action들은 선택해 본 경험이 없다. 이러한 문제를 논문에서는 pessimistic underexploration 문제라고 하는 것이다.
 
- 오른쪽 그림은 Directional uniformedness를 표현하고 있는데, 가우시안 분포의 특성상 거쳐온 쪽(그림상에서 오른쪽)과 그렇지 않은 쪽(왼쪽)을 동일한 확률로 action을 선택하게 되는데, 앞서 설명한 이유 때문에 이것 또한 비효율적이라는 것이다.
+오른쪽 그림은 Directional uniformedness를 표현하고 있는데, 가우시안 분포의 특성상 거쳐온 쪽(그림상에서 오른쪽)과 그렇지 않은 쪽(왼쪽)을 동일한 확률로 action을 선택하게 되는데, 앞서 설명한 이유 때문에 이것 또한 비효율적이라는 것이다.
 
- 그리고 기존의 알고리즘에 따르면 학습이 어느 정도 이뤄져 lower bound 근처에 도달하게 되면 큰 변화없이 비슷한 지역을 반복적으로 학습한다는 문제도 있어 낭비적이라고 한다.
+그리고 기존의 알고리즘에 따르면 학습이 어느 정도 이뤄져 lower bound 근처에 도달하게 되면 큰 변화없이 비슷한 지역을 반복적으로 학습한다는 문제도 있어 낭비적이라고 한다.
 
 ## Exploration policy
 
@@ -103,7 +103,7 @@ $$
 \mu_e, \Sigma_E = \text{argmax}_{\mu, \Sigma: KL(N(\mu,\Sigma), N(\mu_T, \Sigma_T)) \le \delta} \ E_{a-N(\mu,\Sigma)}[\bar Q_{UB}](s,a)
 $$
 
-결과적으로 보면 위에서 구한 upper bound $$\bar Q_{UB}(s,a)$$를 극대화하는 동시에 KLD로 제약을 두는 것이 된다. 여기서 첫 번째, 즉 upper bound를 극대화하는 것은 정보가 많을 것으로 추측되는 action을 선택할 가능성을 높이는 것으로 해석([principle of optimism in the face of uncertainty](<https://ie.technion.ac.il/~moshet/brafman02a.pdf>))될 수 있다.
+결과적으로 보면 위에서 구한 upper bound $$\bar Q_{UB}(s,a)$$를 극대화하는 동시에 KLD로 제약을 두는 것이 된다. 여기서 첫 번째, 즉 upper bound를 극대화하는 것은 정보가 많을 것으로 추측되는 action을 선택할 가능성을 높이는 것으로 해석([principle of optimism in the face of uncertainty](https://ie.technion.ac.il/~moshet/brafman02a.pdf))될 수 있다.
 
 두 번째 target policy $$\pi_T$$ KLD를 와의 차이를 일정 수준 이하로 제한하는 것은 안정적인 업데이트를 위한 것이라고 한다. 이는 두 가지로 다시 해석될 수 있는데, 실제 action과 너무 다른 action을 취하여 해선 안되는 행동들(catastrophic)을 선택하는 것을 방지할 수 있다는 것이 한 가지 이유이고, $$\bar Q_{UB}$$ 역시도 근사값이므로 정확도에 있어 문제가 생길 수 있는 만큼 그나마 정확할 것으로 예상되는 target policy 근처의 action만 선택하도록 하는 것이 다른 이유가 된다.
 
@@ -123,6 +123,6 @@ $$
 
 ### effect of exploration policy
 
-<img src="/static/images/paper-review/oac_fig2.png" className="w-full mx-auto block" />
+<img src="/static/images/paper-review/oac_fig2.png" className="mx-auto block w-full" />
 
 기존의 방법들이 $$\pi_T$$에서 더 이상 내려가지 못하고 머물렀다면, exploration policy $$\pi_E$$를 도입하여 OAC는 기존에 탐색하지 못한 영역까지 탐색할 수 있게 되었다고 한다. 그리고 반복적으로 어떤 영역을 탐색하는 것이 아니므로 효율적(optimistic)하다고 말한다.

@@ -1,16 +1,16 @@
 ---
-title: "[HER] Hindsight Experience Replay"
+title: '[HER] Hindsight Experience Replay'
 date: '2019-10-03'
 tags: ['Reinforcement-Learning', 'Model-Free-RL']
 draft: false
-summary: ""
+summary: ''
 ---
 
 # 논문 제목 : Hindsight Experience Replay
 
 - Marcin Andrychowicz 등(OpenAI)
 - 2018
-- [paper link](<https://arxiv.org/abs/1707.01495>)
+- [paper link](https://arxiv.org/abs/1707.01495)
 
 ## Summary
 
@@ -28,6 +28,7 @@ summary: ""
 
 - UVFA는 DQN을 토대로 한 개 이상의 goal이 존재하는 상황을 위해 만들어진 방법이다.
 - UVFA에서는 기본적으로 복수의 goal을 가정하며 이러한 목표는 action과 reward 모두에 영향을 미친다.
+
   - 즉, policy 𝝅 는 state 뿐만 아니라 현재의 goal 을 함께 입력으로 받아 action을 반환하고, reward 또한 state, action, goal 세 개의 조합으로 결정된다.
   - Q function은 다음과 같이 정의된다.
 

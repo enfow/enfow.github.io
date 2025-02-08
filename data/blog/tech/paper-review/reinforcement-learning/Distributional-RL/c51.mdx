@@ -1,14 +1,14 @@
 ---
-title: "[C51] A Distributional Perspective on Reinforcement Learning"
+title: '[C51] A Distributional Perspective on Reinforcement Learning'
 date: '2020-01-15'
 tags: ['Reinforcement-Learning', 'Distributional-RL']
 draft: false
-summary: ""
+summary: ''
 ---
 
 - Bellemare 등
 - 2017
-- [논문 링크](<https://arxiv.org/abs/1707.06887>)
+- [논문 링크](https://arxiv.org/abs/1707.06887)
 
 ## Summary
 
@@ -46,7 +46,7 @@ $$
 
 ### Updating Policy
 
- distributional RL에서도 기본적인 강화학습 알고리즘과 마찬가지로 target value와 current value 간의 차이를 이용하여 학습하게 된다. policy를 업데이트하기 전에 현재 policy가 얼마나 좋은지 평가하는 과정이 필요한데, 이를 위해 논문에서는 다음과 같이 알고리즘적인 논의를 진행한다.
+distributional RL에서도 기본적인 강화학습 알고리즘과 마찬가지로 target value와 current value 간의 차이를 이용하여 학습하게 된다. policy를 업데이트하기 전에 현재 policy가 얼마나 좋은지 평가하는 과정이 필요한데, 이를 위해 논문에서는 다음과 같이 알고리즘적인 논의를 진행한다.
 
 #### 1. target distribution
 
@@ -119,7 +119,7 @@ $$
 
 expected bellman equation은 unique fixed point $$Q^*$$를 갖는데, 이것이 바로 bellman optimality equation이다. 그리고 $$E_{a-\pi^*} [Q^*(s,a)] = \max_a Q^*(s,a)$$이 성립할 때 $$\pi^* \in \Pi$$는 optimal policy가 된다.
 
-bellman operator는 쉽게 말해 bellman equation을 벡터 간의 곱 형태로 표현한 것이라고 할 수 있다. 구체적인 내용은 다음 [링크](<https://enfow.github.io/study/rl-study/2020/01/14/Bellman-Operator/>)에 정리해두었다. 논문에서는 $$\rm I\!R^{s x a}$$ 백터 간 연산의 형태로 bellman operator $$\tau^\pi$$와 bellman optimality operator $$\tau$$를 다음과 같이 정의하고 있다.
+bellman operator는 쉽게 말해 bellman equation을 벡터 간의 곱 형태로 표현한 것이라고 할 수 있다. 구체적인 내용은 다음 [링크](https://enfow.github.io/study/rl-study/2020/01/14/Bellman-Operator/)에 정리해두었다. 논문에서는 $$\rm I\!R^{s x a}$$ 백터 간 연산의 형태로 bellman operator $$\tau^\pi$$와 bellman optimality operator $$\tau$$를 다음과 같이 정의하고 있다.
 
 $$
 \tau^{\pi}Q(s,a) = E[R(s,a)] + \gamma E_{P, \pi}[Q(s',a')] \\

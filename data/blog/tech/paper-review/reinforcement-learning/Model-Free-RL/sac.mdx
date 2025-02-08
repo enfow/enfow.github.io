@@ -1,14 +1,14 @@
 ---
-title: "[SAC] Off-Policy Maximum Entropy Deep Reinforcement Learning with a Stochastic Actor"
+title: '[SAC] Off-Policy Maximum Entropy Deep Reinforcement Learning with a Stochastic Actor'
 date: '2020-10-09'
 tags: ['Reinforcement-Learning', 'Model-Free-RL']
 draft: false
-summary: ""
+summary: ''
 ---
 
 - Tuomas Haarnoja, Aurick Zhou, Pieter Abbeel, Sergey Levine
 - 2018
-- [논문 링크](<https://arxiv.org/abs/1801.01290>)
+- [논문 링크](https://arxiv.org/abs/1801.01290)
 
 ## Summary
 
@@ -26,7 +26,7 @@ summary: ""
 
 **SAC(Soft Actor-Critic)**은 당연하게도 이러한 Actor-Critic의 문제를 해결하기 위해 제시된 알고리즘이다. 이를 위해 Ziebart의 논문 Maximum Entropy Inverse Reinforcement Learning(2008)을 비롯하여 강화학습에서 다양하게 적용되어 온 **Maximum Entropy Framework**를 도입한다.
 
-Maximum Entropy Framework는 쉽게 말해 강화학습 모델을 학습하는 데 있어 Policy의 Entropy를 높이는 것을 고려하는 방법을 말한다. 강화학습에서 꽤나 오랫동안 사용되어온 방법론인 만큼 Maximum Entropy Framework의 장점 또한 많이 알려져 있으며, 특히 보다 효율적으로 탐색(Exploration)을 수행하고 모델이 보다 Robust 해진다고 알려져 있다. 그러나 [Soft Q-Learning](<https://arxiv.org/pdf/1702.08165.pdf>)을 비롯해 이를 적용한 많은 Off-Policy 알고리즘들은 Continuous Action Space 상에서 Approximate Inference를 수행하는 데 어려움을 겪어 이를 제대로 활용하지 못했다고 지적한다. 이러한 점에서 SAC는 Maximum Entropy Framework를 Actor-Critic에 적용하고 그 과정에서 안정적인 학습을 위해 제시하는 근사 알고리즘에 더 큰 의의를 가진다고 할 수 있다.
+Maximum Entropy Framework는 쉽게 말해 강화학습 모델을 학습하는 데 있어 Policy의 Entropy를 높이는 것을 고려하는 방법을 말한다. 강화학습에서 꽤나 오랫동안 사용되어온 방법론인 만큼 Maximum Entropy Framework의 장점 또한 많이 알려져 있으며, 특히 보다 효율적으로 탐색(Exploration)을 수행하고 모델이 보다 Robust 해진다고 알려져 있다. 그러나 [Soft Q-Learning](https://arxiv.org/pdf/1702.08165.pdf)을 비롯해 이를 적용한 많은 Off-Policy 알고리즘들은 Continuous Action Space 상에서 Approximate Inference를 수행하는 데 어려움을 겪어 이를 제대로 활용하지 못했다고 지적한다. 이러한 점에서 SAC는 Maximum Entropy Framework를 Actor-Critic에 적용하고 그 과정에서 안정적인 학습을 위해 제시하는 근사 알고리즘에 더 큰 의의를 가진다고 할 수 있다.
 
 ### Objective Function with Maximum Entropy
 
@@ -184,4 +184,4 @@ $$
 
 Soft Actor-Critic의 알고리즘은 다음과 같이 환경으로부터 데이터를 수집하는 부분과 그것을 바탕으로 업데이트를 하는 부분 두 가지로 이뤄져 있다.
 
-<img src="/static/images/paper-review/sac_algorithm.png" className="w-full mx-auto block" />
+<img src="/static/images/paper-review/sac_algorithm.png" className="mx-auto block w-full" />

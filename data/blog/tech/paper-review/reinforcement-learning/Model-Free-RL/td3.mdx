@@ -1,14 +1,14 @@
 ---
-title: "[TD3] Addressing Function Approximation Error in Actor-Critic Methods"
+title: '[TD3] Addressing Function Approximation Error in Actor-Critic Methods'
 date: '2019-11-07'
 tags: ['Reinforcement-Learning', 'Model-Free-RL']
 draft: false
-summary: ""
+summary: ''
 ---
 
 - Scott Fujimoto 등
 - 2018
-- [논문 링크](<https://arxiv.org/abs/1802.09477>)
+- [논문 링크](https://arxiv.org/abs/1802.09477)
 
 ## Summary
 
@@ -44,7 +44,7 @@ DDPG에서도 Q 네트워크(critic)에 overestimation bias가 발생한다면 d
 
 $$y = r + \gamma Q_{\theta'}(s', \pi_\varnothing(s'))$$
 
-하지만 DDQN([Van Hasselt et al, 2016](<http://localhost:4000/paper-review/reinforcement-learning/q-learning/2019/09/17/DDQN-Deep-Reinforcement-Learning-with-Double-Q-learning/>))과 같은 방법을 바로 적용하는 것은 DDPG를 비롯한 Actor Critic 계열의 모델에서는 충분히 효과적이지 않다(ineffective)고 한다. 이는 Actor Critic의 경우 policy가 상대적으로 천천히 변화하고, 이로 인해 current Q function과 target Q function 간의 차이가 크지 않아 단순히 두 개의 네트워크를 사용하는 것만으로는 이점이 적기 때문이다.
+하지만 DDQN([Van Hasselt et al, 2016](http://localhost:4000/paper-review/reinforcement-learning/q-learning/2019/09/17/DDQN-Deep-Reinforcement-Learning-with-Double-Q-learning/))과 같은 방법을 바로 적용하는 것은 DDPG를 비롯한 Actor Critic 계열의 모델에서는 충분히 효과적이지 않다(ineffective)고 한다. 이는 Actor Critic의 경우 policy가 상대적으로 천천히 변화하고, 이로 인해 current Q function과 target Q function 간의 차이가 크지 않아 단순히 두 개의 네트워크를 사용하는 것만으로는 이점이 적기 때문이다.
 
 #### 2. Double Q-learning
 
@@ -98,19 +98,27 @@ $$\epsilon - clip(N(0, \sigma), -c, c)$$
 
 TD3는 위에서 언급한 것과 같이 DDPG에서 빈번히 발생한 문제들을 해결하기 위해 알고리즘을 개선한 것이라고 할 수 있다. 즉 기본적으로는 이름에서도 알 수 있듯이 DDPG의 구조를 가지고 있다. 구체적으로 TD3에는 다음과 같이 세 가지 세부 알고리즘이 구현되어 있다.
 
-  1. **Twin(clipped)**
+1. **Twin(clipped)**
+
+
     - DDPG와 마찬가지로 두 개의 Critic을 가지고 있지만, target value y 를 구할 때에는 둘 중 작은 target value 를 사용한다.
     - 이를 통해 overestimation bias를 낮춘다.
-  2. **Delayed**
+
+2. **Delayed**
+
+
     - Critic이 d번 업데이트 될 때, Policy는 1번만 업데이트 한다.
     - 이를 통해 보다 안정적인 policy 업데이트가 가능해진다.
-  3. **noise to target policy**
+
+3. **noise to target policy**
+
+
     - target value를 구할 때 사용되는 action에 노이즈를 더해 사용한다.
     - 이를 통해 target value의 narrow peak(또는 local minimum)에 덜 민감해진다.
 
 ### Algorithm of TD3
 
-<img src="/static/images/paper-review/td3_algorithm.png" className="w-[80%] mx-auto block" />
+<img src="/static/images/paper-review/td3_algorithm.png" className="mx-auto block w-[80%]" />
 
 - 2번째 줄에서 선언하는 것과 같이 target network 를 별도로 두는 방법은 DDPG에서도 사용되는 방법이다.
 - 7번째 줄에서 target value y를 구하는 데에 사용되는 action πφ′(s′) 에 노이즈 ε를 더하고 있다(noise to target policy). 이 때 action a~를 구할 때 사용되는 policy는 2번째 줄에서 선언한 target network이다.

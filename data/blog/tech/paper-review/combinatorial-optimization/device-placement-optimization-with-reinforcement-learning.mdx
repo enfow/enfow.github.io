@@ -1,14 +1,14 @@
 ---
-title: "Device Placement Optimization with Reinforcement Learning"
+title: 'Device Placement Optimization with Reinforcement Learning'
 date: '2020-11-07'
-tags: ["Reinforcement-Learning", 'Combinatorial-Optimization', 'Placement']
+tags: ['Reinforcement-Learning', 'Combinatorial-Optimization', 'Placement']
 draft: false
-summary: ""
+summary: ''
 ---
 
 - Azalia Mirhoseini, Hieu Pham, Quoc V. Le, Benoit Steiner, Rasmus Larsen, Yuefeng Zhou, Naveen Kumar, Mohammad Norouzi, Samy Bengio, Jeff Dean
 - 2017
-- [논문 링크](<https://arxiv.org/abs/1706.04972>)
+- [논문 링크](https://arxiv.org/abs/1706.04972)
 
 # Summary
 
@@ -88,7 +88,7 @@ $$
 \nabla_\theta J(\theta) \approx {1 \over K} \Sigma_{i=1}^K (r(\mathcal P) - B) \cdot \nabla_\theta \log p(\mathcal P \lvert \mathcal G; \theta)
 $$
 
-식을 정확하게 추정하는 것이 중요하다. 여기서 Worker의 숫자가 $$K$$가 되므로, Worker가 많으면 많을수록 현재 Controller가 가지고 있는 Policy Parameter $$\theta$$의  Gradient를 보다 정확하게 추정할 수 있다. 논문 실험에서는 20개의 Controller 각각에 4~8개의 Worker를 붙여 진행했다고 한다.
+식을 정확하게 추정하는 것이 중요하다. 여기서 Worker의 숫자가 $$K$$가 되므로, Worker가 많으면 많을수록 현재 Controller가 가지고 있는 Policy Parameter $$\theta$$의 Gradient를 보다 정확하게 추정할 수 있다. 논문 실험에서는 20개의 Controller 각각에 4~8개의 Worker를 붙여 진행했다고 한다.
 
 ## Reducing Variance
 

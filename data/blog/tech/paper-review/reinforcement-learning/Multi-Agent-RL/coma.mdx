@@ -1,14 +1,14 @@
 ---
-title: "[COMA] Counterfactual Multi-Agent Policy Gradients"
+title: '[COMA] Counterfactual Multi-Agent Policy Gradients'
 date: '2020-08-15'
 tags: ['Reinforcement-Learning', 'Multi-Agent-RL']
 draft: false
-summary: ""
+summary: ''
 ---
 
 - Jakob N. Foerster, Gregory Farquhar 등
 - 2017
-- [논문 링크](<https://arxiv.org/abs/1705.08926>)
+- [논문 링크](https://arxiv.org/abs/1705.08926)
 
 ## Summary
 
@@ -24,7 +24,7 @@ summary: ""
 
 ### Single Agent & Multi Agent
 
-물론 Multi Agent의 특성을 가지는 문제들은 일반적인 Single Agent 알고리즘들로도 해결이 가능하다. Agent의 갯수에 상관없이 모든 Agent가 수집한 Observation을 하나의 Observation으로 보고, 이에 따라 Policy가 모든 Agent의 Action을 결정하도록 하기만 하면 되기 때문이다. 하지만 이 경우 Agent의 갯수가 늘어남에 따라 Action Space 또한 증가하여 차원의 저주에서 자유롭지 못하다.  Multi-Agent 알고리즘들은 Single Agent 알고리즘들이 가지는 이러한 한계를 해결하는 데에 집중한다.
+물론 Multi Agent의 특성을 가지는 문제들은 일반적인 Single Agent 알고리즘들로도 해결이 가능하다. Agent의 갯수에 상관없이 모든 Agent가 수집한 Observation을 하나의 Observation으로 보고, 이에 따라 Policy가 모든 Agent의 Action을 결정하도록 하기만 하면 되기 때문이다. 하지만 이 경우 Agent의 갯수가 늘어남에 따라 Action Space 또한 증가하여 차원의 저주에서 자유롭지 못하다. Multi-Agent 알고리즘들은 Single Agent 알고리즘들이 가지는 이러한 한계를 해결하는 데에 집중한다.
 
 ### Centralised Training of Decentralised Policies
 
@@ -38,22 +38,22 @@ Centralised Policy가 보다 단순하지만 문제 상황에 따라 Decentraliz
 
 Multi Agent에서는 Agent가 복수가 되면서 Global과 Local(individual)을 나누게 된다. 이와 관련하여 기본적인 MDP 요소들의 표기법은 다음과 같다.
 
-|notation|desc|
-|:------|:---|
-|$$a \in A$$|Individual Agent|
-|$$s \in S$$|Global State|
-|$$\boldsymbol{u} \in \boldsymbol{U} = U^n$$|Joint Action|
-|$$u^a \in U$$|Agent $$a$$'s Action|
-|$$P(s' \lvert s, \boldsymbol{u}): S \times \boldsymbol{U} \times S \rightarrow [0, 1]$$|State Transition|
-|$$r(s, \boldsymbol{u}):S \times \boldsymbol{U} \rightarrow R$$|Shared Reward Function|
+| notation                                                                                | desc                   |
+| :-------------------------------------------------------------------------------------- | :--------------------- |
+| $$a \in A$$                                                                             | Individual Agent       |
+| $$s \in S$$                                                                             | Global State           |
+| $$\boldsymbol{u} \in \boldsymbol{U} = U^n$$                                             | Joint Action           |
+| $$u^a \in U$$                                                                           | Agent $$a$$'s Action   |
+| $$P(s' \lvert s, \boldsymbol{u}): S \times \boldsymbol{U} \times S \rightarrow [0, 1]$$ | State Transition       |
+| $$r(s, \boldsymbol{u}):S \times \boldsymbol{U} \rightarrow R$$                          | Shared Reward Function |
 
 이에 덧붙여 각각의 Agent가 서로 다른 것을 관찰할 수 있다는 가정(**partially observable**)을 위해 다음과 같은 표기법을 추가한다.
 
-|notation|desc|
-|:------|:---|
-|$$O(s,a): S \times X \rightarrow Z$$|Observation Function|
-|$$\tau^a \in T = (Z \times U)^*$$|Action-Observation History|
-|$$\pi^a (u^a \lvert \tau^a): T \times U \rightarrow [0, 1]$$|Decentralisation Policies|
+| notation                                                     | desc                       |
+| :----------------------------------------------------------- | :------------------------- |
+| $$O(s,a): S \times X \rightarrow Z$$                         | Observation Function       |
+| $$\tau^a \in T = (Z \times U)^*$$                            | Action-Observation History |
+| $$\pi^a (u^a \lvert \tau^a): T \times U \rightarrow [0, 1]$$ | Decentralisation Policies  |
 
 볼드체로 되어 있는 것은 joint를 뜻하며, 여기서는 나오지 않았지만 $$-a$$는 Agent $$a$$를 제외한 나머지 Agent에 대한 것을 의미한다.
 
@@ -85,7 +85,7 @@ Multi Agent에 Actor-Critic을 적용하는 가장 단순한 방법은 Actor-Cri
 
 ## Counterfactual Multi-Agent Policy Gradients
 
-<img src="/static/images/study/coma_architecture.png" className="w-[45em] block mx-auto" />
+<img src="/static/images/study/coma_architecture.png" className="mx-auto block w-[45em]" />
 
 논문에서 제시하는 COMA 알고리즘은 IAC가 가지는 단점들을 극복하는 것을 목표로 한다. 이를 위해 COMA에서 도입하고 있는 방법론들은 다음과 같은 것들이 있다.
 
@@ -113,7 +113,7 @@ $$
 
 하지만 이를 곧바로 적용하는 것은 또 다른 두 가지 문제를 낳게 되는데, 첫째로는 $$r(s, (\boldsymbol{u}^{-a}, c^a))$$를 구하기 위해 추가적인 Simulator가 필요하다는 것이고, 두번째로는 Default Action을 결정하는 방법에 관한 것이다.
 
-두 가지 문제를 한 번에 해결하기 위해 COMA에서는 Centralised Critic를 가지고 Difference Reward를 계산하는 방법을 도입했다. 구체적으로 다음과 같이 Agent $$a$$에 대한 Advantage Function를 위의 Difference Reward 형태로 변환하고, 이를 구하기 위해 Centralised Critic  $$Q(s, \boldsymbol{u})$$를 적극적으로 활용하는 것이다.
+두 가지 문제를 한 번에 해결하기 위해 COMA에서는 Centralised Critic를 가지고 Difference Reward를 계산하는 방법을 도입했다. 구체적으로 다음과 같이 Agent $$a$$에 대한 Advantage Function를 위의 Difference Reward 형태로 변환하고, 이를 구하기 위해 Centralised Critic $$Q(s, \boldsymbol{u})$$를 적극적으로 활용하는 것이다.
 
 $$
 \eqalign{
@@ -127,6 +127,6 @@ $$
 
 ### 3. Use of a critic representation that allows efficient evaluation of baseline
 
-<img src="/static/images/study/coma_critic.png" className="w-[15em] float-left" />
+<img src="/static/images/study/coma_critic.png" className="float-left w-[15em]" />
 
 그런데 Neural Network로 Critic을 구성하는 경우에 위 방법을 사용하면 Action의 갯수만큼 매 Agent마다 Critic을 계산해주어야 하므로 연산 횟수가 크게 늘어난다는 문제점이 발생한다. 이를 해결하기 위해 COMA에서는 다소 특수한 형태의 Critic을 사용하게 된다. 즉 입력으로 다른 agent의 Action $$\boldsymbol{u^{-a}}$$ 등이 들어오면 출력으로 각 Agent $$a$$의 Action에 대한 Q value가 한 번에 나오도록 하여 counterfactual advantage를 한 번에 구할 수 있도록 한 것이다. COMA의 Critic 구조를 보여주는 왼쪽 그림에서 가운데 Neural Network를 양변 사다리꼴로 표현하고 여러 개의 Q Value를 출력하도록 하는 이유가 여기에 있다.

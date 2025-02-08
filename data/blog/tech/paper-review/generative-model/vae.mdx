@@ -1,14 +1,14 @@
 ---
-title: "[VAE] Auto-Encoding Variational Bayes"
+title: '[VAE] Auto-Encoding Variational Bayes'
 date: '2020-03-28'
-tags: ['Generative-Model', "Auto-Encoder"]
+tags: ['Generative-Model', 'Auto-Encoder']
 draft: false
-summary: ""
+summary: ''
 ---
 
 - Diederic Kingma, Max Welling
 - 2013
-- [논문 링크](<https://arxiv.org/abs/1312.6114>)
+- [논문 링크](https://arxiv.org/abs/1312.6114)
 
 # Summary
 
@@ -67,7 +67,7 @@ $$
 \log p_\theta(x) = D_{KL}(q_{\phi}(z \lvert x) \| p_\theta(z \lvert x)) + L(\theta, \phi ; x)
 $$
 
-여기서 $$L(\theta, \phi ; x)$$를 **lower bound**라고 하는데, 이는 우변의 두 번째 항 $$ D_{KL}(q_{\phi}(z \lvert x) \| p_\theta(z \lvert x))$$이 항상 양수이기 때문에 다음과 같이 표현할 수 있어 붙은 이름이다.
+여기서 $$L(\theta, \phi ; x)$$를 **lower bound**라고 하는데, 이는 우변의 두 번째 항 $$ D*{KL}(q*{\phi}(z \lvert x) \| p\_\theta(z \lvert x))$$이 항상 양수이기 때문에 다음과 같이 표현할 수 있어 붙은 이름이다.
 
 $$
 \log p_\theta(x) \geqq L(\theta, \phi ; x)
@@ -141,7 +141,7 @@ $$
 
 ---
 
-$$ z = g_\phi (\epsilon, x) $$ 가 주어졌을 때
+$$ z = g\_\phi (\epsilon, x) $$ 가 주어졌을 때
 
 $$
 q_\phi(z \lvert x) \Pi_i dz_i = p(\epsilon) \Pi_i d\epsilon_i

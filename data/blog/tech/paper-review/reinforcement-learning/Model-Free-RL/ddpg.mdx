@@ -1,14 +1,14 @@
 ---
-title: "[DDPG] Continuous Control with Deep Reinforcement Learning"
+title: '[DDPG] Continuous Control with Deep Reinforcement Learning'
 date: '2019-11-07'
 tags: ['Reinforcement-Learning', 'Model-Free-RL']
 draft: false
-summary: ""
+summary: ''
 ---
 
 - P. Lillicrap 등
 - 2016
-- [논문 링크](<https://arxiv.org/abs/1509.02971>)
+- [논문 링크](https://arxiv.org/abs/1509.02971)
 
 ## Summary
 
@@ -22,7 +22,7 @@ DQN 알고리즘은 Observation Space가 고차원인 경우에 대해서도 높
 
 ## Deep Deterministic Policy Gradient
 
-**DDPG**는 이름 그대로 Deterministic Policy $$\mu(s)$$를 가정할 때 이를 업데이트하는 방향(Gradient)을 구하는 [DPG(Deterministic Policy Gradient) Thoerem](<http://proceedings.mlr.press/v32/silver14.pdf?CFID=6293331&CFTOKEN=eaaee2b6cc8c9889-7610350E-DCAB-7633-E69F572DC210F301>)에 기초하고 있다. Off-Policy Deterministic Policy Gradient를 가정하는 경우 Performance Gradient는 다음과 같이 구해진다.
+**DDPG**는 이름 그대로 Deterministic Policy $$\mu(s)$$를 가정할 때 이를 업데이트하는 방향(Gradient)을 구하는 [DPG(Deterministic Policy Gradient) Thoerem](http://proceedings.mlr.press/v32/silver14.pdf?CFID=6293331&CFTOKEN=eaaee2b6cc8c9889-7610350E-DCAB-7633-E69F572DC210F301)에 기초하고 있다. Off-Policy Deterministic Policy Gradient를 가정하는 경우 Performance Gradient는 다음과 같이 구해진다.
 
 $$
 \eqalign{
@@ -84,7 +84,7 @@ $$
 
 ## Algorithm of DDPG
 
-<img src="/static/images/paper-review/ddpg_algorithm.png" className="w-full mx-auto block" />
+<img src="/static/images/paper-review/ddpg_algorithm.png" className="mx-auto block w-full" />
 
 - 1 번째 줄에서 actor와 critic을 선언하고, 이어 두 번째 줄에서 actor, critic을 복제하여 target network 를 두고 있다.
 - 8 번째 줄에서 deteriministic policy $$\mu()$$를 통해 현재 state에 대한 action을 고르게 되는데, action에 NOISE를 추가해주고 있다. 여기서 NOISE는 탐색(exploration) 기능을 수행한다.

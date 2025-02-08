@@ -1,14 +1,14 @@
 ---
-title: "[MAML] Model-Agnostic Meta-Learning for Fast Adaptation of Deep Networks"
+title: '[MAML] Model-Agnostic Meta-Learning for Fast Adaptation of Deep Networks'
 date: '2020-09-18'
 tags: ['Meta-Learning']
 draft: false
-summary: ""
+summary: ''
 ---
 
 - Chelsea Finn, Pieter Abbeel,Sergey Levine
 - 2017
-- [Paper Link](<https://arxiv.org/abs/1703.03400>)
+- [Paper Link](https://arxiv.org/abs/1703.03400)
 
 ## Summary
 
@@ -34,12 +34,12 @@ $$
 
 각 구성요소가 의미하는 바는 다음과 같다.
 
-| Notation | Description |
-|:---:|---|
-| $$L(x_1, a_1, ... , x_H, a_H)$$ | Loss Function |
-| $$q(x_1)$$ | Initial Observation Distribution |
-| $$q(x_{t+1} \lvert x_t, a_t)$$ | Transition Distribution |
-| $$H$$ | Episode Length |
+|            Notation             | Description                      |
+| :-----------------------------: | -------------------------------- |
+| $$L(x_1, a_1, ... , x_H, a_H)$$ | Loss Function                    |
+|           $$q(x_1)$$            | Initial Observation Distribution |
+| $$q(x_{t+1} \lvert x_t, a_t)$$  | Transition Distribution          |
+|              $$H$$              | Episode Length                   |
 
 Supervised Learning 뿐만 아니라 Reinforcement Leanring 등 다양한 경우를 고려하기 위해 Transition Distribution을 포함하고 있다. i.i.d Condition을 가정하는 Supervised Learning이라면 $$H=1$$이 되며, Initial Observation Distribution은 데이터의 분포가 된다. 이 경우 Transition Distribution은 사용하지 않는다.
 
@@ -52,17 +52,20 @@ Meta Learning의 기존 방법으로는
 - 전체 Dataset을 학습하는 방법
 - Non-Parametric Method
 
-가 대표적이다. 이 두 가지 방법론의 한계는 명확한데, 일반적으로 적용하는 데에 어려움이 있다는 것이다. Non-Parametric Method의 대표적인 예라고 할 수 있는 Vinyals의 [Matching Network](<https://enfow.github.io/paper-review/meta-learning/2020/09/15/matching_networks_for_one_shot_laerning/>)만 하더라도 분류 문제만을 목표로 삼고 있다. MAML은 임의의 $$p(T)$$에 맞춰 Parameter를 업데이트 하는 업데이트 알고리즘으로서 Model의 구조와 Task의 특성에 구애받지 않고 적용 가능하다는 점에서 이전의 방법론들과 차별적이다.
+가 대표적이다. 이 두 가지 방법론의 한계는 명확한데, 일반적으로 적용하는 데에 어려움이 있다는 것이다. Non-Parametric Method의 대표적인 예라고 할 수 있는 Vinyals의 [Matching Network](https://enfow.github.io/paper-review/meta-learning/2020/09/15/matching_networks_for_one_shot_laerning/)만 하더라도 분류 문제만을 목표로 삼고 있다. MAML은 임의의 $$p(T)$$에 맞춰 Parameter를 업데이트 하는 업데이트 알고리즘으로서 Model의 구조와 Task의 특성에 구애받지 않고 적용 가능하다는 점에서 이전의 방법론들과 차별적이다.
 
 ### "Model-Agnostic"
 
-MAML의 이러한 특성을 나타내는 단어가 **MAML**에서 **Model-Agnostic**이다. Model-Agnostic이란 학습에 사용된 모델이 무엇인지 상관없이 적용 가능하다는 것을 의미한다. 이름에 걸맞게 MAML은 Model의 구조에 어떠한 제약도 없으며, Model이 어떤 Parameter $$\theta$$로 Parametrized되어 있고, 이를 Loss Function이 충분히 Smooth하여  Gradient Descent(or Ascent)를 적용하여 Model을 업데이트 할 수 있기만 하면 적용이 가능하다. 이와 관련하여 논문에서는 Supervised Regression and Classification과 Reinforcement Learning 두 가지 케이스에 대해 적용 예시를 보여준다.
+MAML의 이러한 특성을 나타내는 단어가 **MAML**에서 **Model-Agnostic**이다. Model-Agnostic이란 학습에 사용된 모델이 무엇인지 상관없이 적용 가능하다는 것을 의미한다. 이름에 걸맞게 MAML은 Model의 구조에 어떠한 제약도 없으며, Model이 어떤 Parameter $$\theta$$로 Parametrized되어 있고, 이를 Loss Function이 충분히 Smooth하여 Gradient Descent(or Ascent)를 적용하여 Model을 업데이트 할 수 있기만 하면 적용이 가능하다. 이와 관련하여 논문에서는 Supervised Regression and Classification과 Reinforcement Learning 두 가지 케이스에 대해 적용 예시를 보여준다.
 
 ### MAML is Parameter Update Algorithm
 
 MAML은 여러 Task가 공유하는 Internal Representation을 찾아내는 방향으로 Model을 업데이트하는 방식에 관해 정의하는, 일종의 업데이트 알고리즘이다.
 
-<img src="/static/images/paper-review/maml_internal_representation.png" className="w-[38em] block mx-auto" />
+<img
+  src="/static/images/paper-review/maml_internal_representation.png"
+  className="mx-auto block w-[38em]"
+/>
 
 MAML에서 시도하는 접근방법은 위의 이미지와 같이 도식화 할 수 있다. 만약 일반적인 학습 방법대로 Initial Parameter $$\theta$$에 시작하여 새로운 Task를 학습한다면 상당히 많은 업데이트를 거쳐야 Optimal Parameter $$\star$$에 가까워질 수 있을 것이다. 하지만 MAML은 새로운 Task와 유사한 $$p(T)$$들에 맞춰 미리 Parameter를 업데이트하게 되고, 이렇게 업데이트 된 Parameter $$\theta'$$에서부터 시작하게 된다. 따라서 새로운 Task에 대해 보다 적은 학습량 만으로도 충분히 Optimal Parameter $$\star$$에 도달하는 것이 가능하다.
 
@@ -74,7 +77,10 @@ MAML에서 시도하는 접근방법은 위의 이미지와 같이 도식화 할
 
 한마디로 각 Task가 가지는 loss function의 Gradient 방향으로 파라미터를 약간 업데이트 할 때, $$p(T)$$의 모든 Task들의 성능이 향상되는 파라미터 $$\theta$$를 찾겠다는 것이다. 아래 그림을 보게 되면 $$\theta$$가 업데이트 됨에 따라 점점 더 Task $$T_1, T_2, T_3$$의 Optimal한 $$\theta_1^*, \theta_2^*, \theta_3^*$$에 가까워짐을 알 수 있다. 그리고 최종 $$\theta$$는 세 $$\theta_1^*, \theta_2^*, \theta_3^*$$ 어디에도 약간의 업데이트를 거쳐 도달할 수 있는 상태에 놓여 있다.
 
-<img src="/static/images/paper-review/maml_algorithm_diagram.png" className="w-[30em] block mx-auto" />
+<img
+  src="/static/images/paper-review/maml_algorithm_diagram.png"
+  className="mx-auto block w-[30em]"
+/>
 
 Parameter $$\theta$$로 Parameterized 된 모델을 $$f_\theta$$라고 하자. 만약 어떤 Task $$T_i \backsim p(T)$$에 맞춰 $$\theta$$를 Gradient Descent에 따라 업데이트 한다면 다음과 같이 표현할 수 있다.
 
@@ -93,11 +99,12 @@ $$
 최종적으로 Objective Function에 맞춰 SGD를 적용한 업데이트 식은 다음과 같다.
 
 $$
-\theta \leftarrow \theta - \beta \nabla_\theta \Sigma_{T_i \backsim p(T)} L_{T_i}(f_{\theta - \alpha \nabla_\theta L_{T_i}(f_\theta)})$$
+\theta \leftarrow \theta - \beta \nabla_\theta \Sigma_{T_i \backsim p(T)} L_{T_i}(f_{\theta - \alpha \nabla_\theta L_{T_i}(f_\theta)})
+$$
 
 그리고 이를 적용한 MAML의 기본 알고리즘은 다음과 같다.
 
-<img src="/static/images/paper-review/maml_algorithm.png" className="w-[30em] block mx-auto" />
+<img src="/static/images/paper-review/maml_algorithm.png" className="mx-auto block w-[30em]" />
 
 ## Species of MAML
 
@@ -105,8 +112,14 @@ $$
 
 ### Supervised Regression and Classification with MAML
 
-<img src="/static/images/paper-review/maml_supervised_regression_and_classification_algorithm.png" className="w-[30em] block mx-auto" />
+<img
+  src="/static/images/paper-review/maml_supervised_regression_and_classification_algorithm.png"
+  className="mx-auto block w-[30em]"
+/>
 
 ### Reinforcement Learning with MAML
 
-<img src="/static/images/paper-review/maml_reinforcement_learning_algorithm.png" className="w-[30em] block mx-auto" />
+<img
+  src="/static/images/paper-review/maml_reinforcement_learning_algorithm.png"
+  className="mx-auto block w-[30em]"
+/>

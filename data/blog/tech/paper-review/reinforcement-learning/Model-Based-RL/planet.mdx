@@ -1,16 +1,16 @@
 ---
-title: "[PlaNet] Learning Latent Dynamics for Planning from Pixels"
+title: '[PlaNet] Learning Latent Dynamics for Planning from Pixels'
 date: '2020-09-13'
 tags: ['Reinforcement-Learning', 'Model-Based-RL']
 draft: false
-summary: ""
+summary: ''
 ---
 
 # 논문 제목 : Learning Latent Dynamics for Planning from Pixels
 
 - Danijar Hafner, Timothy Lillicrap, Ian Fischer, Ruben Villegas, David Ha, Honglak Lee, James Davidson
 - 2018
-- [논문 링크](<https://arxiv.org/abs/1811.04551>)
+- [논문 링크](https://arxiv.org/abs/1811.04551)
 
 ## Summary
 
@@ -58,7 +58,10 @@ PlaNet은 하나의 이미지 Observation을 현재 Enviroment의 State로 보�
 
 현재 시점 $$t$$에서 Planning을 통해 Action $$a_t$$를 결정하겠다는 것은 Latent State $$s_t$$에서 시작하여 만들어질 수 있는 무한한 State-Action Sequence 중에서 기대 누적 Reward가 가장 큰 경우에 따르겠다는 것을 뜻한다. 여기서도 최적의 State-Action Sequence를 찾기 위해서는 다양하게 경험해보고 이들 간의 기대 누적 Reward를 비교해보는 것이 중요하다고 할 수 있다.
 
-<img src="/static/images/paper-review/planet_planning_algorithm.png" className="w-[42em] block mx-auto my-4" />
+<img
+  src="/static/images/paper-review/planet_planning_algorithm.png"
+  className="mx-auto my-4 block w-[42em]"
+/>
 
 이를 위해 PlaNet은 매 Optimization Iteration마다 $$J$$개의 Action Sequence를 Action Sampling Distribution $$q(a_{t:t+H})$$에서 Sampling하며(line 3~6), 이 중 Sequence의 기대 누적 Reward $$R^{(j)}$$가 큰 순서대로 $$K$$개를 뽑아(line 7) 이들의 분포로 Action Sampling Distribution을 업데이트하도록 하고 있다(line 9). 초기의 Action Sampling Distribution은 알고리즘에 나와 있듯(line 1) Normal Distribution으로 한다. 결과적으로 $$s_t$$에서의 Action은 $$\mu$$로 결정된다.
 
@@ -83,7 +86,7 @@ $$
 
 #### One-Step Predictive Distribution
 
-[VAE](<https://enfow.github.io/paper-review/generative-model/2020/03/28/VAE-auto_encoding_variational_bayes/>)의 Lower Bound 식을 먼저 확인해보면 다음과 같다.
+[VAE](https://enfow.github.io/paper-review/generative-model/2020/03/28/VAE-auto_encoding_variational_bayes/)의 Lower Bound 식을 먼저 확인해보면 다음과 같다.
 
 $$
 \eqalign{
@@ -111,7 +114,10 @@ $$
 
 이와 관련하여 Transition Model $$s_t \backsim p(s_t \lvert s_{t-1}, a_{t-1})$$과 관련해 이를 Stochastic Model로 할 것인지, Deterministic Model(variance=0)로 할 것인지 또한 중요한 문제가 된다. 왜냐하면 Stochstic하다고 가정하는 경우 Transition Model이 Multiple Step을 예측하는 것을 어렵게 한다는 단점을 가지고, Deterministic하다고 가정하는 경우에는 Optimization 과정에서 Solution을 찾는 것이 너무 어려워 학습이 어려워진다는 단점을 각각 가지기 때문이다.
 
-<img src="/static/images/paper-review/planet_recurrent_state_space_model.png" className="w-[42em] block mx-auto my-4" />
+<img
+  src="/static/images/paper-review/planet_recurrent_state_space_model.png"
+  className="mx-auto my-4 block w-[42em]"
+/>
 
 위의 그림에서 원 속의 $$s_t$$는 Stochastic Variable이고 네모 박스의 $$h_t$$는 Deterministic Variable이다. 첫 번째와 두 번째 그림에 나와있는 Deterministic Model은 $$h_t$$만을, Stochastic Model은 $$s_t$$만을 사용하는데 이 경우 위에서 언급한 문제들이 발생한다. 이러한 문제를 피하기 위해 논문에서 제시하는 방법 **RSSM**은 $$h_t$$ 와 $$s_t$$를 함께 사용하여 보다 Robust하면서도 Multiple Step 예측에도 효과적인 모델이 될 수 있다고 언급한다.
 
@@ -140,7 +146,10 @@ $$
 
 이렇게 바뀌면서 단순히 Multi-Step 이후를 예측한다는 것 뿐만 아니라 $$t-d$$시점과 $$t$$시점 사이에 추가적인 Observation 없이도 예측이 가능해졌다는 점이 중요하다. 즉 중간의 Observation 없이 Multi-Step 이후의 Latent State를 예측하는 것이 가능하다는 것이다.
 
-<img src="/static/images/paper-review/planet_standard_variationa_bound_and_observation_overshooting.png" className="w-[32em] block mx-auto my-4" />
+<img
+  src="/static/images/paper-review/planet_standard_variationa_bound_and_observation_overshooting.png"
+  className="mx-auto my-4 block w-[32em]"
+/>
 
 위의 그림에서 확인할 수 있듯이 위의 식은 예측한 Latent State가 얼마나 정확한지 확인하기 위해 실제 Observation과의 Reconstruction Error를 구하게 된다.
 
@@ -163,7 +172,10 @@ $$
 
 논문에 나와있는 이미지로 식의 의미를 이해하면 다음과 같다.
 
-<img src="/static/images/paper-review/planet_latent_overshooting.png" className="w-[24em] block mx-auto my-4" />
+<img
+  src="/static/images/paper-review/planet_latent_overshooting.png"
+  className="mx-auto my-4 block w-[24em]"
+/>
 
 Latent OverShooting에서는 $$t$$시점에 접근 가능한 모든 Distance $$d$$의 Latent State를 $$s_t$$와의 비교를 통해 학습을 진행하도록 하고 있다. 따라서 Latent State를 Reconstruction 할 필요가 없고, 여러 Distance에 대해 일괄적으로 처리할 수 있다는 장점을 가지고 있다. 위의 식에서 $$\beta$$는 $$\beta$$-VAE를 말한다.
 
@@ -171,7 +183,7 @@ Latent OverShooting에서는 $$t$$시점에 접근 가능한 모든 Distance $$d
 
 전체 알고리즘은 다음과 같다. 11번째 줄에서 $$\text{planner}$$가 위의 `Take Action with Planning Algorithm`에서 확인한 Planning 알고리즘이다.
 
-<img src="/static/images/paper-review/planet_algorithm.png" className="w-[32em] block mx-auto" />
+<img src="/static/images/paper-review/planet_algorithm.png" className="mx-auto block w-[32em]" />
 
 ### Data Collection
 

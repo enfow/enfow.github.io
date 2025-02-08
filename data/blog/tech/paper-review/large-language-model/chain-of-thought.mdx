@@ -1,9 +1,9 @@
 ---
-title: "[CoT] Chain-of-Thought Prompting Elicits Reasoning in Large Language Models"
+title: '[CoT] Chain-of-Thought Prompting Elicits Reasoning in Large Language Models'
 date: '2024-09-21'
 tags: ['Large-Language-Model', 'Chain-of-Thought']
 draft: false
-summary: ""
+summary: ''
 ---
 
 # Chain-of-Thought Prompting Elicits Reasoning in Large Language Models
@@ -70,7 +70,11 @@ A: The answer is 11.
 
 기존 방식(Standard Prompting)과 비교하여 보면 보다 쉽게 이해할 수 있다.
 
-<img src="/static/images/paper-review/cot-compare-standard-and-cot.png" alt="cot-compare-standard-and-cot" className="w-full mx-auto block" />
+<img
+  src="/static/images/paper-review/cot-compare-standard-and-cot.png"
+  alt="cot-compare-standard-and-cot"
+  className="mx-auto block w-full"
+/>
 
 ### Related Research
 
@@ -104,7 +108,11 @@ Chain-of-Thought 는 다음과 같은 장점을 가진다.
 
 Reasoning task에 대한 Chain-of-Thought의 효과성을 측정하기 위해 세 가지 Task, Arithmetic Reasoning, Commonsense Reasoning, Symbolic Reasoning 에 대한 Benchmark dataset들을 선정하고 실험을 진행했다. 일반적인 Language Model Benchmark Dataset 에는 Chain-of-Thought 에 해당하는 부분이 포함되어 있지 않기 때문에 논문의 주요 저자들이 직접 작성했다고 한다. 구체적인 각 Task 별 예시는 아래와 같다.
 
-<img src="/static/images/paper-review/cot-examples-of-triples.png" alt="cot-examples-of-triples" className="w-[80%] mx-auto block" />
+<img
+  src="/static/images/paper-review/cot-examples-of-triples.png"
+  alt="cot-examples-of-triples"
+  className="mx-auto block w-[80%]"
+/>
 
 기존과 같이 Input-Output Pair 만을 사용하는 방법과 성능을 비교하기 위해 기존 방법을 Standard Prompting 으로, 논문에서 제안하는 방법을 Chain-of-Thought Prompting 으로 하여 비교하였다.
 
@@ -116,7 +124,11 @@ GSM8K, SVAMP, MAWPS 등 총 5개의 Benchmark Dataset 에 대해 실험을 진�
 
 모델의 크기에 따라 실험을 진행하였고, 일부의 실험 결과는 다음과 같다.
 
-<img src="/static/images/paper-review/cot-arithmetic-reasoning-result-1.png" alt="cot-arithmetic-reasoning-result-1" className="w-[60%] mx-auto block" />
+<img
+  src="/static/images/paper-review/cot-arithmetic-reasoning-result-1.png"
+  alt="cot-arithmetic-reasoning-result-1"
+  className="mx-auto block w-[60%]"
+/>
 
 전체적으로 볼 때, 모델의 크기가 커짐에 따라 성능이 좋아지고, Chain-of-Thought 로 인한 증가 폭 또한 커짐을 알 수 있다. 특히 GPT-3 175B와 PaLM 540B 의 경우 많은 데이터 셋에서 기존에 최고 성능을 보이던 Task-Specific Fine-Tuning 모델보다 더욱 높은 점수를 보여주었다(SoTA).
 
@@ -124,7 +136,11 @@ GSM8K, SVAMP, MAWPS 등 총 5개의 Benchmark Dataset 에 대해 실험을 진�
 
 Few-shot Learning 에서는 examplar의 조합에 따라 성능이 크게 달라질 수 있다([링크](https://arxiv.org/abs/2102.09690)). Chain-of-Thought에서도 유사한 문제가 발생할 가능성은 충분하며, 특히 프롬프트를 작성하는 Annotator에 따라 성능이 달라질 수 있다. 이를 확인해보기 위해 논문의 세 저자들은 각각 독립적으로 프롬프트로 사용할 Chain-of-Thought 를 작성하여 실험을 진행하였다.
 
-<img src="/static/images/paper-review/cot-arithmetic-reasoning-result-2.png" alt="cot-arithmetic-reasoning-result-2" className="w-[40%] mx-auto block" />
+<img
+  src="/static/images/paper-review/cot-arithmetic-reasoning-result-2.png"
+  alt="cot-arithmetic-reasoning-result-2"
+  className="mx-auto block w-[40%]"
+/>
 
 Annotator에 따라 성능의 차이가 존재하나, 베이스라인인 Standard Prompting과 비교해 볼 땐 모두 더 높은 점수를 기록하였다. 이러한 점에서 Chain-of-Thought 으로 인한 성능의 증가는 프롬프트의 스타일과는 개별적으로 이뤄진 것이라 할 수 있다.
 
@@ -132,7 +148,11 @@ Annotator에 따라 성능의 차이가 존재하나, 베이스라인인 Standar
 
 CSQA, StrategyQA 등 5개의 Benchmark Dataset을 활용하였다. 기본적으로 Arithmetic Reasoning의 실험 방식과 크게 다르지 않았다.
 
-<img src="/static/images/paper-review/cot-commonsense-reasoning-result-1.png" alt="cot-commonsense-reasoning-result-1" className="w-full mx-auto block" />
+<img
+  src="/static/images/paper-review/cot-commonsense-reasoning-result-1.png"
+  alt="cot-commonsense-reasoning-result-1"
+  className="mx-auto block w-full"
+/>
 
 실험 결과 또한 모델의 크기가 커질수록 성능이 좋아진다는 점에서 Arithmetic Reasoning 의 실험 결과와 유사했다.
 
@@ -164,7 +184,11 @@ A coin is heads up. Phoebe flips the coin. Osvaldo does not flip the coin. Is th
 
 Last letter concatenation 에서는 Demonstration 에서는 2개 단어로 구성된 이름을, 실제 문제에서는 3~4개의 단어로 구성된 이름을 사용하는 것으로 구현하였고, Coin flip 에서는 flip 하는 횟수를 늘리는 방식으로 구현하였다.
 
-<img src="/static/images/paper-review/cot-symbolic-reasoning-result-1.png" alt="cot-symbolic-reasoning-result-1" className="w-[50%] mx-auto block" />
+<img
+  src="/static/images/paper-review/cot-symbolic-reasoning-result-1.png"
+  alt="cot-symbolic-reasoning-result-1"
+  className="mx-auto block w-[50%]"
+/>
 
 In-Domain 문제에서는 PaLM 540B 모델을 기준으로 두 문제에 대해 각각 7.6% -> 99.4%, 98.1 -> 100% 로 스코어가 증가하여, Chain-of-Thougth 가 매우 탁월하게 작용함을 보여주었다. OOD 문제에서는 완벽하게 풀어내지는 못하였지만 비약적인 성능 향상을 보여주었다.
 
@@ -178,7 +202,11 @@ Chain-of-Thought에 의한 효과는 모델의 크기가 크면 클수록 보다
 
 이것의 이유를 알아보기 위해 논문에서는 PaLM 62B 모델이 오답을 만들어낸 경우를 분석하여 semantic understanding(20 errors), one step missing(18 errors), other errors(7 errors) 세 가지로 분류하였다. 이후 540B 모델에 대해서도 동일한 실험을 진행하여 어떤 분류의 error 들이 얼마나 감소하였는지 아래와 같이 정리하였다.
 
-<img src="/static/images/paper-review/cot-65b-540b-error.png" alt="cot-65b-540b-error" className="w-[90%] mx-auto block" />
+<img
+  src="/static/images/paper-review/cot-65b-540b-error.png"
+  alt="cot-65b-540b-error"
+  className="mx-auto block w-[90%]"
+/>
 
 작은 모델이 해결하지 못한 문제들을 큰 모델은 일부 잘 해결하였다는 점에서 성능이 보다 높아졌음을 알 수 있다. 나아가 작은 모델들이 실패한 결과들을 분석해보면 다음과 같은 특성을 보였다.
 

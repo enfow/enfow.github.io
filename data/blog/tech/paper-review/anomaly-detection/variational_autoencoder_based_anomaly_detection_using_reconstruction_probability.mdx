@@ -1,14 +1,14 @@
 ---
-title: "Variational AutoEncoder based Anomaly Detection using Reconstruction Probability"
+title: 'Variational AutoEncoder based Anomaly Detection using Reconstruction Probability'
 date: '2020-05-06'
-tags: ["Anomaly Detection", "Auto-Encoder"]
+tags: ['Anomaly Detection', 'Auto-Encoder']
 draft: false
-summary: ""
+summary: ''
 ---
 
 - Jinwon An, Sungzoon Cho
 - 2015
-- [paper link](<http://dm.snu.ac.kr/static/docs/TR/SNUDM-TR-2015-03.pdf>)
+- [paper link](http://dm.snu.ac.kr/static/docs/TR/SNUDM-TR-2015-03.pdf)
 
 # Summary
 
@@ -55,13 +55,13 @@ AutoEncoder로 이상치 탐지를 실시하는 경우에는 기본적으로 정
 
 ## With Variational AutoEncoder
 
-`Variational AutoEncoder(VAE)`에 관해서는 [링크](<https://enfow.github.io/paper-review/neural-network/2020/03/28/VAE-auto_encoding_variational_bayes/>)에도 정리해 두었다. 사실 VAE의 경우에는 AutoEncoder와 형태만 비슷할 뿐 발전 과정이나 수식의 면에서 큰 차이가 있다. 하지만 AutoEncoder와 마찬가지로 Encoder에 의해 차원 축소가 이뤄지고, 바로 뒤의 Decoder로 이를 복원하며, reconstruction error를 사용하여 학습이 이뤄진다는 점에서 유사하기 때문에 동일한 방법으로 이상치 탐지에 사용할 수 있다.
+`Variational AutoEncoder(VAE)`에 관해서는 [링크](https://enfow.github.io/paper-review/neural-network/2020/03/28/VAE-auto_encoding_variational_bayes/)에도 정리해 두었다. 사실 VAE의 경우에는 AutoEncoder와 형태만 비슷할 뿐 발전 과정이나 수식의 면에서 큰 차이가 있다. 하지만 AutoEncoder와 마찬가지로 Encoder에 의해 차원 축소가 이뤄지고, 바로 뒤의 Decoder로 이를 복원하며, reconstruction error를 사용하여 학습이 이뤄진다는 점에서 유사하기 때문에 동일한 방법으로 이상치 탐지에 사용할 수 있다.
 
 VAE의 loss function은 다음과 같다.
 
 $$
 \begin{aligned}
-L(\theta, \phi; x) 
+L(\theta, \phi; x)
 &= - D_{KL}(q_{\phi}(z \mid x) \| p_\theta(z \mid x)) + \log p_\theta(x) \\
 &= - D_{KL}(q_\phi(z \mid x) \| p_\theta(z)) + \mathbb{E}_{z \sim q_\phi(z \mid x)}[\log p_\theta(x \mid z)]
 \end{aligned}
@@ -75,23 +75,23 @@ $$
 
 ## Algorithm
 
-1) Encoder에서 평균과 분산을 구한다
+1. Encoder에서 평균과 분산을 구한다
 
 $$\mu_z^{(i)}, \sigma_z^{(i)} = f_\theta(z\lvert x^{(i)})$$
 
-2) 정규분포에서 latent variable을 L개 추출한다
+2. 정규분포에서 latent variable을 L개 추출한다
 
- $$\text{draw L samples from} z \backsim N( \mu_z^{(i)}, \sigma_z^{(i)} )$$
+$$\text{draw L samples from} z \backsim N( \mu_z^{(i)}, \sigma_z^{(i)} )$$
 
-3) 각 latent sample을 Decoder의 입력으로 하여 각각에 대한 평균과 분산을 구한다
+3. 각 latent sample을 Decoder의 입력으로 하여 각각에 대한 평균과 분산을 구한다
 
 $$\mu_{(\hat x)}^{(i,l)}, \sigma_{(\hat x)}^{(i,l)} = g_\phi(x\lvert z^{(i,l)})$$
 
-4) 이렇게 얻어진 L개의 분포에 대해 입력 값 $$x^{(i)}$$가 나올 확률을 평균한다
+4. 이렇게 얻어진 L개의 분포에 대해 입력 값 $$x^{(i)}$$가 나올 확률을 평균한다
 
 $$\text{recon probability(i)} = {1 \over L} \Sigma_{l=1}^L p_\theta (x^{(i)} \lvert \mu_{(\hat x)}^{(i,l)}, \sigma_{(\hat x)}^{(i,l)} ) $$
 
-5) 확률 값이 $$\alpha$$ 이상인 경우 정상 데이터로, 미만인 경우 이상 데이터로 분류한다.
+5. 확률 값이 $$\alpha$$ 이상인 경우 정상 데이터로, 미만인 경우 이상 데이터로 분류한다.
 
 ---
 

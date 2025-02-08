@@ -1,14 +1,14 @@
 ---
-title: "[TRPO] Trust Region Policy Optimization"
+title: '[TRPO] Trust Region Policy Optimization'
 date: '2020-03-01'
 tags: ['Reinforcement-Learning', 'Model-Free-RL']
 draft: false
-summary: ""
+summary: ''
 ---
 
 - John Schulman, Sergey Levine 등
 - 2015
-- [논문 링크](<https://arxiv.org/abs/1502.05477>)
+- [논문 링크](https://arxiv.org/abs/1502.05477)
 
 ## Summary
 
@@ -165,15 +165,15 @@ $$
 }
 $$
 
-여기서 $$L_{\pi_{\text{old}}}(\pi_{\text{new}}) - C D_{KL}^{\max}(\pi_{\text{old}}, \pi_{\text{new}})$$를 극대화하는 $$\pi_{\text{new}}$$를 다음 policy로 업데이트하면 지속적인 성능 개선이 보장되는 policy update가 가능하다. 이때 $$\eta(\pi_{new})$$를 식 $$L_{\pi_{\text{old}}}(\pi_{\text{new}}) - C D_{KL}^{\max}(\pi_{\text{old}}, \pi_{\text{new}})$$로 근사하기 때문에 [Surrogate Function](<https://kr.mathworks.com/help/gads/what-is-surrogate-optimization.html>)이라고 할 수 있으며 이를 이용하여 다음과 같은 알고리즘을 도출할 수 있다.
+여기서 $$L_{\pi_{\text{old}}}(\pi_{\text{new}}) - C D_{KL}^{\max}(\pi_{\text{old}}, \pi_{\text{new}})$$를 극대화하는 $$\pi_{\text{new}}$$를 다음 policy로 업데이트하면 지속적인 성능 개선이 보장되는 policy update가 가능하다. 이때 $$\eta(\pi_{new})$$를 식 $$L_{\pi_{\text{old}}}(\pi_{\text{new}}) - C D_{KL}^{\max}(\pi_{\text{old}}, \pi_{\text{new}})$$로 근사하기 때문에 [Surrogate Function](https://kr.mathworks.com/help/gads/what-is-surrogate-optimization.html)이라고 할 수 있으며 이를 이용하여 다음과 같은 알고리즘을 도출할 수 있다.
 
-<img src="/static/images/paper-review/trpo_algorithm.png" className="w-[80%] mx-auto block" />
+<img src="/static/images/paper-review/trpo_algorithm.png" className="mx-auto block w-[80%]" />
 
 여기까지가 TRPO의 이론적인 업데이트 방식이다. 하지만 이를 적용하기 위해서는 연산량 등을 고려하여 보다 구체화해야 할 부분들이 남아있다.
 
 ### Trust region contraint Not Penalty
 
-위에서는 $$C D_{KL}^{\max}(\pi_{\text{old}}, \pi_{\text{new}})$$의 크기만큼 **Penalty**를 부여하는 방식을 사용하고 있다. 하지만 $$C$$에 포함되어 있는 $$\epsilon$$의 정의 $$\max_{s, a} \lvert A_\pi (s,a) \rvert$$를 고려하면 결국 매 state에서 새롭게 구해야 하고, 이렇게 되면 연산량이 크게 늘어날 수밖에 없다. 이를 대신하여 논문에서는 충분히 작은 $$\delta$$ 값 내에서만 변화할 수 있도록 **Constraint**를 주는 방법을 제시한다. 즉 Panelty 방식은  $$L_{\pi_{\text{old}}}(\pi_{\text{new}}) - C D_{KL}^{\max}(\pi_{\text{old}}, \pi_{\text{new}})$$를 가장 최대로 하는 $$\theta_{new}$$를 선택하게 된다면 Constraint 방식은 $$D_{\text{KL}}^{\text{max}} (\theta_\text{old}, \theta) \leqq \delta$$라는 제약 조건 내에서 $$L_{\theta_{\text{old}}}(\theta)$$을 최대화 하는 $$\theta_{new}$$를 선택하는 것으로 이해할 수 있다.
+위에서는 $$C D_{KL}^{\max}(\pi_{\text{old}}, \pi_{\text{new}})$$의 크기만큼 **Penalty**를 부여하는 방식을 사용하고 있다. 하지만 $$C$$에 포함되어 있는 $$\epsilon$$의 정의 $$\max_{s, a} \lvert A_\pi (s,a) \rvert$$를 고려하면 결국 매 state에서 새롭게 구해야 하고, 이렇게 되면 연산량이 크게 늘어날 수밖에 없다. 이를 대신하여 논문에서는 충분히 작은 $$\delta$$ 값 내에서만 변화할 수 있도록 **Constraint**를 주는 방법을 제시한다. 즉 Panelty 방식은 $$L_{\pi_{\text{old}}}(\pi_{\text{new}}) - C D_{KL}^{\max}(\pi_{\text{old}}, \pi_{\text{new}})$$를 가장 최대로 하는 $$\theta_{new}$$를 선택하게 된다면 Constraint 방식은 $$D_{\text{KL}}^{\text{max}} (\theta_\text{old}, \theta) \leqq \delta$$라는 제약 조건 내에서 $$L_{\theta_{\text{old}}}(\theta)$$을 최대화 하는 $$\theta_{new}$$를 선택하는 것으로 이해할 수 있다.
 
 $$
 \eqalign{
@@ -266,7 +266,7 @@ $$
 
 ---
 
-### *Importance Sampling
+### \*Importance Sampling
 
 $$f(x)$$의 평균 $$E[f(x)]$$를 샘플링을 통해 추정하는 것은 다음과 같이 나타낼 수 있다.
 

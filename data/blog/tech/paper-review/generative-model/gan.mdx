@@ -1,15 +1,15 @@
 ---
-title: "[GAN] Generative Adversarial Nets"
+title: '[GAN] Generative Adversarial Nets'
 date: '2020-07-31'
-tags: ["Generative-Model", 'GAN']
+tags: ['Generative-Model', 'GAN']
 draft: false
-summary: ""
+summary: ''
 ---
 
 - Ian J. Goodfellow, Jean Pouget-Abadie, Mehdi Mirza, Bing Xu, David Warde-Farley, Sherjil Ozair, Aaron Courville, Yoshua Bengio
 - 2014
-- [논문 링크](<https://papers.nips.cc/paper/5423-generative-adversarial-nets.pdf>)
-- [튜토리얼 링크](<https://arxiv.org/abs/1701.00160>)
+- [논문 링크](https://papers.nips.cc/paper/5423-generative-adversarial-nets.pdf)
+- [튜토리얼 링크](https://arxiv.org/abs/1701.00160)
 
 # Summary
 
@@ -45,7 +45,7 @@ $$
 
 ## Classification of Generative Model
 
-MLE를 사용하는 생성 모델을 Ian Goodfellow는 크게 두 갈래, Explicit Density Method와 Implicit Density Method 두 가지로 나누어 보고 있다. **Explicit Density Method**는 $$P_{model}(x;\theta)$$를 직접 정의하는 방법을 말한다. 이러한 방법은 다시 정확히 계산 가능한 확률 분포(Tractable)를 가정하는지 그렇지 않은 확률 분포(Intractable)를 가정하는지로 나뉘는데, Tractable Explicit Density Model로는 FVBN(1998), Intractable Explicit Density Model로는 Variational Inference를 사용하는 **VAE(2013)**와  Markov chain을 사용하는 **Boltzmann machine**이 있다.
+MLE를 사용하는 생성 모델을 Ian Goodfellow는 크게 두 갈래, Explicit Density Method와 Implicit Density Method 두 가지로 나누어 보고 있다. **Explicit Density Method**는 $$P_{model}(x;\theta)$$를 직접 정의하는 방법을 말한다. 이러한 방법은 다시 정확히 계산 가능한 확률 분포(Tractable)를 가정하는지 그렇지 않은 확률 분포(Intractable)를 가정하는지로 나뉘는데, Tractable Explicit Density Model로는 FVBN(1998), Intractable Explicit Density Model로는 Variational Inference를 사용하는 **VAE(2013)**와 Markov chain을 사용하는 **Boltzmann machine**이 있다.
 
 참고로 VAE는 Intractable하다는 문제점을 Approximation으로 해결한다. VAE 알고리즘에서 직접 함수를 구하는 것이 아닌 비교적 구하기 쉬운 Lower Bound를 극대화하는 방향으로 학습을 진행하는 것을 이러한 관점으로 이해할 수 있다.
 

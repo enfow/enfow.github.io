@@ -1,14 +1,14 @@
 ---
-title: "[BCQ] Off-Policy Deep Reinforcement Learning without Exploration"
+title: '[BCQ] Off-Policy Deep Reinforcement Learning without Exploration'
 date: '2020-01-09'
 tags: ['Reinforcement-Learning', 'Batch-RL']
 draft: false
-summary: ""
+summary: ''
 ---
 
 - Scott Fujimoto, David Meger 등
 - 2019
-- [paper link](<https://arxiv.org/abs/1812.02900>)
+- [paper link](https://arxiv.org/abs/1812.02900)
 
 ## Summary
 
@@ -74,9 +74,9 @@ extrapolation error를 줄이기 위해서는 $$s'$$를 이용해 target value�
 
 보다 구체적으로 batch 환경에서 off-policy agent를 안정적으로 학습시키기 위해서는 action을 선택하는데 있어 다음 세 가지 조건이 요구된다.
 
-1) batch에 저장된 데이터와 선택된 action 간의 거리가 최소화되어야 한다.
-2) 익숙한 데이터가 많은 방향으로 state가 결정되도록 한다.
-3) value function을 극대화한다.
+1. batch에 저장된 데이터와 선택된 action 간의 거리가 최소화되어야 한다.
+2. 익숙한 데이터가 많은 방향으로 state가 결정되도록 한다.
+3. value function을 극대화한다.
 
 이들 조건 중 첫 번째 조건에 대해서는 위에서 다수 언급했었다. 하지만 첫 번째 조건이 만족된다고 할지라도 두 번째와 세 번째 조건이 만족되는 것은 아니기 때문에 단순히 거리가 가장 작은 action을 선택하는 것만으로는 부족하다. 남은 두 가지 조건을 만족시키기 위해서는 batch에 저장된 전체 transition에 대해 알고 있어야 한다. 따라서 이러한 문제를 해결하기 위해 논문에서는 생성 모델(generative)을 도입하고 있다.
 
@@ -103,7 +103,7 @@ $$
 { \{a_i - G_\omega (s) \} }_{i=1}^n
 $$
 
-위 식에서 $$n$$은 하나의 next state $$s'$$에서 후보로 선택된 next action $$a'$$의 개수를 말한다. 그리고  perturbance model의 $$\Phi$$는 next action $$a'$$이 선택되는 범위를 제한한다. 이 두 가지 hyperparameter는 강화학습 알고리즘과 imitation laerning 알고리즘 간의 상충관계를 형성한다. 만약 $$\phi = 0$$이고, $$n=1$$이라면 Behavior cloning과 유사하게 동작한다. 반면 $$\Phi \rightarrow a_{max} - a_{min}$$, $$\ n \rightarrow \infty$$ 라면 Q-learning과 비슷해진다.
+위 식에서 $$n$$은 하나의 next state $$s'$$에서 후보로 선택된 next action $$a'$$의 개수를 말한다. 그리고 perturbance model의 $$\Phi$$는 next action $$a'$$이 선택되는 범위를 제한한다. 이 두 가지 hyperparameter는 강화학습 알고리즘과 imitation laerning 알고리즘 간의 상충관계를 형성한다. 만약 $$\phi = 0$$이고, $$n=1$$이라면 Behavior cloning과 유사하게 동작한다. 반면 $$\Phi \rightarrow a_{max} - a_{min}$$, $$\ n \rightarrow \infty$$ 라면 Q-learning과 비슷해진다.
 
 perturbance model을 업데이트하기 위해 DPG 방법을 사용한다고 했었는데, 구체적인 알고리즘은 다음과 같다.
 

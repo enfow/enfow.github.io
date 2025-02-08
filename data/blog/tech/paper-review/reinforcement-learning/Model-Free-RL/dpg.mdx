@@ -1,17 +1,17 @@
 ---
-title: "[DPG] Deterministic Policy Gradient Algorithms"
+title: '[DPG] Deterministic Policy Gradient Algorithms'
 date: '2020-12-25'
 tags: ['Reinforcement-Learning', 'Model-Free-RL']
 draft: false
-summary: ""
+summary: ''
 ---
 
 # 논문 제목 : Deterministic Policy Gradient Algorithms
 
 - David Silver, Guy Lever, Nicolas Heess, Thomas Degris, Daan Wierstra, Martin Riedmiller
 - 2018
-- [논문 링크](<http://proceedings.mlr.press/v32/silver14.pdf?CFID=6293331&CFTOKEN=eaaee2b6cc8c9889-7610350E-DCAB-7633-E69F572DC210F301>)
-- [보충 자료](<http://proceedings.mlr.press/v32/silver14-supp.pdf>)
+- [논문 링크](http://proceedings.mlr.press/v32/silver14.pdf?CFID=6293331&CFTOKEN=eaaee2b6cc8c9889-7610350E-DCAB-7633-E69F572DC210F301)
+- [보충 자료](http://proceedings.mlr.press/v32/silver14-supp.pdf)
 
 ## Summary
 
@@ -52,7 +52,7 @@ $$
 }
 $$
 
-True Q Function $$Q^\pi$$를 대신하여 근사함수 $$Q^w$$를 사용하여 학습을 진행하게 되면 Bias가 발생하게 되고 이로 인해 안정적인 학습이 방해받을 수 있다. 이와 관련하여 $$Q^w(s,a)$$가 다음 두 조건을 만족하는 경우 Bias는 존재하지 않는다는 것이 [Sutton 등](<http://incompleteideas.net/papers/SMSM-NIPS99-submitted.pdf>)에 의해 증명되어 있다.
+True Q Function $$Q^\pi$$를 대신하여 근사함수 $$Q^w$$를 사용하여 학습을 진행하게 되면 Bias가 발생하게 되고 이로 인해 안정적인 학습이 방해받을 수 있다. 이와 관련하여 $$Q^w(s,a)$$가 다음 두 조건을 만족하는 경우 Bias는 존재하지 않는다는 것이 [Sutton 등](http://incompleteideas.net/papers/SMSM-NIPS99-submitted.pdf)에 의해 증명되어 있다.
 
 $$
 \eqalign{
@@ -87,7 +87,7 @@ $$
 }
 $$
 
-위 전개 식의 가장 큰 특징은 세 번째 줄에서 $$\pi(a \lvert s)\nabla_\theta Q^\pi(s,a)$$ Term이 사라졌다는 데에 있다. Action Value Function에 대한 Gradient를 구하는 것이 까다롭기 때문에 제거한 것인데, [Degris 등](<https://arxiv.org/pdf/1205.4839.pdf>)에 따르면 이 때에도 Local Optima로의 수렴성이 보장된다고 한다. 마지막 줄의 $${\pi_\theta (a \lvert s) \over {\beta_\theta (a \lvert s)}}$$는 $$\beta$$를 따를 때의 분포와 $$\pi$$를 따를 때의 분포가 다르기 때문에 이를 맞춰주는 Importance Sampling Term이다.
+위 전개 식의 가장 큰 특징은 세 번째 줄에서 $$\pi(a \lvert s)\nabla_\theta Q^\pi(s,a)$$ Term이 사라졌다는 데에 있다. Action Value Function에 대한 Gradient를 구하는 것이 까다롭기 때문에 제거한 것인데, [Degris 등](https://arxiv.org/pdf/1205.4839.pdf)에 따르면 이 때에도 Local Optima로의 수렴성이 보장된다고 한다. 마지막 줄의 $${\pi_\theta (a \lvert s) \over {\beta_\theta (a \lvert s)}}$$는 $$\beta$$를 따를 때의 분포와 $$\pi$$를 따를 때의 분포가 다르기 때문에 이를 맞춰주는 Importance Sampling Term이다.
 
 ## Deterministic Policy Gradient
 

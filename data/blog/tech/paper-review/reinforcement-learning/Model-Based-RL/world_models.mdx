@@ -1,16 +1,16 @@
 ---
-title: "[World Models] World Models"
+title: '[World Models] World Models'
 date: '2020-09-08'
 tags: ['Reinforcement-Learning', 'Model-Based-RL']
 draft: false
-summary: ""
+summary: ''
 ---
 
 # 논문 제목 : World Models
 
 - DavidHa, JurgenSchmidhuber
 - 2018
-- [논문 링크](<https://arxiv.org/abs/1803.10122>)
+- [논문 링크](https://arxiv.org/abs/1803.10122)
 
 ## Summary
 
@@ -36,17 +36,20 @@ World Model 부분의 성능이 탁월하여 환경으로부터 받은 State에�
 
 세부적으로 보면 Model은 아래 그림과 같이 세 가지 Model, **V Model, M model, C Model**로 구성되어 있다.
 
-<img src="/static/images/paper-review/world_model_architecture.png" className="w-[33em] block mx-auto" />
+<img
+  src="/static/images/paper-review/world_model_architecture.png"
+  className="mx-auto block w-[33em]"
+/>
 
 ### V Model
 
-**V Model**은 State 정보를 가장 먼저 받아들이는 부분으로 State에서 중요한 정보를 추출하는 역할을 수행한다. 즉 Observation을 Small Representation을 변화시키는 것을 목표로 한다. 이때 사용하는 것이 [VAE(Variational Auto Encoder)](<http://localhost:4000/paper-review/generative-model/2020/03/28/VAE-auto_encoding_variational_bayes/>)로, VAE의 Latent $$z$$를 State의 Small Representation으로 사용한다.
+**V Model**은 State 정보를 가장 먼저 받아들이는 부분으로 State에서 중요한 정보를 추출하는 역할을 수행한다. 즉 Observation을 Small Representation을 변화시키는 것을 목표로 한다. 이때 사용하는 것이 [VAE(Variational Auto Encoder)](http://localhost:4000/paper-review/generative-model/2020/03/28/VAE-auto_encoding_variational_bayes/)로, VAE의 Latent $$z$$를 State의 Small Representation으로 사용한다.
 
 ### M Model
 
 V Model이 각 시점 $$t$$에 들어온 State 정보 $$s_t$$에서 특징을 추출하는 역할을 한다면 이후에 오는 **M Model**은 미래 State를 예측하는 역할을 한다. 시간 순으로 들어오는 State 정보들을 입력으로 받기 때문에 RNN으로 처리하고 있다. 또한 많은 환경들이 Stochastic 하므로 이에 대한 대처 능력을 높이기 위해 **Mixture Density Network(MDN)**를 사용한다.
 
-<img src="/static/images/paper-review/world_model_m_model.png" className="w-[35em] block mx-auto" />
+<img src="/static/images/paper-review/world_model_m_model.png" className="mx-auto block w-[35em]" />
 
 **MDN**은 논문의 각주에 나와있듯 Bishop이 논문 Mixture Density Networks에서 제시하는 방법으로, 하나의 입력 $$x$$에 대해 다양한 결과가 존재할 수 있음을 가정하고 그에 맞춰 여러 개의 확률 분포를 가정하는 확률 모델이라고 할 수 있다. 정규 분포를 가정한 MDN의 수식은 다음과 같다.
 
@@ -78,14 +81,14 @@ $$
 
 세 개로 나눠져 있고 이전 시점이 현재 시점에 계속해서 영향을 주기 때문에 전체적인 프로세스가 복잡한 편이므로 다음과 같이 그림으로 표현하면 보다 쉽게 이해할 수 있다.
 
-<img src="/static/images/paper-review/world_model_process.png" className="w-[35em] block mx-auto" />
+<img src="/static/images/paper-review/world_model_process.png" className="mx-auto block w-[35em]" />
 
 1. 환경으로부터 State $$s_t$$를 입력으로 받는다.
 2. V Model에 $$s_t$$를 입력으로 전달하고, 출력으로 $$z_t$$를 받는다.
 3. $$z_t$$를 C Model에 전달한다.
 4. C Model은 $$z_t$$와 이전 시점에 만들어진 $$h_t$$를 사용하여 Action $$a_t$$를 결정한다.
 5. 환경은 $$a_t$$를 받아 $$s_{t+1}$$로 넘어간다.
-5. M Model은 V Model의 $$z_t$$, C Model의 $$a_t$$, 그리고 자기 자신의 $$h_t$$를 통해 다음 time step에 사용할 $$h_{t+1}$$을 만들어둔다.
+6. M Model은 V Model의 $$z_t$$, C Model의 $$a_t$$, 그리고 자기 자신의 $$h_t$$를 통해 다음 time step에 사용할 $$h_{t+1}$$을 만들어둔다.
 
 ## How to Train: Car Racing Experiment
 
@@ -97,9 +100,9 @@ $$
 4. Model C를 $$a_t = W_c [z_t, h_t] + b_c$$로 정의한다.
 5. CMA-ES 방법에 따라 $$W_c$$와 $$b_c$$를 기대 누적 Reward가 극대화되도록 학습시킨다.
 
-여기서 **Rollout**이란  Episode와 유사한 개념으로 다음과 같이 정의된다.
+여기서 **Rollout**이란 Episode와 유사한 개념으로 다음과 같이 정의된다.
 
-<img src="/static/images/paper-review/world_model_rollout.png" className="w-[25em] block mx-auto" />
+<img src="/static/images/paper-review/world_model_rollout.png" className="mx-auto block w-[25em]" />
 
 그리고 3번에서 M Model을 학습시킬 때에는 1,2번에서 수집한 데이터들을 사용한다. 즉 Random Action들과 당시의 State에 대한 Latent vector를 가지고 학습을 진행하게 된다. 그리고 식에서도 확인할 수 있지만 Model V와 Model M은 Reward에 대해서는 어떠한 정보도 얻지 못하고, 오로지 C Model 만이 Reward에 대해 학습한다.
 
@@ -107,7 +110,7 @@ $$
 
 실험 결과와 관련하여 재미있는 점 중 하나는 M Model을 사용하지 않은 경우, 즉 예측에 관한 정보를 Model C가 얻지 못한 경우에 대해서도 실험을 진행했다는 점이다. 그 결과는 아래와 같다.
 
-<img src="/static/images/paper-review/world_model_score.png" className="w-[15em] block mx-auto" />
+<img src="/static/images/paper-review/world_model_score.png" className="mx-auto block w-[15em]" />
 
 V Model만을 사용한 경우에도 성능이 A3C와 유사하게 나오는 것을 확인할 수 있다. 다만 Variance가 상당히 큰 것을 알 수 있는데, 이는 VAE에서 $$z_t$$를 추출하는 과정에서 정보 손실이 발생했기 때문으로 추측된다. 참고로 V Model with Hidden Layer는 C Model에 하나의 Hidden layer를 더 추가한 경우라고 한다.
 

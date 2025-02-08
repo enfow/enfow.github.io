@@ -1,9 +1,9 @@
 ---
-title: "Dense Text Retrieval based on Pretrained Language Models: A Survey"
+title: 'Dense Text Retrieval based on Pretrained Language Models: A Survey'
 date: '2025-01-16'
 tags: ['Large-Language-Model', 'Informational Retrieval']
 draft: false
-summary: ""
+summary: ''
 ---
 
 # Summary
@@ -15,7 +15,7 @@ summary: ""
 
 Dense Retrieval 이란 pretrained language model(PLM)을 활용하여 Query에 맞는 적절한 Answer 를 찾아내는 것이다.
 
-- 딥러닝의 발전은 Text를 latent space에 잘 매핑하게 해주었고, 이를 통해 Query 와 의미론적으로 매칭이 되는 Answer를 더욱 잘 찾을 수 있게 되었다. 
+- 딥러닝의 발전은 Text를 latent space에 잘 매핑하게 해주었고, 이를 통해 Query 와 의미론적으로 매칭이 되는 Answer를 더욱 잘 찾을 수 있게 되었다.
 - 이때 Dense Vector(embedding)를 활용하기 때문에 기존의 방식과 구별되며 이를 Dense Retrieval 이라고 한다.
 
 # Trainer: Loss function
@@ -67,12 +67,16 @@ Dense Retriever의 업데이트 식에서도 보았듯이 학습에는 다수의
 
 ## In-Batch Negatives
 
-<img src="/static/images/paper-review/ir-negative-sampling.png" alt="ir-negative-sampling" className="w-full mx-auto block" />
+<img
+  src="/static/images/paper-review/ir-negative-sampling.png"
+  alt="ir-negative-sampling"
+  className="mx-auto block w-full"
+/>
 
 가장 쉬운 방법은 어떤 한 Query 에 대해 매번 Negative Sample 들을 랜덤하게 추출하는 것이다. 하나의 Query 에 대한 Positive Sample 하나와 다수의 임의 추출된 Negative Samples 로 Batch 를 구성하는 것이다. 하지만 이 방법은 한 배치당 하나의 Query 에 대해서만 학습할 수 있다는 점에서 비효율적이다.
 
 In Batch Negative Sampling 은 Query/Positive text Pair를 Batch Size 만큼 샘플링하고, 각 Query 에 매칭되는 Positive Text 이외에는 모두 Negative text 로 취급하여 학습하도록 하는 방법이다. 이렇게 하면 배치마다 batch size - 1 만큼의 Negative Sample을 배치마다 확보할 수 있다는 점에서 Ramdom Sampling 방법과 동일하지만, 하나의 Batch 로 Batch Size 만큼의 학습을 진행할 수 있다는 점에서 메모리 효율적이다.
-    
+
 실험을 통해 In-Batch Sampling 에서 Negative Sample 의 갯수가 많아질수록, 즉 Batch 의 크기가 커질수록 성능이 좋아지는 경향을 보이기도 했다.
 
 ## Cross-Batch Negatives
@@ -124,10 +128,10 @@ Query-Answer 구조로 되어 있는 데이터는 사람의 판단이 들어가�
 
 - teacher network 가 판단하는 Query와 Text 간의 상관성(relevance score) 자체를 Student network 가 학습하도록 하는 방법
 - 다음과 같이 다양한 distillation function을 고려해 볼 수 있음. 이 중 KLD가 실험적으로 가장 좋았다고 함
-    - Mean Square Error
-    - KL divergence
-    - Max-margin
-    - Margin-MSE
+  - Mean Square Error
+  - KL divergence
+  - Max-margin
+  - Margin-MSE
 
 ## Advanced Distillation method
 
@@ -150,9 +154,9 @@ Knowledge Distillation 의 문제점 중 하나는 teacher 와 student 간의 ca
 - RocketQA-v2 에서 제안된 방법으로, retriever(student)와 reranker(teacher)가 상호 개선하며 학습하는 방식
 - KLD를 사용하여 student의 분포와 teacher 의 분포가 크게 달라지지 않도록 만듦
 
-# Trainer: Pretraining for Dense Retrieval Models 
+# Trainer: Pretraining for Dense Retrieval Models
 
-대량의 데이터에 대해 unsupervised learning 으로 Pretraining model 으로 학습하여 다양한 Task 에 대해 높은 일반화 성능을 보이는 pre-training model을 기초로 하여 Fine-Tuning 을 통해 특정 Task 를 잘 수행하는 모델을 만드는 것은 Language Task 를 다루는 일반적인 방법론 중 하나이다. 하지만  많은 경우 task-specific optimization 이 부족하고, 이로 인해 sub-optimal performance 에 머무르는 문제가 자주 발생한다.
+대량의 데이터에 대해 unsupervised learning 으로 Pretraining model 으로 학습하여 다양한 Task 에 대해 높은 일반화 성능을 보이는 pre-training model을 기초로 하여 Fine-Tuning 을 통해 특정 Task 를 잘 수행하는 모델을 만드는 것은 Language Task 를 다루는 일반적인 방법론 중 하나이다. 하지만 많은 경우 task-specific optimization 이 부족하고, 이로 인해 sub-optimal performance 에 머무르는 문제가 자주 발생한다.
 
 이러한 문제를 해소하기 위해 Task와 연관이 높은 Pre-Training 을 도입하는 방법들이 발전해왔다.
 
@@ -182,8 +186,9 @@ Generation-Augmented Pretraining 에는 pipeline, end-to-end 두 가지 방법�
 - 성능이 올라가는 것을 실험적으로 검증함
 
 ### end-to-end
-  - pipeline이 여러 단계를 나누었다면 end-to-end 는 단계를 나누지 않고 한 번에 처리함
-  - 하나의 seq2seq 모델이 있고, 문맥을 입력 받으면 그에 맞는 question, answer pair 를 생성함
+
+- pipeline이 여러 단계를 나누었다면 end-to-end 는 단계를 나누지 않고 한 번에 처리함
+- 하나의 seq2seq 모델이 있고, 문맥을 입력 받으면 그에 맞는 question, answer pair 를 생성함
 
 ## Retrieval-Augmented Pretraining
 
@@ -191,7 +196,7 @@ Retriever를 사용하여 Context를 수집한 뒤, 이를 Pre Training 에 사�
 
 ## Representation Enhanced Pretraining
 
-Text의 Representation을 잘 뽑아내도록 Pre-Training 을 학습시키는 방법 또한 Informational Retriever를 위한 Pre-Training 모델을 만드는 데에 유효한 방법 중 하나이다. 
+Text의 Representation을 잘 뽑아내도록 Pre-Training 을 학습시키는 방법 또한 Informational Retriever를 위한 Pre-Training 모델을 만드는 데에 유효한 방법 중 하나이다.
 
 ### Autoencoder
 
@@ -205,7 +210,11 @@ TSDAE 에 대한 간략한 설명을 덧붙이면 다음과 같다.
   - Training time 에는 noise input 을 넣어 original output 을 복원
   - Inference time 에는 encoder 만 사용하여 sentence 의 embedding 을 추출할 수 있음
 
-<img src="/static/images/paper-review/tsdae-archtecture.png" alt="tsdae-archtecture" className="w-full mx-auto block" />
+<img
+  src="/static/images/paper-review/tsdae-archtecture.png"
+  alt="tsdae-archtecture"
+  className="mx-auto block w-full"
+/>
 
 ### Contrastive learning
 
@@ -220,5 +229,5 @@ Contrastive learning은 augmentation 과 discrimination 두 가지 단계로 주
 
 # Reference
 
-- [Zhao, W.X., Liu, J., Ren, R. and Wen, J.-R. (2022). Dense Text Retrieval based on Pretrained Language Models: A Survey. arXiv:2211.14876 [Accessed 12 Dec. 2022].](<https://arxiv.org/abs/2211.14876>)
-- [Wang, K., Reimers, N. and Gurevych, I. (2021). TSDAE: Using Transformer-based Sequential Denoising Auto-Encoder for Unsupervised Sentence Embedding Learning. 2022](<https://arxiv.org/abs/2104>)
+- [Zhao, W.X., Liu, J., Ren, R. and Wen, J.-R. (2022). Dense Text Retrieval based on Pretrained Language Models: A Survey. arXiv:2211.14876 [Accessed 12 Dec. 2022].](https://arxiv.org/abs/2211.14876)
+- [Wang, K., Reimers, N. and Gurevych, I. (2021). TSDAE: Using Transformer-based Sequential Denoising Auto-Encoder for Unsupervised Sentence Embedding Learning. 2022](https://arxiv.org/abs/2104)

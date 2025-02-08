@@ -1,16 +1,16 @@
 ---
-title: "Large-Scale Learnable Graph Convolutional Networks"
+title: 'Large-Scale Learnable Graph Convolutional Networks'
 date: '2020-09-06'
 tags: ['Graph-Neural-Network']
 draft: false
-summary: ""
+summary: ''
 ---
 
 # 논문 제목 : Large-Scale Learnable Graph Convolutional Networks
 
 - Hongyang Gao, Zhengyang Wang, Shuiwang Ji
 - 2018
-- [Paper Link](<https://arxiv.org/abs/1808.03965>)
+- [Paper Link](https://arxiv.org/abs/1808.03965)
 
 ## Summary
 
@@ -29,7 +29,7 @@ Grid-Like Graph는 위의 두 가지 특징을 모두 만족하는 특별한 Gra
 
 ## The Pioneer: Graph Convolution Network
 
-GCN은 이러한 문제를 **Spectral Graph Convolution**이라는 Spectral Graph Theroy의 방법론을 적용하여 해결한다. 쉽게 말해 Convolution의 방식을 변경하는 것이다. 따라서 GCN은 결과적으로 Convolution Operation의 기본적인 아이디어, 즉 이웃 Node의 Feature를 반영하여 각 Node의 Feautre를 업데이트하는 방식을 따르기는 하지만 일반적인 CNN과는 다른 방식으로 구현된다. 다음은 GCN을 구성하는 한 layer에 대한 수식으로, $$X_l$$을 입력으로 받아 $$X_{l+1}$$을 출력하게 된다. 이와 관련하여 자세한 내용은 다음 [포스팅](<https://enfow.github.io/paper-review/graph-neural-network/2020/09/06/semi_supervised_classification_with_graph_convolutional_networks/>)에서 다루고 있다.
+GCN은 이러한 문제를 **Spectral Graph Convolution**이라는 Spectral Graph Theroy의 방법론을 적용하여 해결한다. 쉽게 말해 Convolution의 방식을 변경하는 것이다. 따라서 GCN은 결과적으로 Convolution Operation의 기본적인 아이디어, 즉 이웃 Node의 Feature를 반영하여 각 Node의 Feautre를 업데이트하는 방식을 따르기는 하지만 일반적인 CNN과는 다른 방식으로 구현된다. 다음은 GCN을 구성하는 한 layer에 대한 수식으로, $$X_l$$을 입력으로 받아 $$X_{l+1}$$을 출력하게 된다. 이와 관련하여 자세한 내용은 다음 [포스팅](https://enfow.github.io/paper-review/graph-neural-network/2020/09/06/semi_supervised_classification_with_graph_convolutional_networks/)에서 다루고 있다.
 
 $$
 X_{l+1} = \sigma ( \tilde D^{-{1 \over 2}} \tilde A \tilde D^{-{1 \over 2}} X_l W_l )
@@ -46,7 +46,10 @@ $$
 
 **LGCN(Learnable Graph Convolutional Network)**의 가징 큰 특징은 Graph data를 Grid-Like한 형태로 바꾸어 Convolution Operation을 적용하는 것이라고 할 수 있다. 이를 위해서는 Graph와 Grid-Like의 두 가지 차이점, (1) 각 Node의 이웃 Node의 개수가 다르다는 것과 (2) 이웃 노드들을 줄세울 수 없다는 점을 해결해야 하는데, 그 과정은 다음 두 가지 단계로 나누어 진행된다. 논문에 나오는 아래 그림을 참고하면 보다 쉽게 이해할 수 있다.
 
-<img src="/static/images/paper-review/learnable_graph_convolution_layer.png" className="w-[42em] block mx-auto" />
+<img
+  src="/static/images/paper-review/learnable_graph_convolution_layer.png"
+  className="mx-auto block w-[42em]"
+/>
 
 ### (1) $$k$$-largest Node Selection
 
@@ -82,7 +85,10 @@ $$
 
 ## Learnable Graph Convolutional Network
 
-<img src="/static/images/paper-review/learnable_graph_convolution_network.png" className="w-[42em] block mx-auto" />
+<img
+  src="/static/images/paper-review/learnable_graph_convolution_network.png"
+  className="mx-auto block w-[42em]"
+/>
 
 LGCL은 하나의 Layer에 관한 내용으로, 이를 사용하여 전체 모델 LGCN은 다음과 같이 구성할 수 있다.
 
@@ -97,8 +103,14 @@ Model에 있어 LGCL의 갯수와 $$k$$의 크기가 주된 하이퍼파라미�
 
 LGCN은 GCN 등에 비해 연산량은 줄였지만, 곧바로 전체 Graph에 대해 적용하게 되면 이 또한 Memory를 비롯하여 비용이 커질 수 밖에 없다는 문제가 있다. 이러한 문제를 해결하기 위해 논문에서는 전체 Graph의 일부(Sub-Graph)에 대해서 훈련하는 방식을 제시한다.
 
-<img src="/static/images/paper-review/lgcn_sub_graph_selection_algorithm.png" className="w-[32em] block mx-auto" />
+<img
+  src="/static/images/paper-review/lgcn_sub_graph_selection_algorithm.png"
+  className="mx-auto block w-[32em]"
+/>
 
 Sub-Graph는 전체 Graph를 임의로 crop하여 구성하게 된다. 그런데 임의로 Node를 선택하는 것이므로 각 Node의 모든 이웃 Node가 Sub-Graph에 포함되지 않을 수도 있다. 이 경우 이웃 Node를 결정할 때 BFS 알고리즘을 사용하여 Sub-Node에 포함된 Node만으로 학습이 이뤄질 수 있도록 한다.
 
-<img src="/static/images/paper-review/lgcn_sub_graph_bfs_example.png" className="w-[32em] block mx-auto" />
+<img
+  src="/static/images/paper-review/lgcn_sub_graph_bfs_example.png"
+  className="mx-auto block w-[32em]"
+/>

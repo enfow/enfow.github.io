@@ -1,14 +1,14 @@
 ---
-title: "[Attention] Neural Machine Translation by Jointly Learning to Align and Translate"
+title: '[Attention] Neural Machine Translation by Jointly Learning to Align and Translate'
 date: '2020-06-28'
 tags: ['Sequence-to-Sequence', 'Attention']
 draft: false
-summary: ""
+summary: ''
 ---
 
 - Dzmitry Bahdanau, Kyunghyun Cho, Yoshua Bengio
 - 2014
-- [논문 링크](<https://arxiv.org/abs/1409.0473>)
+- [논문 링크](https://arxiv.org/abs/1409.0473)
 
 ## 세 줄 요약
 
@@ -48,7 +48,10 @@ I ate an apple yesterday.
 
 어텐션 구조에서는 인코더의 마지막 hidden state만을 사용하는 것이 아니라 각 time step의 모든 hidden state를 사용한다. 그런데 이 경우 RNN Encoder Decoder 구조와 같이 순방향 hidden state 만으로 구성하게 되면 이른 시점의 hidden state에 들어있는 정보들은 초기의 몇몇 단어들의 특성만을 반영한다는 문제점이 있다.
 
-<img src="/static/images/paper-review/bidirectional_rnn.png" className="w-[35em] block mx-auto my-4" />
+<img
+  src="/static/images/paper-review/bidirectional_rnn.png"
+  className="mx-auto my-4 block w-[35em]"
+/>
 
 이를 해결하기 위해 어텐션에서는 Bidirectional RNN을 사용한다. 이름대로 두 방향, 즉 순방향과 역방향 모두에 대해 각각의 RNN 네트워크를 두어 hidden state를 구한 뒤 이를 concat한 값을 hidden state로 사용하는 방법이다. 이를 통해 모든 hidden state는 sequence 전체에 대한 정보를 가지게 되고, 동시에 앞 뒤로 가까운 값들의 영향을 보다 많이 받아 상대적인 위치에 따른 hidden state별 집중도가 다르게 나오게 된다.
 
@@ -92,7 +95,7 @@ Attention Score를 구할 때 사용되는 함수 a는 두 개의 vector $$s_{i-
 
 #### Attention Architecture
 
-<img src="/static/images/paper-review/attention.png" className="w-[35em] block mx-auto my-4" />
+<img src="/static/images/paper-review/attention.png" className="mx-auto my-4 block w-[35em]" />
 
 #### Alignment Model
 

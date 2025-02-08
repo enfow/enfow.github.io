@@ -1,14 +1,14 @@
 ---
-title: "[A3C] Asynchronous Methods for Deep Reinforcement Learning"
+title: '[A3C] Asynchronous Methods for Deep Reinforcement Learning'
 date: '2020-09-30'
 tags: ['Reinforcement-Learning', 'Parallel-RL']
 draft: false
-summary: ""
+summary: ''
 ---
 
 - Volodymyr Mnih, Adrià Puigdomènech Badia, Mehdi Mirza 등
 - 2016
-- [논문 링크](<https://arxiv.org/abs/1602.01783>)
+- [논문 링크](https://arxiv.org/abs/1602.01783)
 
 ## Summary
 
@@ -54,7 +54,11 @@ Replay Memory를 사용하면 많은 수의 Transaction을 모아두고 랜덤 �
 
 ### One-Step Q-learning
 
-<img src="/static/images/paper-review/a3c_one_step_q_learning.png" className="w-[25em] mx-auto block" align="left" />
+<img
+  src="/static/images/paper-review/a3c_one_step_q_learning.png"
+  className="mx-auto block w-[25em]"
+  align="left"
+/>
 
 각각의 경우 어떻게 학습이 이뤄지는 지에 대해서는 알고리즘을 보면서 확인하면 보다 쉽게 이해할 수 있다. 참고로 모든 알고리즘은 단일 Thread에서 동작하는 프로세스를 기준으로 한다.
 
@@ -74,7 +78,10 @@ n-Step Q-learning과 One-Step Q-learning의 가장 큰 차이점은 **Forward Vi
 
 그리고 n-Step Q-learning에는 Thread 마다 고유의 파라미터 $$\theta'$$를 가진다는 점에서도 차이가 있다. 한 번 루프를 돌 때마다 가장 먼저 $$\theta'$$를 Current Value Net $$\theta$$과 동기화해주는데, 이는 Forward View를 수헹하는 과정에서 Current Value Net이 다른 Agent에 의해 변화하는 것을 방지하기 위함으로 보인다. 따라서 $$\theta$$에 대한 Gradient $$d\theta$$ 또한 $$\theta'$$를 기준으로 구하고 있다.
 
-<img src="/static/images/paper-review/a3c_n_step_q_learning.png" className="w-[45em] mx-auto block" />
+<img
+  src="/static/images/paper-review/a3c_n_step_q_learning.png"
+  className="mx-auto block w-[45em]"
+/>
 
 ### Advantage Actor-Critic(A3C)
 
@@ -88,4 +95,4 @@ $$
 
 위의 식과 같이 Entropy Regularization Term을 더해주는 방식으로 구현이 가능하다.
 
-<img src="/static/images/paper-review/a3c_actor_critic.png" className="w-[45em] mx-auto block" />
+<img src="/static/images/paper-review/a3c_actor_critic.png" className="mx-auto block w-[45em]" />

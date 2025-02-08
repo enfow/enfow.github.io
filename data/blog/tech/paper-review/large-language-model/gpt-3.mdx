@@ -1,9 +1,9 @@
 ---
-title: "[GPT-3] Language Models are Few-Shot Learners"
+title: '[GPT-3] Language Models are Few-Shot Learners'
 date: '2024-08-16'
 tags: ['Large-Language-Model', 'GPT']
 draft: false
-summary: ""
+summary: ''
 ---
 
 # Summary
@@ -20,7 +20,7 @@ summary: ""
 
 1. 새로운 Task 에 대해 학습을 진행하기 위해서는 그에 맞는 새로운 labeled large dataset 이 필요하다. 현실 세계에는 수없이 많은 종류의 Task 가 있는데, 매번 새로운 데이터셋을 확보하는 것은 분명 부담스럽다.
 2. Fine-Tuning 방법론은 가짜 상관관계(Spurious correlation)으로 인한 문제의 가능성을 높인다. 특히 Pre-Training 단계에서 거대한 크기의 데이터를 학습하게 되지만, 그것에 비해 Fine-Tuning 에서 사용되는 데이터의 양이 작은 학습 구조는 이러한 문제에 더욱 취약하다. 따라서 Benchmark 성능은 높을지라도 실제 사용자는 그렇지 못하다고 느낄 가능성, 즉 일반화 성능이 떨어지는 문제가 나타날 수 있다.
-3. 사람이 학습하는 방법과 비교해 볼 때 너무나도 비효율적이다. 사람은 소수의 예제만으로도 Task 의 특성을 파악하고, 그에 따라 해결할 수 있지만 그에 비해 Fine-Tuning 은 너무나도 많은 데이터와 학습을 필요로 한다. 
+3. 사람이 학습하는 방법과 비교해 볼 때 너무나도 비효율적이다. 사람은 소수의 예제만으로도 Task 의 특성을 파악하고, 그에 따라 해결할 수 있지만 그에 비해 Fine-Tuning 은 너무나도 많은 데이터와 학습을 필요로 한다.
 
 # Without Fine-Tuning
 
@@ -32,7 +32,11 @@ summary: ""
 
 그렇다면 어떻게 "다양한 Task들과 동시에 패턴 인식 능력을 함께 학습"하도록 만들 수 있을까. 논문에서는 아래의 그림을 통해 설명하고 있다.
 
-<img src="/static/images/paper-review/gpt-3-in-context-learning-pretraining.png" alt="gpt-3-in-context-learning.png" className="w-full mx-auto block" />
+<img
+  src="/static/images/paper-review/gpt-3-in-context-learning-pretraining.png"
+  alt="gpt-3-in-context-learning.png"
+  className="mx-auto block w-full"
+/>
 
 그림을 보게 되면 Inner Loop 와 Outer Loop 두 개의 루프가 있다. Outer loop 는 일반적인 Generative Language Model 의 학습에 사용되는 방법을 지칭하는데, Large Dataset 에 대해 next word prediction, missing word prediction 의 training loss 를 줄이는 방향으로 실제 모델 파라미터를 업데이트하게 된다.
 
@@ -42,20 +46,24 @@ in-context learning 은 Inference Time 에 이뤄지며, 따라서 Model Paramet
 
 두 학습 방법을 표로 정리하여 비교해보면 다음과 같다.
 
-|  | **Pre-Training**  | **In-Context Learning**  |
-|--|-------------------|--------------------------|
-| **Phase** | Training Time | Inference Time |
-| **Objective** | 대규모 텍스트 코퍼스에서 일반적인 패턴 학습 | 주어진 Context 사용하여 특정 작업에 학습된 패턴 적용  |
-| **Data** | 방대한 양의 다양한 데이터셋   | 추론 중에 제공된 특정 example 들  |
-| **Update** | SGD 로 모델 파라미터 업데이트  |  모델 파라미터는 고정됨 |
-| **Learning Method** | Unsupervised learning, Next Word Prediction   | 주어진 Context를 기반으로 한 적응(Adaptation)   |
-| **Generalization**   | 다양한 작업에 걸쳐 패턴을 일반화  |  Context 를 기반으로 특정 작업에 적응 |
+|                     | **Pre-Training**                            | **In-Context Learning**                              |
+| ------------------- | ------------------------------------------- | ---------------------------------------------------- |
+| **Phase**           | Training Time                               | Inference Time                                       |
+| **Objective**       | 대규모 텍스트 코퍼스에서 일반적인 패턴 학습 | 주어진 Context 사용하여 특정 작업에 학습된 패턴 적용 |
+| **Data**            | 방대한 양의 다양한 데이터셋                 | 추론 중에 제공된 특정 example 들                     |
+| **Update**          | SGD 로 모델 파라미터 업데이트               | 모델 파라미터는 고정됨                               |
+| **Learning Method** | Unsupervised learning, Next Word Prediction | 주어진 Context를 기반으로 한 적응(Adaptation)        |
+| **Generalization**  | 다양한 작업에 걸쳐 패턴을 일반화            | Context 를 기반으로 특정 작업에 적응                 |
 
 # Zero-shot, One-shot and Few-shot
 
 In-Context learning 은 주어지는 Demonstration 의 갯수에 따라 다음과 같이 세 가지로 나누어 볼 수 있다.
 
-<img src="/static/images/paper-review/gpt-3-shots.png" alt="gpt-3-shots" className="w-full mx-auto block" />
+<img
+  src="/static/images/paper-review/gpt-3-shots.png"
+  alt="gpt-3-shots"
+  className="mx-auto block w-full"
+/>
 
 ## Few-Shot
 
@@ -82,7 +90,11 @@ GPT-3 은 파라미터의 갯수는 175 Billion 으로 크게 증가했지만, �
 1. 고품질의 말뭉치(High-Quality Reference Corpora)와 비교해 유사도가 높은 버전의 filtered Common Crawl 데이터셋을 확보함
 2. 문서 간, 데이터 셋 간 중복 확인을 통해 중복을 제거하고, Validation set 의 integrity 를 높이기 위해 학습 시 사용된 데이터가 들어가지 않도록 확인함
 3. 고품질의 말뭉치를 데이터셋에 추가하여 데이터의 다양성을 높임
-<img src="/static/images/paper-review/gpt-3-trained-models.png" alt="gpt-3-model-size-and-n-of-examples" className="w-full mx-auto block" />
+   <img
+     src="/static/images/paper-review/gpt-3-trained-models.png"
+     alt="gpt-3-model-size-and-n-of-examples"
+     className="mx-auto block w-full"
+   />
 
 모델의 크기에 따른 성능 평가를 위해 다양한 크기의 모델들을 학습하고, 비교하고 있다. 한 가지 특징이 있다면 모델의 크기가 클수록 Batch Size 는 키우고 Learning Rate 는 줄여가는 경향성을 보인다는 것이다.
 
@@ -90,19 +102,31 @@ GPT-3 은 파라미터의 갯수는 175 Billion 으로 크게 증가했지만, �
 
 ## Training Loss
 
-<img src="/static/images/paper-review/gpt-3-training-loss.png" alt="gpt-3-model-size-and-n-of-examples" className="w-full mx-auto block" />
+<img
+  src="/static/images/paper-review/gpt-3-training-loss.png"
+  alt="gpt-3-model-size-and-n-of-examples"
+  className="mx-auto block w-full"
+/>
 
-175 Billions 갯수 만큼 파라미터의 크기를 키웠음에도 여전히 모델의 크기, 데이터 셋의 크기, 학습 연산량과 Validation Loss(Cross-Entropy) 간에는 Power-Law 의 관계가 성립함을 실험적으로 보인 [Scaling Laws for Neural Language Models](<https://arxiv.org/abs/2001.08361>) 논문의 결과와 유사한 결과를 보이고 있다.
+175 Billions 갯수 만큼 파라미터의 크기를 키웠음에도 여전히 모델의 크기, 데이터 셋의 크기, 학습 연산량과 Validation Loss(Cross-Entropy) 간에는 Power-Law 의 관계가 성립함을 실험적으로 보인 [Scaling Laws for Neural Language Models](https://arxiv.org/abs/2001.08361) 논문의 결과와 유사한 결과를 보이고 있다.
 
 ## In-Context Learning Performance
 
 아래 Plot 은 논문에서 실험한 42개의 Task 에 대한 통합 스코어를 In-Context Learning 셋팅 별로 분류하여 시각화한 것이다.
 
-<img src="/static/images/paper-review/gpt-3-aggregated-in-context-performance.png" alt="gpt-3-aggregated-in-context-performance" className="w-full mx-auto block" />
+<img
+  src="/static/images/paper-review/gpt-3-aggregated-in-context-performance.png"
+  alt="gpt-3-aggregated-in-context-performance"
+  className="mx-auto block w-full"
+/>
 
 또한 아래 Plot 에서는 모델의 크기와 In-Context Learning 의 상관 관계를 보여주고 있다.
 
-<img src="/static/images/paper-review/gpt-3-model-size-and-n-of-examples.png" alt="gpt-3-model-size-and-n-of-examples" className="w-full mx-auto block" />
+<img
+  src="/static/images/paper-review/gpt-3-model-size-and-n-of-examples.png"
+  alt="gpt-3-model-size-and-n-of-examples"
+  className="mx-auto block w-full"
+/>
 
 두 Plot 의 결과를 정리하면 다음과 같다.
 
@@ -115,47 +139,67 @@ GPT-3 은 파라미터의 갯수는 175 Billion 으로 크게 증가했지만, �
 Cloze Task란 다음과 같이 빈칸을 채워 넣는 문제다.
 
 |-------------------|---------------------------------|
-| Original Sentence | The cat jumped over the fence.  |
-| Cloze Sentence    | The cat ____ over the fence.    |
-| Correct Answer    | jumped                          |
+| Original Sentence | The cat jumped over the fence. |
+| Cloze Sentence | The cat \_\_\_\_ over the fence. |
+| Correct Answer | jumped |
 
-대표적인 Benchmark Dataset 으로 [Lambada](<https://arxiv.org/abs/1606.06031>) 가 있다.
+대표적인 Benchmark Dataset 으로 [Lambada](https://arxiv.org/abs/1606.06031) 가 있다.
 
-<img src="/static/images/paper-review/gpt-3-lambada-example.png" alt="gpt-3-lambada" className="w-full mx-auto block" />
+<img
+  src="/static/images/paper-review/gpt-3-lambada-example.png"
+  alt="gpt-3-lambada"
+  className="mx-auto block w-full"
+/>
 
 Completion Task 란 다음과 같이 주어진 문장을 완성하는 문제다.
 
-| **Type**            | **Text**   |
-|---------------------|------------|
+| **Type**            | **Text**                                                                                       |
+| ------------------- | ---------------------------------------------------------------------------------------------- |
 | Given Text          | The villagers were known for their kindness and...                                             |
 | Possible Completion | The villagers were known for their kindness and would often help travelers who passed through. |
 
-대표적인 Benchmark Dataset 으로 [StoryCloze](<https://arxiv.org/pdf/1604.01696v1>)와 [HellaSwag](<https://arxiv.org/pdf/1905.07830v1>) 가 있다. StoryCloze 는 아래와 같이 문장의 시작 부분이 주어져 있고, 2개의 선지 중 가장 그럴싸하게 문장을 완성하는 선지를 고르는 문제이다.
+대표적인 Benchmark Dataset 으로 [StoryCloze](https://arxiv.org/pdf/1604.01696v1)와 [HellaSwag](https://arxiv.org/pdf/1905.07830v1) 가 있다. StoryCloze 는 아래와 같이 문장의 시작 부분이 주어져 있고, 2개의 선지 중 가장 그럴싸하게 문장을 완성하는 선지를 고르는 문제이다.
 
-<img src="/static/images/paper-review/gpt-3-storycloze-example.png" alt="gpt-3-storycloze-example" className="w-full mx-auto block" />
+<img
+  src="/static/images/paper-review/gpt-3-storycloze-example.png"
+  alt="gpt-3-storycloze-example"
+  className="mx-auto block w-full"
+/>
 
 HellaSwag 도 StoryCloze 와 유사한데, 4지선다 문제라는 점에서 차이가 있다.
 
-<img src="/static/images/paper-review/gpt-3-hallaswag-example.png" alt="gpt-3-hallaswag-example" className="w-[80%] mx-auto block" />
+<img
+  src="/static/images/paper-review/gpt-3-hallaswag-example.png"
+  alt="gpt-3-hallaswag-example"
+  className="mx-auto block w-[80%]"
+/>
 
 아래 실험 결과에 따르면 Lambbada 문제에서는 GPT-3 의 성능의 demonstration 의 갯수에 상관 없이 항상 SOTA 보다 성능이 좋았다. StoryCloze 와 HellaSwag 에서는 SOTA 에 성능이 다소 미치지 못했지만, Fine-Tuning 을 하지 않고도 일정 수준 이상의 성능을 보였다는 점에서 의의를 갖는다.
 
-<img src="/static/images/paper-review/gpt-3-cloze-and-completion-task-performance.png" alt="gpt-3-cloze-and-completion-task-performance" className="w-full mx-auto block" />
+<img
+  src="/static/images/paper-review/gpt-3-cloze-and-completion-task-performance.png"
+  alt="gpt-3-cloze-and-completion-task-performance"
+  className="mx-auto block w-full"
+/>
 
 ## Closed Book Question Answering
 
-질문에 대한 적절한 답을 하는 QA 문제는 [Natural Questions](<https://aclanthology.org/Q19-1026/>), [WebQuestions](<https://aclanthology.org/D13-1160/>), [TriviaQA](<https://arxiv.org/abs/1705.03551>) 세 가지 데이터 셋에 대해 실험을 진행했다. Natural Questions 는 구글에서 만든 데이터 셋으로, 실제 사용자들이 구글에 질문한 내용과 그에 대한 답으로 구성되어 있다. WebQuestions 는 웹 상에서 이뤄진 질문들을 Knowledge Graph 로 저장한 Freebase 를 바탕으로 만들어진 데이터셋이다. 마지막으로 Trivia QA 는 일반 상식에 관한 질문들로 구성된 데이터 셋이다.
+질문에 대한 적절한 답을 하는 QA 문제는 [Natural Questions](https://aclanthology.org/Q19-1026/), [WebQuestions](https://aclanthology.org/D13-1160/), [TriviaQA](https://arxiv.org/abs/1705.03551) 세 가지 데이터 셋에 대해 실험을 진행했다. Natural Questions 는 구글에서 만든 데이터 셋으로, 실제 사용자들이 구글에 질문한 내용과 그에 대한 답으로 구성되어 있다. WebQuestions 는 웹 상에서 이뤄진 질문들을 Knowledge Graph 로 저장한 Freebase 를 바탕으로 만들어진 데이터셋이다. 마지막으로 Trivia QA 는 일반 상식에 관한 질문들로 구성된 데이터 셋이다.
 
-<img src="/static/images/paper-review/gpt-3-closed-book-qa-task-performance.png" alt="gpt-3-cloze-and-completion-task-performance" className="w-full mx-auto block" />
+<img
+  src="/static/images/paper-review/gpt-3-closed-book-qa-task-performance.png"
+  alt="gpt-3-cloze-and-completion-task-performance"
+  className="mx-auto block w-full"
+/>
 
-TriviaQA 문제에서만 SOTA 보다 좋은 성능을 보였다. 이외의 셋팅에서는 Fine-Tuning을 사용한 다른 모델들에 비해 성능이 다소 떨어졌다. 참고로 Closed Book 이란 Inference Time 에 외부 정보에 접근할 수 없도록 하는 실험 설정을 말하며, 이를 통해 모델의 정보 저장 능력과 정보 검색 능력을 실험할 수 있다.  
+TriviaQA 문제에서만 SOTA 보다 좋은 성능을 보였다. 이외의 셋팅에서는 Fine-Tuning을 사용한 다른 모델들에 비해 성능이 다소 떨어졌다. 참고로 Closed Book 이란 Inference Time 에 외부 정보에 접근할 수 없도록 하는 실험 설정을 말하며, 이를 통해 모델의 정보 저장 능력과 정보 검색 능력을 실험할 수 있다.
 
 # Reference
 
-- [Brown, T.B., Mann, B., Ryder, N., Subbiah, M., Kaplan, J., Dhariwal, P., Neelakantan, A., Shyam, P., Sastry, G., Askell, A., Agarwal, S., Herbert-Voss, A., Krueger, G., Henighan, T., Child, R., Ramesh, A., Ziegler, D.M., Wu, J., Winter, C. and Hesse, C. (2020). Language Models Are Few-Shot Learners. arxiv.org.](<https://arxiv.org/abs/2005.14165>)
-- [Paperno, D., Kruszewski, G., Lazaridou, A., Pham, Q.N., Bernardi, R., Pezzelle, S., Baroni, M., Boleda, G. and Fernández, R. (2016). The LAMBADA dataset: Word prediction requiring a broad discourse context.](<https://doi.org/10.48550/arXiv.1606.06031>)
-- [Mostafazadeh, N., Chambers, N., He, X., Parikh, D., Batra, D., Vanderwende, L., Kohli, P. and Allen, J. (n.d.). A Corpus and Cloze Evaluation for Deeper Understanding of Commonsense Stories](<https://arxiv.org/pdf/1604.01696v1>)
-- [Zellers, R., Holtzman, A., Bisk, Y., Farhadi, A., Choi, Y., & Allen, P. (n.d.). HellaSwag: Can a Machine Really Finish Your Sentence?](<https://arxiv.org/pdf/1905.07830v1>)
-- [Kwiatkowski, T., Palomaki, J., Redfield, O., Collins, M., Parikh, A., Alberti, C., Epstein, D., Polosukhin, I., Devlin, J., Lee, K., Toutanova, K., Jones, L., Kelcey, M., Chang, M.-W., Dai, A.M., Uszkoreit, J., Le, Q. and Petrov, S. (2019). Natural Questions: A Benchmark for Question Answering Research. Transactions of the Association for Computational Linguistics, 7.](<https://doi.org/10.1162/tacl_a_00276>)
-‌- [Berant, J., Chou, A., Frostig, R. and Liang, P. (2013). Semantic Parsing on Freebase from Question-Answer Pairs. [online] ACLWeb.](<https://aclanthology.org/D13-1160>)
-- [Joshi, M., Choi, E., Weld, D.S. and Zettlemoyer, L. (2017). TriviaQA: A Large Scale Distantly Supervised Challenge Dataset for Reading Comprehension.](<https://doi.org/10.48550/arXiv.1705.03551>)
+- [Brown, T.B., Mann, B., Ryder, N., Subbiah, M., Kaplan, J., Dhariwal, P., Neelakantan, A., Shyam, P., Sastry, G., Askell, A., Agarwal, S., Herbert-Voss, A., Krueger, G., Henighan, T., Child, R., Ramesh, A., Ziegler, D.M., Wu, J., Winter, C. and Hesse, C. (2020). Language Models Are Few-Shot Learners. arxiv.org.](https://arxiv.org/abs/2005.14165)
+- [Paperno, D., Kruszewski, G., Lazaridou, A., Pham, Q.N., Bernardi, R., Pezzelle, S., Baroni, M., Boleda, G. and Fernández, R. (2016). The LAMBADA dataset: Word prediction requiring a broad discourse context.](https://doi.org/10.48550/arXiv.1606.06031)
+- [Mostafazadeh, N., Chambers, N., He, X., Parikh, D., Batra, D., Vanderwende, L., Kohli, P. and Allen, J. (n.d.). A Corpus and Cloze Evaluation for Deeper Understanding of Commonsense Stories](https://arxiv.org/pdf/1604.01696v1)
+- [Zellers, R., Holtzman, A., Bisk, Y., Farhadi, A., Choi, Y., & Allen, P. (n.d.). HellaSwag: Can a Machine Really Finish Your Sentence?](https://arxiv.org/pdf/1905.07830v1)
+- [Kwiatkowski, T., Palomaki, J., Redfield, O., Collins, M., Parikh, A., Alberti, C., Epstein, D., Polosukhin, I., Devlin, J., Lee, K., Toutanova, K., Jones, L., Kelcey, M., Chang, M.-W., Dai, A.M., Uszkoreit, J., Le, Q. and Petrov, S. (2019). Natural Questions: A Benchmark for Question Answering Research. Transactions of the Association for Computational Linguistics, 7.](https://doi.org/10.1162/tacl_a_00276)
+  ‌- [Berant, J., Chou, A., Frostig, R. and Liang, P. (2013). Semantic Parsing on Freebase from Question-Answer Pairs. [online] ACLWeb.](https://aclanthology.org/D13-1160)
+- [Joshi, M., Choi, E., Weld, D.S. and Zettlemoyer, L. (2017). TriviaQA: A Large Scale Distantly Supervised Challenge Dataset for Reading Comprehension.](https://doi.org/10.48550/arXiv.1705.03551)

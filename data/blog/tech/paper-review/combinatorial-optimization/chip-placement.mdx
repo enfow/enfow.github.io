@@ -1,14 +1,14 @@
 ---
-title: "Chip Placement with Deep Reinforcement Learning"
+title: 'Chip Placement with Deep Reinforcement Learning'
 date: '2020-08-26'
-tags: ["Reinforcement-Learning", 'Combinatorial-Optimization', 'Placement']
+tags: ['Reinforcement-Learning', 'Combinatorial-Optimization', 'Placement']
 draft: false
-summary: ""
+summary: ''
 ---
 
 - Azalia Mirhoseini, Anna Goldie, Mustafa Yazgan, Joe Jiang, Ebrahim Songhori, Shen Wang, Young-Joon Lee 등
 - 2020
-- [논문 링크](<https://arxiv.org/abs/2004.10746>)
+- [논문 링크](https://arxiv.org/abs/2004.10746)
 
 # Summary
 
@@ -46,7 +46,7 @@ Chip Placement에서 해결해야 하는 것은 아래 두 가지 요소를 적�
 
 ## 1. Standard Cell
 
- NAND Gate, NOR Gate 등과 같이 가장 기본적인 수준의 기능을 제공하는 구성요소들을 말한다.
+NAND Gate, NOR Gate 등과 같이 가장 기본적인 수준의 기능을 제공하는 구성요소들을 말한다.
 
 ## 2. Macro
 
@@ -150,13 +150,13 @@ Placement Density는 Hard Constraint, 즉 밀집도가 일정 수준 이상으�
 
 ---
 
-# Grid  & Order
+# Grid & Order
 
 논문에서는 Chip Placement 문제를 강화학습에 적용 가능하도록 구체화하고 강화학습 알고리즘이 이를 보다 잘 학습할 수 있도록 하기 위해 여러 방법론들을 적용하고 있다. 그 중 Grid를 어떻게 설정할 것인지와 Macro의 배치 순서는 어떻게 되는지에 대해서는 다음과 같이 설정하고 있다.
 
 ## Grid
 
-Chip Canvas를 행과 열로 나눌 것인지는 최적화 문제의 복잡도와 설계의 질에 직접적인 영향을 미치기 때문에 중요하다. 이를 위해 논문에서는 행과 열의 최대 개수를 128개로 제한한 뒤, 이를  Bin Packing 문제로 보고 각각의 시도에서 낭비되는 공간의 크기를 계산했다고 한다.
+Chip Canvas를 행과 열로 나눌 것인지는 최적화 문제의 복잡도와 설계의 질에 직접적인 영향을 미치기 때문에 중요하다. 이를 위해 논문에서는 행과 열의 최대 개수를 128개로 제한한 뒤, 이를 Bin Packing 문제로 보고 각각의 시도에서 낭비되는 공간의 크기를 계산했다고 한다.
 
 ## Macro Order
 
@@ -252,12 +252,12 @@ Policy Network는 State의 정보가 담긴 State Embedding을 받아 적절한 
 
 첫 번째는 Feature Embedding을 위해 Pre-Training이 효과적인지 검증하는 실험이다. 이를 위해 논문에서는 다음 네 가지 경우에 대한 실험 결과를 비교하고 있다.
 
-|Setting| Pre-Training | Fine Tuning |
-|:------:|:---:|:---:|
-|Zero-Shot| O | X |
-|2hr Fine Tuning| O | O(2Hour) |
-|12hr Fine Tuning| O | O(12Hour) |
-|24hr From Scratch | X | X |
+|      Setting      | Pre-Training | Fine Tuning |
+| :---------------: | :----------: | :---------: |
+|     Zero-Shot     |      O       |      X      |
+|  2hr Fine Tuning  |      O       |  O(2Hour)   |
+| 12hr Fine Tuning  |      O       |  O(12Hour)  |
+| 24hr From Scratch |      X       |      X      |
 
 결과는 다음과 같다. y축이 Placement Cost이므로 작으면 작을 수록 좋다.
 
@@ -291,4 +291,4 @@ Table을 처음 보았을 때 RePLAce가 더 좋은 것 같아 보이지만 논�
 
 # Additional Study
 
-- **Force-Directed Method**에 대해서는 [VLSI Cell Placement Technique](<https://enfow.github.io/paper-review/domain/2020/09/07/vlsi_cell_placement_technique/>)논문 리뷰에 정리해 두었다.
+- **Force-Directed Method**에 대해서는 [VLSI Cell Placement Technique](https://enfow.github.io/paper-review/domain/2020/09/07/vlsi_cell_placement_technique/)논문 리뷰에 정리해 두었다.

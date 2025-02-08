@@ -1,17 +1,17 @@
 ---
-title: "Relational Inductive Biases, Deep Learning, and Graph Networks"
+title: 'Relational Inductive Biases, Deep Learning, and Graph Networks'
 date: '2021-01-11'
 tags: ['Graph-Neural-Network']
 draft: false
-summary: ""
+summary: ''
 ---
 
 # 논문 제목 : Relational Inductive Biases, Deep Learning, and Graph Networks
 
 - Peter W. Battaglia, Jessica B. Hamrick, Victor Bapst 등
 - 2018
-- [Paper Link](<https://arxiv.org/pdf/1806.01261.pdf>)
-- [Vedio](<https://www.youtube.com/watch?v=sTGKOUzIpaQ&ab_channel=MITCBMM>)
+- [Paper Link](https://arxiv.org/pdf/1806.01261.pdf)
+- [Vedio](https://www.youtube.com/watch?v=sTGKOUzIpaQ&ab_channel=MITCBMM)
 
 ## Summary
 
@@ -25,7 +25,7 @@ summary: ""
 
 사실 위에서 언급한 각각의 구조들이 가지는 상대적인 장점들은 잘 알려져 있다. 이미지가 대표적이라고 할 수 있을텐데, 기본적인 MNIST Classification에서 시작하여 Semantic Segmentation, Facial Recognition까지 이미지를 다루는 대부분의 딥러닝 모델들은 모두 CNN을 사용한다.
 
-**Inductive Bias**는 이와 같이 CNN이 왜 이미지를 다루는 작업에 있어 강점을 보이는지에 대한 설명이라고 할 수 있다. 여기서 말하는 Inductive Bias는 다음과 같이 정의된다([Springer](<https://link.springer.com/referenceworkentry/10.1007%2F978-1-4419-9863-7_927>)).
+**Inductive Bias**는 이와 같이 CNN이 왜 이미지를 다루는 작업에 있어 강점을 보이는지에 대한 설명이라고 할 수 있다. 여기서 말하는 Inductive Bias는 다음과 같이 정의된다([Springer](https://link.springer.com/referenceworkentry/10.1007%2F978-1-4419-9863-7_927)).
 
 - In machine learning, the term inductive bias refers to a set of (explicit or implicit) assumptions made by a learning algorithm in order to perform induction, that is, to generalize a finite set of observation (training data) into a general model of the domain.
 
@@ -35,9 +35,15 @@ summary: ""
 
 Inductive Bias는 크게 **Relational Inductive Bias**와 **Non-relational Inductive Bias** 두 개로 나뉜다. 이때 Relational Inductive Bias는 말 그대로 Inductive Bias 중에서도 어떤 관계에 초점을 맞춘 것이라고 할 수 있는데, 여기서 말하는 관계란 입력 Element와 출력 Element 간의 관계를 말한다.
 
-<img src="/static/images/paper-review/relational_inductive_bias_table.png" className="w-[48em] block mx-auto my-8" />
+<img
+  src="/static/images/paper-review/relational_inductive_bias_table.png"
+  className="mx-auto my-8 block w-[48em]"
+/>
 
-<img src="/static/images/paper-review/relational_inductive_bias_compare_buliding_blocks.png" className="w-[48em] block mx-auto my-8" />
+<img
+  src="/static/images/paper-review/relational_inductive_bias_compare_buliding_blocks.png"
+  className="mx-auto my-8 block w-[48em]"
+/>
 
 ### Fully Connected
 
@@ -80,7 +86,10 @@ Graph는 Node와 각 Node 간의 연결을 의미하는 Edge로 구성되는 자
 
 논문에서는 Graph의 특성을 고려하여 기존에 제시된 방법론들을 확장하여 만든 **Graph Netoworks(GN) Framework**을 제시하고 있다. **GN Block**은 기본적으로 Graph를 입력으로 받아 Graph를 출력하는 **Graph to Graph 구조**(CNN은 Grid to Grid, RNN은 Seq to Seq로 볼 수 있다)이며, Graph의 정의에 따라 세 가지 구성요소, Entities가 되는 **Node** $$V$$, 이들 간의 Relations이 되는 **Edge** $$E$$, 그리고 전체 Graph의 특성을 표현하는 **Global** $$u$$를 처리하게 된다. 알고리즘은 다음과 같다.
 
-<img src="/static/images/paper-review/relational_inductive_bias_gn_block_algorithm.png" className="w-[48em] block mx-auto my-8" />
+<img
+  src="/static/images/paper-review/relational_inductive_bias_gn_block_algorithm.png"
+  className="mx-auto my-8 block w-[48em]"
+/>
 
 가장 먼저 보이는 것은 Graph $$(E, V, u)$$를 입력으로 받아 새로운 Graph $$(E', V', u')$$를 반환한다는 것이다. 알고리즘은 크게 세 부분으로 구성되는데 Edge Feature, Node Feature, Global Feature를 차례대로 새로 구하게 된다. 그 과정에서 세 가지 Update Function $$\phi^e, \phi^v, \phi^u$$과 세 가지 Aggregation Function $$\rho^{e \rightarrow v}, \rho^{e \rightarrow u}, \rho^{v \rightarrow u}$$을 사용한다.
 
@@ -98,7 +107,10 @@ GN Block은 기본적으로 Graph를 다루는 문제들에 일반적으로 적�
 
 다양한 형태로 Graph의 입력과 출력이 주어질 수 있는 만큼 Block의 내부 구조도 그에 맞춰 구성할 수 있어야 한다. 이미지가 주어진다면 Update Function으로 CNN을, Sequence가 주어지면 RNN을 사용할 수 있어야 한다. 또한 문제의 특성에 맞춰 출력 값을 구성할 수 있어야 한다. 이와 관련하여 논문에서는 다음 6가지의 내부 구조를 제시한다. 위에서 확인한 알고리즘은 $$(a)$$이며, 필요에 따라 일부만 사용하는 식으로 내부 구조를 달리하고 있다.
 
-<img src="/static/images/paper-review/relational_inductive_bias_6_different_internal.png" className="w-[48em] block mx-auto my-8" />
+<img
+  src="/static/images/paper-review/relational_inductive_bias_6_different_internal.png"
+  className="mx-auto my-8 block w-[48em]"
+/>
 
 #### Composable multi-block architectures
 

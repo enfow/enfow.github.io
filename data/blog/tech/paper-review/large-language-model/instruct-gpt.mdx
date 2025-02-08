@@ -1,9 +1,9 @@
 ---
-title: "[Instruct GPT] Training language models to follow instructions with human feedback"
+title: '[Instruct GPT] Training language models to follow instructions with human feedback'
 date: '2024-09-10'
 tags: ['Large-Language-Model', 'GPT']
 draft: false
-summary: ""
+summary: ''
 ---
 
 # Summary
@@ -29,7 +29,11 @@ Instruct GPT 는 이러한 문제를 해결하는 데에 도움이 되는 한 �
 
 RLHF(Reinforcement Learning from Human Feedback)란 사람이 직접 Trajectory 들에 대한 선호를 평가하고, 이를 학습에 사용하는 방법으로, OpenAI의 2017년 논문 'Deep Reinforcement Learning from Human Preferences'에서 제안되었다. 결과물들에 대한 사람의 선호를 학습하도록 하여 사람이 선호하는 결과물을 산출해내도록 만들겠다는 것이다.
 
-<img src="/static/images/paper-review/instruct-gpt-3step-diagram.png" alt="instruct-gpt-3step-diagram" className="w-full mx-auto block" />
+<img
+  src="/static/images/paper-review/instruct-gpt-3step-diagram.png"
+  alt="instruct-gpt-3step-diagram"
+  className="mx-auto block w-full"
+/>
 
 Language Model 에 이를 적용하기 위해 논문에서는 다음 3개의 step 을 구성하였다.
 
@@ -165,14 +169,22 @@ Alignment problem 을 해결하기 위해 제안된 모델인 만큼 그 평가 
 
 **사용자들은 InstructGPT의 출력 값을 보다 선호한다**
 
-<img src="/static/images/paper-review/instruct-gpt-win-rate-sft-175.png" alt="instruct-gpt-win-rate-sft-175" className="w-[80%] mx-auto block" />
+<img
+  src="/static/images/paper-review/instruct-gpt-win-rate-sft-175.png"
+  alt="instruct-gpt-win-rate-sft-175"
+  className="mx-auto block w-[80%]"
+/>
 
 위 이미지는 GPT-3 SFT 175B 모델을 기준으로 Labeler가 직접 출력 값에 대한 선호도를 평가한 것이다.
 
 - 전체적인 선호도는 GPT-3 < GPT-3 + few-shot prompt < SFT < PPO < PPO-ptx 순으로 좋았다.
 - PPO, PPO-ptx 간의 선호도 차이는 크지 않았다.
 
-<img src="/static/images/paper-review/instruct-gpt-metadata-result.png" alt="instruct-gpt-metadata-result" className="w-full mx-auto block" />
+<img
+  src="/static/images/paper-review/instruct-gpt-metadata-result.png"
+  alt="instruct-gpt-metadata-result"
+  className="mx-auto block w-full"
+/>
 
 위 이미지는 개별 항목에 대한 선호도를 평가한 것이다.
 
@@ -186,7 +198,11 @@ Alignment problem 을 해결하기 위해 제안된 모델인 만큼 그 평가 
 
 **[trustfulQA](https://arxiv.org/abs/2109.07958) 데이터셋 기준으로 GPT-3 보다 성능이 좋았다.**
 
-<img src="/static/images/paper-review/instruct-gpt-truthfulqa-result.png" alt="instruct-gpt-truthfulqa-result" className="w-full mx-auto block" />
+<img
+  src="/static/images/paper-review/instruct-gpt-truthfulqa-result.png"
+  alt="instruct-gpt-truthfulqa-result"
+  className="mx-auto block w-full"
+/>
 
 카테고리 셋은 차례대로 1.3B, 6B, 175B의 모델 크기를 나타낸다. 또한 회색 그래프는 truthfulness 결과를, truthfulness + informativeness 결과를 의미한다. 전반적으로 GPT-3에 비해 성능이 높아졌음을 알 수 있다.
 
@@ -194,7 +210,11 @@ Alignment problem 을 해결하기 위해 제안된 모델인 만큼 그 평가 
 
 **toxicity 를 기준으로 약간의 성능 향상이 있었으나, bias 에 대해서는 그렇지 못했다.**
 
-<img src="/static/images/paper-review/instruct-gpt-toxicity-result.png" alt="instruct-gpt-toxicity-result" className="w-full mx-auto block" />
+<img
+  src="/static/images/paper-review/instruct-gpt-toxicity-result.png"
+  alt="instruct-gpt-toxicity-result"
+  className="mx-auto block w-full"
+/>
 
 위의 subplot 중 오른쪽이 RealToxicityPrompts Benchmark로 산출한 결과를 보여준다. Benckmark 를 기준으로 일반 프롬프트에 대해서는 성능이 크게 차이가 없고, 오히려 SFT 모델의 성능이 가장 좋았다. 반면 Respectful 프롬프트에 대해서는 성능이 향상되었다.
 
@@ -202,7 +222,11 @@ theWinogender (Rudinger et al., 2018) and CrowS-Pairs (Nangia et al., 2020) data
 
 **RLHF fine-tuning procedure 를 개선하여 NLP dataset 에 대한 성능 저하 문제를 개선할 수 있다.**
 
-<img src="/static/images/paper-review/instruct-gpt-rlhf-nlp-dataset-result.png" alt="instruct-gpt-rlhf-nlp-dataset-result" className="w-full mx-auto block" />
+<img
+  src="/static/images/paper-review/instruct-gpt-rlhf-nlp-dataset-result.png"
+  alt="instruct-gpt-rlhf-nlp-dataset-result"
+  className="mx-auto block w-full"
+/>
 
 Alignment 를 진행한 후에 Benchmark 성능은 오히려 저하되는 것을 소위 Alignment Tax 라고 부른다. RL 업데이트에서 PPO Gradient 항과 더불어 Pretraining Gradient 항을 더한 것(PPO-ptx)이 이러한 문제를 해소하기 위해서인데, PPO-ptx가 PPO에 비해 실험한 모든 benchmark dataset에서 성능이 좋아졌음을 확인할 수 있다.
 

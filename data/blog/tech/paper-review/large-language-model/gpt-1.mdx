@@ -1,9 +1,9 @@
 ---
-title: "[GPT-1] Improving Language Understanding by Generative Pre-Training"
+title: '[GPT-1] Improving Language Understanding by Generative Pre-Training'
 date: '2024-05-15'
 tags: ['Large-Language-Model', 'GPT']
 draft: false
-summary: ""
+summary: ''
 ---
 
 # Summary
@@ -97,7 +97,11 @@ $$
 
 Pre-Training 은 앞 부분 단어들을 보고 바로 뒤의 단어를 맞추는 구조로 Task 유형이 하나인데다가 문장 간의 구별도 필요하지 않다. 하지만 Fine-Tuning 은 Task 의 종류가 많고, 경우에 따라서는 복수의 문장을 한꺼번에 입력으로 받아야 한다. 따라서 Task의 유형에 따라 입력 구조와 출력을 다루는 방법이 달라지게 된다.
 
-<img src="/static/images/paper-review/gpt-1-fine-tuning-input.png" alt="transformer" className="w-full mx-auto block" />
+<img
+  src="/static/images/paper-review/gpt-1-fine-tuning-input.png"
+  alt="transformer"
+  className="mx-auto block w-full"
+/>
 
 구체적인 Task 유형에 따라 세부적인 부분이 다르지만, 기본적으로는 입력 Sequence 를 Pre-Trained model(Transformer)과, Additional Linear Layer 에 차례대로 통과시키는 구조를 가지고 있다. 즉 어떠한 문제든 Pre-trained model 이 한 번에 처리할 수 있도록 입력(traversal-style)을 만들도록 하여 Task specific 구조를 없애는 것을 목표로 한다.
 
@@ -119,7 +123,11 @@ Pre-Training 은 앞 부분 단어들을 보고 바로 뒤의 단어를 맞추�
 
 # Analysis
 
-<img src="/static/images/paper-review/gpt-1-analysis-image.png" alt="transformer" className="w-full mx-auto block" />
+<img
+  src="/static/images/paper-review/gpt-1-analysis-image.png"
+  alt="transformer"
+  className="mx-auto block w-full"
+/>
 
 ## Number of layers
 

@@ -1,16 +1,16 @@
 ---
-title: "[Dyna-Q] Integrating Planning for Task-Completion Dialogue Policy Learning"
+title: '[Dyna-Q] Integrating Planning for Task-Completion Dialogue Policy Learning'
 date: '2020-09-09'
 tags: ['Reinforcement-Learning', 'Model-Based-RL']
 draft: false
-summary: ""
+summary: ''
 ---
 
 # 논문 제목 : Integrating Planning for Task-Completion Dialogue Policy Learning
 
 - Baolin Peng, Xiujun Li, Jianfeng Gao, Jingjing Liu, Kam-Fai Wong, Shang-Yu Su
 - 2018
-- [논문 링크](<https://arxiv.org/abs/1801.06176>)
+- [논문 링크](https://arxiv.org/abs/1801.06176)
 
 ## Summary
 
@@ -18,12 +18,14 @@ summary: ""
 - Deep Dyna-Q에서는 실제 사용자를 대상으로 직접 Policy를 업데이트하면서 데이터의 효율성을 높이기 위해 사용자를 시뮬레이팅하는 **World Model**을 Agent 내부에서 Policy와 함께 학습시키고, 이를 다시 Policy를 업데이트 하기 위해 사용한다.
 - World Model의 성능이 좋아 시뮬레이팅의 정확도가 높아진다면 한 번에 여러 Step을 예측하도록 해 학습 속도를 높일 수 있다.
 
-
 ## Making Dialogue System with RL
 
 MDP(Markov Decision Process)에 맞게 수식화를 할 수 있다면 강화학습을 적용하여 문제를 푸는 것이 가능하다. 논문에서는 어떤 Task를 완수하는 내용의 대화(Task Completion Dialogue)를 MDP로 보고 강화학습 알고리즘으로 해결하고자 시도하는데, 구체적인 예시는 다음과 같다.
 
-<img src="/static/images/paper-review/ddq_two_sample_dialogue_sessions.png" className="w-[40em] block mx-auto my-4" />
+<img
+  src="/static/images/paper-review/ddq_two_sample_dialogue_sessions.png"
+  className="mx-auto my-4 block w-[40em]"
+/>
 
 위 이미지는 DQN과 논문에서 제시하고 있는 알고리즘인 Deep Dyna Q(DDQ)의 대화 결과를 비교해서 보여주고 있다. 이미지의 맨 위에 나와있는 것을 사용자의 목적(Goal)으로 보고 이에 맞춰 Agent가 예약을 진행해주는 Task를 수행하는 것이다. 당연하게도 DQN은 잘 수행하지 못하지만 DDQ는 빠르게 원하는 목적을 달성하고 대화를 종료하는 것을 확인할 수 있다.
 
@@ -45,7 +47,7 @@ Dyna Q 알고리즘 자체는 1990년 Sutton이 제시한 방법으로 강화학
 
 DDQ은 세부적으로 다음 5가지 Component로 구성된다.
 
-<img src="/static/images/paper-review/ddq_dialogue_agent.png" className="w-[28em] block mx-auto" />
+<img src="/static/images/paper-review/ddq_dialogue_agent.png" className="mx-auto block w-[28em]" />
 
 - **NLU(Natural Language Understanding)**: 사용자의 자연어에서 의미를 추출하는 모듈
 - **State Tracker**: 대화가 어떠한 상태인지, 어디까지 진행되었는지 파악하는 모듈
@@ -75,7 +77,11 @@ Planning Process란 World Model에서 만들어 낸 경험을 사용하여 Dialo
 
 World Model은 $$M(s,a;\theta_M)$$로 표현할 수 있으며, State와 Dialogue Policy가 결정한 Action에 대한 정보를 입력 받으면 사용자가 했을 법한 Action $$a^u$$와 Reward $$r$$ 그리고 Done_bool을 출력하게 된다. 이를 위해 World Model은 아래 식과 같이 구성되며, 구조는 그림과 같다.
 
-<img src="/static/images/paper-review/ddq_world_model_architecture.png" className="w-[25em] block mx-auto" align="right" />
+<img
+  src="/static/images/paper-review/ddq_world_model_architecture.png"
+  className="mx-auto block w-[25em]"
+  align="right"
+/>
 
 $$
 \eqalign{
@@ -84,6 +90,7 @@ $$
     &a^u = \text{softmax}(W_a h + b_a)\\
     &t = \text{sigmoid}(W_t h + b_t)
 }
+
 
 $$
 
@@ -103,4 +110,4 @@ $$M(s,a;\theta_M)$$로 정의되는 World Model은 실제 사용자를 최대한
 
 DDQ의 학습 알고리즘은 아래와 같다. (1) Direct Reinforcement Learning (2) World Model Learning (3) Planning을 차례대로 진행하는 것을 확인할 수 있다.
 
-<img src="/static/images/paper-review/ddq_algorithm.png" className="w-[28em] block" />
+<img src="/static/images/paper-review/ddq_algorithm.png" className="block w-[28em]" />
