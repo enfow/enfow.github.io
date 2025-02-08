@@ -8,6 +8,7 @@ import { notFound } from 'next/navigation'
 const POSTS_PER_PAGE = 10
 
 export const generateStaticParams = async () => {
+  console.log('Generating static params for tag pages...')
   const tagCounts = tagData as Record<string, number>
   const staticParams: { category: string; tag: string; page: string }[] = []
 
@@ -15,7 +16,7 @@ export const generateStaticParams = async () => {
     const parts = post.path.split('/')
     const category = parts[0] || ''
 
-    if (!category) continue // Ensure category exists
+    if (!category) continue
 
     for (const tag of post.tags || []) {
       const encodedTag = encodeURI(slug(tag))
@@ -32,10 +33,13 @@ export const generateStaticParams = async () => {
     }
   }
 
+  console.log('Static params generated:', staticParams)
   return staticParams
 }
 
-export default async function TagPage(props: { params: Promise<{ tag: string; page: string }> }) {
+export default async function TagPage(props: {
+  params: Promise<{ category: string; tag: string; page: string }>
+}) {
   const params = await props.params
   const tag = decodeURI(params.tag)
   const title = tag[0].toUpperCase() + tag.split(' ').join('-').slice(1)
