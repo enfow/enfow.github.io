@@ -112,7 +112,7 @@ const CategoryLinkList = ({ pathname }) => {
             {subCategories && (
               <ul>
                 {subCategories.map((subCategory) => {
-                  const isActiveSubCategory = pathname === subCategory.href
+                  const isActiveSubCategory = pathname.startsWith(subCategory.href)
                   return (
                     <li key={subCategory.title} className="my-2 px-3">
                       <Link
