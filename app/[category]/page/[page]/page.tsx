@@ -10,38 +10,26 @@ const VALID_CATEGORIES = ['tech', 'daily', 'finance']
 export const metadata = genPageMetadata({ title: 'Blog' })
 
 export const generateStaticParams = async () => {
-  return VALID_CATEGORIES.flatMap((category) =>
-    allBlogs
-      .filter((blog) => blog.path.startsWith(category))
-      .map((blog) => {
-        const parts = blog.path.split('/')
-        return {
-          category,
-          subCategory: parts[1] || '',
-        }
-      })
-  )
+  return VALID_CATEGORIES.map((category) => ({
+    category,
+  }))
 }
 
-export default async function BlogPage({
-  params,
-}: {
-  params: Promise<{ subCategory: string; category: string }>
-}) {
-  const { subCategory, category } = await params
+export default async function BlogPage({ params }: { params: Promise<{ category: string, page: string}> }) {
+  const { category, page} = await params
 
   if (!VALID_CATEGORIES.includes(category)) {
     notFound()
   }
 
-  const path = `${category}/${subCategory}`
+  const path = `${category}`
 
   const filteredBlogs = allBlogs.filter((blog) => blog.path.startsWith(path))
   const posts = allCoreContent(sortPosts(filteredBlogs))
 
-  const pageNumber = 1
+  const pageNumber = parseInt(page)
   const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE)
-  const initialDisplayPosts = posts.slice(0, POSTS_PER_PAGE * pageNumber)
+  const initialDisplayPosts = posts.slice(POSTS_PER_PAGE * (pageNumber - 1), POSTS_PER_PAGE * pageNumber)
   const pagination = {
     currentPage: pageNumber,
     totalPages: totalPages,
