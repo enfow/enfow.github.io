@@ -1,0 +1,46 @@
+---
+title: 'A Systematic Survey of Prompt Engineering in Large Language Models: Techniques and Applications'
+date: '2025-02-16'
+tags: ['Large-Language-Model', 'Prompt-Engineering']
+draft: true
+summary: ''
+---
+
+# Taxonomy of Prompt Engineering Techniques
+
+<img
+  src="/static/images/paper-review/prompt-engineering-taxonomy.png"
+  alt="prompt-engineering-taxonomy"
+  className="mx-auto block w-full"
+/>
+
+
+# Summary
+
+| **Technique**                      | **Category**                                | **Description** |
+|-------------------------------------|--------------------------------------------|---------------|
+| Automatic Chain of Thought (CoT)    | Reasoning and Logic                        | CoT 에 맞는 프롬프트 자동 생성, query 를 클러스터링하고, 각 클러스터에서 하나씩 샘플링함 |
+| Self-Consistency                    | Reasoning and Logic                        | 복수의 CoT 경로를 생성하여 Greedy decoding 전략의 한계 극복 |
+| Logical Chain of Thought            | Reasoning and Logic                        | 논리연산기호(AND, OR)를 사용한 CoT. |
+| Chain-of-Symbol (CoS) Prompting     | Reasoning and Logic                        | 자연어의 근본적인 모호함을 기호를 사용하여 보다 명확하고 정확하게 프롬프트를 만드는 방법 |
+| Tree-of-Thoughts (ToT) Prompting    | Reasoning and Logic                        | 그래프 탐색 알고리즘(BFS, DFS)를 활용하여 최적의 reasoning step 생성하며 CoT 진행 |
+| Graph-of-Thoughts (GoT) Prompting   | Reasoning and Logic                        | 복수의 CoT 경로를 생성하고, 이를 그래프화하여 다룸 |
+| System 2 Attention (S2A) Prompting  | Reasoning and Logic                        | 문맥 재구성(regeneration)을 통한 불필요한 정보 제거, System2 는 다니얼 카너먼의 신중한 사고에서 착안. |
+| Thread of Thought (ThoT) Prompting  | Reasoning and Logic                        | 긴 입력 값을 여러 개의 segment로 분할하고, 각각을 요약한 뒤 최종 응답을 생성함. |
+| Chain-of-Table Prompting            | Reasoning and Logic                        | 테이블을 입력으로 받았을 때 이를 적절하게 처리함. |
+| Retrieval Augmented Generation (RAG) | Reduce Hallucination                       | 검색을 통해 관련 있는 텍스트를 탐색하고, 이를 프롬프트에 포함시켜 최종 아웃풋을 생성하는 방법. |
+| ReAct Prompting                     | Reduce Hallucination                       | reasoning trace 와 task specific action(외부 검색 등) 을 동시에 생성함. |
+| Chain-of-Verification (CoVe) Prompting | Reduce Hallucination                     | 응답을 검증할 방법 및 그 결과도 답하게 하여 오류를 줄임. |
+| Chain-of-Note (CoN) Prompting       | Reduce Hallucination                       | 검색된 document 에 대한 신뢰성 또한 확인하는 방법. |
+| Chain-of-Knowledge (CoK) Prompting  | Reduce Hallucination                       | 동적으로 지식을 수집하고 이를 응답 생성에 활용. |
+| Active Prompting                    | User Interface                            | 모델이 어려워하는 query에 대한 프롬프트를 작성하여 보다 복잡한 문제에 대한 응답 정확성 향상. |
+| Automatic Prompt Engineer (APE)     | Fine-Tuning and Optimization              | 다양하게 프롬프트를 생성하고, 특정 테스크에 가장 적합한 프롬프트를 강화학습을 사용해 선택함. |
+| Automatic Reasoning and Tool-use (ART) | Knowledge-Based Reasoning and Generation | 다단계 추론과 외부 정보 활용을 자동화해주는 프레임워크. |
+| Emotion Prompting                   | Improving Consistency and Coherence       | 감정을 자극하는 문장(emotional stimulus sentences) 을 추가하여 감정적인 표현도 잘 할 수 있도록 함. |
+| Scratchpad Prompting                 | Code Generation and Execution             | task design 에 초점을 맞춘 scratchpad 개념을 도입함, 최종 답변을 제공하기 전에 중간 토큰을 생성하도록 함. |
+| Program of Thoughts (PoT) Prompting  | Code Generation and Execution             | 수학적 추론을 자연어가 아닌 Python code 로 작성하도록 유도하고, 이를 실행하여 결과를 도출함. |
+| Structured Chain-of-Thought (SCoT) Prompting | Code Generation and Execution      | 프로그램의 구조와 소스코드 요구사항을 보다 명확하게 프롬프팅함. |
+| Chain-of-Code (CoC) Prompting       | Code Generation and Execution             | 자연어의 불명확성을 제거하기 위해 코드로 사고하도록 하여 논리성을 높이는 방법. |
+| Optimization by Prompting (OPRO)    | Optimization and Efficiency               | 알고리즘을 구현하는 것이 아니라 자연어로 최적화 문제(linear regression, TSP)의 해답을 탐색함. |
+| Rephrase and Respond (RaR) Prompting | Understanding User Intent                 | LLM이 질문을 자동으로 다시 표현(rephrase)하고 확장(expand)한 후, 이에 대한 응답을 생성하는 방식. |
+| Take a Step Back Prompting          | Metacognition and Self-Reflection         | 한 차원 더 높게 문제를 추상화하여(step back) 문제를 바라보고 이를 기반으로 논리적인 추론을 수행함. |
