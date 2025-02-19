@@ -10,7 +10,7 @@ const VALID_CATEGORIES = ['tech', 'daily', 'finance']
 export const metadata = genPageMetadata({ title: 'Blog' })
 
 export const generateStaticParams = async () => {
-  const subCategoryToNumPosts = VALID_CATEGORIES.map((category) => {
+  const postCounter = VALID_CATEGORIES.map((category) => {
     const subCategories = allBlogs
       .filter((blog) => blog.path.startsWith(category))
       .map((blog) => blog.path.split('/')[1] || '')
@@ -23,7 +23,7 @@ export const generateStaticParams = async () => {
     })
   })
 
-  return subCategoryToNumPosts
+  return postCounter
     .flat() // Fix nested array issue
     .flatMap(({ category, subCategory, numPosts }) => {
       const totalPages = Math.ceil(numPosts / POSTS_PER_PAGE)
