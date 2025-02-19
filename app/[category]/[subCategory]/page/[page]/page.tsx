@@ -9,20 +9,6 @@ const VALID_CATEGORIES = ['tech', 'daily', 'finance']
 
 export const metadata = genPageMetadata({ title: 'Blog' })
 
-export const generateStaticParams = async () => {
-  return VALID_CATEGORIES.flatMap((category) =>
-    allBlogs
-      .filter((blog) => blog.path.startsWith(category))
-      .map((blog) => {
-        const parts = blog.path.split('/')
-        return {
-          category,
-          subCategory: parts[1] || '',
-        }
-      })
-  )
-}
-
 export default async function BlogPage({
   params,
 }: {
