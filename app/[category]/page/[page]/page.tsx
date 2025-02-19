@@ -10,9 +10,18 @@ const VALID_CATEGORIES = ['tech', 'daily', 'finance']
 export const metadata = genPageMetadata({ title: 'Blog' })
 
 export const generateStaticParams = async () => {
-  return VALID_CATEGORIES.map((category) => ({
-    category,
-  }))
+  const postCounter = VALID_CATEGORIES.map((category) => {
+    const numPosts = allBlogs.filter((blog) => blog.path.startsWith(category)).length
+    return { category, numPosts }
+  })
+
+  return postCounter.flatMap(({ category, numPosts }) => {
+    const totalPages = Math.ceil(numPosts / POSTS_PER_PAGE)
+    return Array.from({ length: totalPages }, (_, i) => ({
+      category,
+      page: (i + 1).toString(),
+    }))
+  })
 }
 
 export default async function BlogPage({
