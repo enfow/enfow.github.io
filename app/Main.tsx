@@ -79,7 +79,7 @@ export default function Home({ posts }) {
         <ul className="divide-y divide-gray-200 dark:divide-gray-700">
           {Object.keys(categoryToPosts).map((category) => (
             <>
-              <li>
+              <li key={category}>
                 <h2 className="text-xl font-bold uppercase leading-9 tracking-tight text-gray-900 hover:text-primary-500 dark:text-gray-100 sm:text-xl sm:leading-10 md:text-3xl md:leading-14">
                   <Link
                     href={`/${category}`}
