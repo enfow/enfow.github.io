@@ -10,5 +10,5 @@ build:
 
 build-and-run:
 	rm -rf .contentlayer
-	yarn build && yarn export
+	EXPORT=1 yarn build
 	npx serve out
