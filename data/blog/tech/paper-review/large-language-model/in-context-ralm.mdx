@@ -57,8 +57,6 @@ $$
 
 제시된 이미지를 보면 보다 직관적으로 이해할 수 있다. 지금까지 생성된 단어 $$x_{i-1}$$이 "World Cup 2022 was the last with 32 teams, before the increase to" 라고 할 때, 일반적인 생성 모델은 이 단어 시퀀스만 활용하여 다음 단어를 생성하게 되지만, In-Context RALM 은 이들을 Retriever 에 넣어 생성에 필요한 정보 "FIFA World Cup 2026 will expland to 48 teams"를 찾아 두 가지를 Concat 해서 생성하도록 한다. 이를 통해 언어 모델의 추가적인 학습 없이도 실시간 데이터와 같이 새로운 정보들도 잘 다룰 수 있다고 한다.
 
-논문을 읽으며 RALM과 RAG(Retrieval Augmented Generation)의 관계에 대해 궁금증이 생겨 검색을 해보았다. 매일 같이 새로운 용어들이 생겨나는 머신러닝 연구의 특성 상 용어 자체는 크게 중요하지 않다고 생각하지만, 정리된 글을 쓰기 위해 또는 연구 간의 비교를 위해서는 필요하다고 생각했다. 
-
 ## Design Choices
 
 기본적인 In Context RALM 모델의 효율성을 높이기 위해 논문에서는 다음 두 가지를 적용해 보았다고 한다.
