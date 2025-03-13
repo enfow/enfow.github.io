@@ -89,6 +89,178 @@ $$
 
 Retrieval Stride 와 Retrieval Query Length 두 가지를 함께 적용함에 있어 중요한 점 중 하나는, 두 가지 하이퍼 파라미터의 크기가 같은 경우, 즉 $$s=l$$ 으로 설정하면 성능이 떨어진다는 것이다.
 
+# Experiment Settings
+
+## Dataset
+
+실험에 사용한 데이터 셋은 다음 7가지이다.
+
+- Language Modeling Dataset
+  - WikiText-103
+  - The Pile
+  - Stack Exchange
+  - FreeLaw
+  - Real News
+- Open Domain QA
+  - Natural QA(NQ)
+  - Trivia QA
+
+## Model
+
+언어 모델로는 GPT-2, GPT-Neo, OPT, LLaMA 등 Open Source로 쉽게 구할 수 있는 모델들을 사용하고 있으며, 각 모델의 크기 또한 다양하게 실험을 진행하여 모델 크기에 따른 성능 비교도 함께 확인하려 하고 있다.
+
+## Retriever & Reranker
+
+Retriever 또한 Sparse, Dense 모두 사용하는 등 다양하게 실험을 진행하고 있는데, 다음과 같다.
+
+- Sparse Retriever
+  - BM25
+- Dense Retriever
+  - frozen BERT-base 
+  - Contriever
+  - Spider
+
+Reranker 의 경우 RoBERTa-Base 를 바탕으로 트레이닝하였다.
+
+# Experiment results
+
+## 1. The Effectiveness of In-Context RALM with Off-the-Shelf Retrievers
+
+<img
+  src="/static/images/paper-review/in-context-ralm-experiment-1.png"
+  alt="in-context-ralm-experiment-1"
+  className="mx-auto block w-full"
+/>
+
+각 모델의 첫 번째 줄과 두 번째 줄의 실험 결과를 비교해보면 BM25와 이 비교적 간단한 Retriever 를 사용한 경우에도 In-Context RAML을 적용하면 성능이 높아질 수 있음을 확인하였다. 경우에 따라서는 In-Context RAML 을 적용하여 더 큰 모델의 성능을 앞지르기도 하였다.
+
+<img
+  src="/static/images/paper-review/in-context-ralm-experiment-2.png"
+  alt="in-context-ralm-experiment-2"
+  className="mx-auto block w-[50%]"
+/>
+
+<img
+  src="/static/images/paper-review/in-context-ralm-experiment-3.png"
+  alt="in-context-ralm-experiment-3"
+  className="mx-auto block w-full"
+/>
+
+위 플롯과 표를 통해 다양한 크기의 LLaMA와 OPT 모델들들에 대해서도 유사한 실험 결과를 보여주었음을 알 수 있다.
+
+<img
+  src="/static/images/paper-review/in-context-ralm-experiment-4.png"
+  alt="in-context-ralm-experiment-4"
+  className="mx-auto block  w-[50%]"
+/>
+
+흥미로운 결과 중 하나는 Sparse Retriever 인 BM25를 적용했을 때 다른 Dense Retriever 보다 더 높은 성능을 보여주었다는 것이다. 이는 Zero-Shot 환경에서는 BM25가 다른 Dense Retriever 보다 더 나은 성능을 보여주었던 기존 연구([BEIR](<https://arxiv.org/abs/2104.08663>))들과 유사한 결과이며, 일반적으로 연산량도 더 적다는 측면에서 BM25를 Retriever로 선택하는 것이 매력적인 옵션이 될 수 있을 것으로 보인다.
+
+<img
+  src="/static/images/paper-review/in-context-ralm-experiment-5.png"
+  alt="in-context-ralm-experiment-5"
+  className="mx-auto block  w-[50%]"
+/>
+
+
+Retrieval Stride $$s$$의 크기에 따른 실험도 진행했는데, 쉽게 추측해볼 수 있듯 Stride 의 크기가 작을수록, 즉 검색을 더 자주할수록 성능이 좋아진다는 것을 알 수 있다. 이는 현재 문맥에 더욱 맞는 문서를 적극적으로 활용할 수 있기 때문으로 추측해 볼 수 있는데, Stride 가 작으면 작을수록 Retrieval 비용은 증가하므로 Trade-Off를 고려해야 할 필요가 있는 부분이다.
+
+<img
+  src="/static/images/paper-review/in-context-ralm-experiment-7.png"
+  alt="in-context-ralm-experiment-7"
+  className="mx-auto block  w-[50%]"
+/>
+
+Query Length $$l$$에 대해서는 32 Toekn 정도로 잡는 것이 가장 좋았다(Sweet Spot)고 한다.
+
+## 2. Improving In-Context RALM with LM-Oriented Reranking
+
+<img
+  src="/static/images/paper-review/in-context-ralm-experiment-6.png"
+  alt="in-context-ralm-experiment-6"
+  className="mx-auto block  w-[50%]"
+/>
+
+위 플롯은 Retriever 가 판단한 최상의 1개 문서를 사용하는 것보다 Top16 개의 문서 중 가장 최선의 것을 사용하면 더 좋은 성능을 보일 수 있음을 보여준다. 이를 통해 Retriever의 Reranker를 개선하는 것으로도 In-Context RALM의 성능이 높아질 수 있음을 짐작하게 되었고, 관련 실험들 또한 다수 진행했다고 한다.
+
+### LMs as Zero-Shot Rerankers
+
+Reranker 의 목적은 Next Text $$y$$을 예측하는 데에 있어 가장 유용한 Document 를 찾아내는 것이다. In-Context RAML 에서는 Retrieval Stride와 Query Length를 고려하여 다음과 같이 가장 이상적인 문서 $$d_i^*$$ 를 수식화 할 수 있다.
+
+$$
+i^* = \arg\max_{i \in [k]} p_{\theta} (y \mid [d_i ; x_{\leq s, j}])
+$$
+
+하지만 이는 곧바로 적용하기 어려운데, Test Time 에는 생성 중이므로 Next Text $$y$$를 알 수 없기 때문이다.
+
+대신 가장 최근에 생성된 문맥들($$y'$$)을 예측하는 데에 도움이 되는 Document 를 찾는 것으로 변경하여 진행했다. 이는 이전 문맥에 잘 맞는 문서라면 다음에 나올 텍스트를 예측하는 데에도 도움이 될 것이라고 가정하는 것이라 할 수 있다.
+
+$$
+y := x_{s, j+1}, \dots, x_{s, j+s}
+$$
+
+$$
+y' := x_{s, j - s' + 1}, \dots, x_{s, j}
+$$
+
+이상적인 케이스 $$y$$가 Retrieval Stride $$s$$개 만큼의 Next Token 들을 예측하는 것이라면 이를 근사한 $$y'$$ 최근에 생성된 $$s'$$개를 예측하는 것으로 변경했다고 할 수 있다. 이를 수식으로 나타내면 다음과 같다.
+
+$$
+\hat{i} = \arg\max_{i \in [k]} p_{\phi} (y' \mid [d_i ; x_{\leq (s, j - s')}])
+$$
+
+<img
+  src="/static/images/paper-review/in-context-ralm-experiment-8.png"
+  alt="in-context-ralm-experiment-8"
+  className="mx-auto block  w-[100%]"
+/>
+
+위의 실험 결과는 $$s'=16$$ 으로 설정하고 다양한 크기의 GPT-2에 Zero-Shot reranker 를 적용한 결과이다. 언어 모델과 Reranker 가 반드시 동일할 필요는 없으며, Reranker 의 크기에 성능이 크게 달라지는 것은 아니라는 것을 알 수 있다.
+
+### Training LM-dedicated Rerankers
+
+BM25가 뽑은 Top K 문서들에 대한 Reranker를 직접 학습해보기도 하였다. 논문에서는 prediction을 도와준다는 의미에서 이를 Predictive Reranking 이라고 부른다.
+
+$$
+p_{\text{rank}}(d_i \mid x_{\leq s, j}) =
+\frac{\exp \left( f(x_{\leq s, j}, d_i) \right)}
+{\sum_{i'=1}^{k} \exp \left( f(x_{\leq s, j}, d_{i'}) \right)}
+$$
+
+어떤 문서가 유용한 정도는 위와 같이 표현할 수 있고,
+
+$$
+\hat{i} = \arg\max_{i \in [k]} p_{\text{rank}}(d_i \mid x_{\leq s, j})
+$$
+
+$$d_{\hat{i} }$$를 찾는 것이 목표가 된다.
+
+$$
+- \log \sum_{i=1}^{k} p_{\text{rank}}(d_i \mid x_{\leq s, j}) \cdot p_{\theta} (y \mid [d_i ; x_{\leq s, j}])
+$$
+
+Loss function 은 다음과 같이 설정하고 학습을 진행했다.
+
+<img
+  src="/static/images/paper-review/in-context-ralm-experiment-1.png"
+  alt="in-context-ralm-experiment-1"
+  className="mx-auto block w-full"
+/>
+
+위 표의 Zero-Shot, Predictive 실험 결과에서 Predictive Reranking 의 효용을 확인할 수 있다. 모든 경우에 있어 Predictive Reranking 을 적용한 경우 그렇지 않은 경우에 비해 성능이 개선되었다. 즉, Retriever에 대한 학습을 통해 더 나은 문서를 찾을 수 있게 되었다는 것이다. 이는 Doamin Specific Task에 있어 Retriever 의 추가 학습이 특히 유용할 수 있음을 의미한다.
+
+## In-Context RALM for Open-Domain Question Answering
+
+LLaMA 모델을 사용하여 Open-Domain Question Anwsering 에서도 In-Context RALM 이 유용한지 확인하는 실험을 진행했다.
+
+<img
+  src="/static/images/paper-review/in-context-ralm-experiment-9.png"
+  alt="in-context-ralm-experiment-9"
+  className="mx-auto block w-full"
+/>
+
+In-Context RALM을 사용하여 검색된 문서를 추가했더니 그렇지 않은 경우에 비해 성능이 대폭 향상됨을 확인할 수 있다. 문서의 갯수가 늘어나면 성능도 조금씩 좋아지나 큰 차이는 없어 보인다.
+
 # Reference
 
 - [Khandelwal, U., Levy, O., Jurafsky, D., Zettlemoyer, L., Lewis, M. and University, S. (n.d.). Published as a conference paper at ICLR 2020 GENERALIZATION THROUGH MEMORIZATION: NEAREST NEIGHBOR LANGUAGE MODELS.](<https://arxiv.org/pdf/1911.00172>)
