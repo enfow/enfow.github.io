@@ -53,7 +53,7 @@ $$
 s(d, x) = \cos(\mathbf{E}(d), \mathbf{E}(x))
 $$
 
-Input Context는 매번 바뀔 가능성이 높지만, Document와 Encoder는 특수한 경우에만 변경될 것이므로 매번 임베딩 $$\mathbf{E}(d)$$를 구하는 것이 아닌, 캐시해두고 계속 사용하는 것이 효율적이다. 또한 논문에서는 FAISS Index([Paper](<https://arxiv.org/pdf/1702.08734>), [Github](<https://github.com/facebookresearch/faiss>)) 를 적용하여 임베딩을 관리했다고 한다.
+Input Context는 매번 바뀔 가능성이 높지만, Document와 Encoder는 특수한 경우에만 변경될 것이므로 매번 임베딩 $$\mathbf{E}(d)$$를 구하는 것이 아닌, 캐시해두고 계속 사용하는 것이 효율적이다. 또한 논문에서는 유사도가 높은 임베딩을 GPU를 활용해 빠르게 찾는 FAISS Index([Paper](<https://arxiv.org/pdf/1702.08734>), [Github](<https://github.com/facebookresearch/faiss>)) 를 적용하였다고 한다.
 
 ## Input Reformulation
 
@@ -135,4 +135,62 @@ $$
 
 ## Update of Datastore Index
 
-끝으로 Retriever 가 업데이트되면 한 가지 문제가 되는 것이 캐싱해 둔 문서의 임베딩을 더 이상 쓸 수 없게 된다는 점이다. 이를 해결하기 위해 논문에서는 주기적으로 비동기 임베딩 업데이트를 진행하였다고 한다.
+끝으로 Retriever 가 업데이트되면 한 가지 문제가 되는 것이 캐싱해 둔 문서의 임베딩을 더 이상 쓸 수 없게 된다는 점이다. 이를 해결하기 위해 논문에서는 주기적으로 비동기적인 임베딩 업데이트를 진행하였다고 한다.
+
+# Training Settings
+
+### Language Model
+
+REPLUG의 Retriever 로는 [Contriever](<https://arxiv.org/pdf/2112.09118>)를 사용하였으며, REPLUG LSR 에서 LM 모델로는 [GPT-3 Curie](<https://arxiv.org/abs/2005.14165>)를 활용하였다.
+
+### Training Data
+
+학습 데이터는 [Pile Training Data](<https://arxiv.org/pdf/2101.00027>)에서 256 토큰 길이를 가진 800K 개의 Sequence 를 추출하였는데, 앞의 128 토큰은 Input context $$x$$ 로, 나머지 128 토큰은 ground truth $$y$$로 설정하는 식으로 구성했다고 한다.
+
+### Documents
+
+외부 Document Corpus $$\mathcal{D}$$ 또한 Pile Training Data 에서 36M 개의 문서를 샘플링하여 확보하였다. 이때 Trivial Retrieval 문제, 즉 Pre-Training corpus 에 Document corpus 가 포함되어 발생하는 문제를 줄이기 위해 Training Data 와 Document Corpus 간에는 중복이 발생하지 않도록 처리한다. Retriever 가 Document 를 뽑을 떄에는 FAISS Index 를 활용하여 $$k=20$$ 으로 설정하였다고 한다.
+
+# Experiments
+
+## Language Model Performance
+
+<img
+  src="/static/images/paper-review/replug-experiment-1.png"
+  alt="replug-experiment-1"
+  className="mx-auto block w-full"
+/>
+
+GPT-2, GPT-3 에 REPLUG를 적용한 경우와 그렇지 않은 경우를 비교하는 실험을 진행했다. 언어 모델은 Black Box Setting 을 가정하여 API로만 접근 가능하도록 하였다.
+
+모든 실험 셋팅에서 REPLUG와 REPLUG LSR이 Frozen 모델에 비해 높은 점수를 보였으며, 이를 통해 Retriever 를 앞에 붙이면 다양한 크기와 성능을 가진 언어 모델에 대해 성능 향상을 기대해 볼 수 있다는 것을 알 수 있다.
+
+또한 REPLUG와 Retriever 에 대한 학습을 진행한 결과인 REPLUG LSR 를 비교해보면 REPLUG LSR 이 항상 더 우수하며, 이는 Retriever 추가 학습의 유용성을 보여준다.
+
+## Downstream Task: MMLU
+
+<img
+  src="/static/images/paper-review/replug-experiment-2.png"
+  alt="replug-experiment-2"
+  className="mx-auto block w-full"
+/>
+
+[MMLU(Massive Multi-task Language Understanding)](<https://arxiv.org/pdf/2009.03300>) 는 아래와 같이 다양한 분야에 대한 4지 선다형 문제들을 푸는 벤치마크이다. 5 Shot in-context 를 적용하여 다양한 크기의 모델에서 실험을 진행하였다.
+
+<img
+  src="/static/images/paper-review/replug-mmlu-example.png"
+  alt="replug-mmlu-example"
+  className="mx-auto block w-[65%]"
+/>
+
+175B의 크기를 갖는 Codex에 REPLUG를 적용하여 스코어가 높아지는 것을 확인할 수 있다. PaLM과 같이 크기가 3배 가까이 큰 모델과 비교해 보더라도 더 좋거나, 약간 낮은 수준의 성능을 보여주었다. 이를 통해 REPLUG를 적용함으로써 모델의 문제 해결 능력을 향상시킬 수 있다는 것을 알 수 있다.
+
+## Downstream Task: Open Domain QA
+
+<img
+  src="/static/images/paper-review/replug-experiment-3.png"
+  alt="replug-experiment-3"
+  className="mx-auto block w-full"
+/>
+
+끝으로 Open-Domain QA Task 에서의 실험 결과를 살펴보자. 데이터셋으로는 [Natural Questions (NQ)](<https://github.com/google-research-datasets/natural-questions>)와 [TriviaQA (TQA)](<https://arxiv.org/abs/1705.03551>)을 사용하고 있다. 결과적으로 적은 수준이지만 Codex 모델에서 REPLUG를 적용함으로써 성능이 향상되었고, 기존에 SOTA의 성능을 보여주던 Atlas 보다도 더욱 좋은 성과를 보였다.
