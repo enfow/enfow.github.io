@@ -6,8 +6,6 @@ draft: false
 summary: ''
 ---
 
-# Summary
-
 # Introduction
 
 `Hallucination` 은 언어 모델이 그럴싸하지만 틀린 답변(incorrect fuctual information)을 내놓는 문제를 가리킨다. 거대 모델들은 Reasoning 등에서 높은 성능을 보여주었지만, training 시에 보지 못한 데이터들(torso and tail)에 대해서는 틀린 답변을 내놓는 문제를 보인다. 특히 복수의 문장을 생성하는 등 출력의 길이가 길면 길수록 `exposure bias` 등으로 인해 이러한 문제는 더욱 심화되는 경향을 보인다. `Chain-of-Verification(CoVe)` 은 Meta AI 에서 2023 년에 발표한 논문으로, 좋은 initial thought 와 reasoning chain 을 구성하면 언어 모델의 hallucination 문제를 줄일 수 있을 것이라는 가정에서 출발한다.
