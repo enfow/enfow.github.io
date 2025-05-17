@@ -1,0 +1,147 @@
+---
+title: Pyenv and Virtualenv
+date: '2020-02-02'
+tags: ['Python']
+draft: false
+summary: ''
+---
+
+# PYENV
+
+[PYENV GITHUB](<https://github.com/pyenv/pyenv>)
+
+pyenv는 한 시스템에 여러 개의 파이썬을 설치하고 사용자가 필요할 때마다 빠르게 파이썬 환경을 전환할 수 있도록 도와주는 도구이다.
+
+## 0. Installation & settings
+
+```
+# linux
+curl -fsSL https://pyenv.run | bash
+
+# mac
+brew update
+brew install pyenv
+```
+
+```
+echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc
+echo '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc
+echo 'eval "$(pyenv init - zsh)"' >> ~/.zshrc
+source ~/.zshrc
+```
+
+## 1. python installation
+
+**python 설치 전 기본 환경 설정**
+
+```
+$
+sudo apt-get install -y libsqlite3-dev zlib1g-dev libssl-dev libffi-dev libbz2-dev liblzma-dev
+sudo apt-get install -y python3-setuptools python3-pip
+```
+
+파이썬 설치 전에 해주는 것이 좋다. 만약 파이썬 설치에 실패하면 다음 명령어도 실행한다.
+
+```
+$
+sudo apt-get install -y make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev xz-utils tk-dev
+```
+
+**python 3.7.4 설치**
+
+```
+pyenv install 3.7.4
+```
+
+**설치 가능 python version 목록 확인**
+
+```
+pyenv install -list
+```
+
+## 2. check available python versions
+
+**현재 사용 중인 파이썬 버전 확인**
+
+```
+pyenv version
+```
+
+- `system` 으로 확인되면 로컬 환경의 기본 파이썬으로 설정되어 있다는 것을 의미
+
+**설치된 파이썬 버전 확인**
+
+```
+pyenv versions
+```
+
+- 현재 사용 중인 파이썬 버전은 `*`로 확인 가능
+
+## 3. change python version
+
+**파이썬 3.7.4 버전으로 파이썬 환경 전환**
+
+```
+pyenv shell 3.7.4
+```
+
+**글로벌 파이썬 환경 설정**
+
+```
+pyenv global 3.7.4
+```
+
+# virtualenv
+
+[PYENV-VIRTUALENV GITHUB](<https://github.com/pyenv/pyenv-virtualenv>)
+
+**virtualenv**는 격리된 파이썬 환경을 만들어주는 도구라고 할 수 있다. 프로젝트에 따라 특수한 파이썬 패키지 및 환경 설정이 필요한 경우가 있는데 virtualenv를 통해 충돌을 방지하면서도 빠른 환경 전환이 가능하다. **pyenv-virtualenv**는 pyenv 플러그인으로 pyenv에서 virtualenv를 사용할 수 있도록 해주는 도구이다.
+
+## 0. Installation & settings
+
+pyenv-virtualenv를 사용하기 위해서는 pyenv를 먼저 설치해야 한다.
+
+```
+$
+git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv
+```
+
+## 1. create virtuelenv
+
+**파이썬 3.7.4 버전을 사용하는 virtualenv 환경 생성**
+
+```
+$
+pyenv shell 3.7.4
+pyenv virtualenv <virtualenv_name>
+```
+
+## 2. check virtualenv list
+
+**설치된 virtualenv 목록 확인**
+
+```
+pyenv virtualenvs
+```
+
+## 3. activate virtualenv
+
+**특정 virtualenv 환경 진입**
+
+```
+pyenv activate <virtualenv_name>
+```
+
+**현재 virtualenv 환경 해제**
+
+```
+pyenv deactivate
+```
+
+## 4. virtualenv remove
+
+**virtualenv 삭제**
+
+```
+pyenv uninstall <virtualenv_name>
+```
