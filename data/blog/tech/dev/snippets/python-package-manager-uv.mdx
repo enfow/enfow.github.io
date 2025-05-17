@@ -1,0 +1,97 @@
+---
+title: 'Python Package Manager UV'
+date: '2025-05-17'
+tags: ['Python']
+draft: false
+summary: ''
+---
+
+최근 다양한 파이썬 패키지 매니저들이 나오고 있고, poetry부터 pdm까지 다양하게 사용해보고 있다. 그 중 uv 가 설치 속도도 빠르고, 관리가 편하다고 느껴 자주 사용해보고자 한다.
+
+# Installation
+
+```
+# python
+pip install uv
+
+# linux
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# mac
+brew install uv
+
+# windows
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+
+# Commands
+
+**새 프로젝트 생성**
+
+```
+# create new directory
+uv init [project_name]
+
+# use current directory
+uv init .
+```
+
+**파이썬 패키지 추가**
+
+```
+uv add [package_name]
+
+# with version
+uv add [package_name]==[version]
+
+# dev
+uv add [package_name] --dev
+
+# extra install
+uv add [package_name] --extra [extra_name]  # pip install 'package_name[extra_name]'
+```
+
+**파이썬 패키지 삭제**
+
+```
+uv remove [package_name]
+```
+
+**lock and sync**
+
+```
+# uv.lock 파일 생성
+uv lock
+
+# uv.lock 의 dependenceis 설치
+uv sync
+```
+
+**export**
+
+```
+uv export -o requirements.txt
+```
+
+**with pyenv virtualenv**
+
+virtualenv 에서도 uv 를 사용하여 package 를 관리할 수 있다. 우선 ㅔyenv local 명령어로 사용할 가상환경을 설정한 뒤, 다음과 같이 `--active` 옵션을 준다.
+
+```
+uv add [package_name] --active  # install packages on current env
+
+uv sync --active
+```
+
+`--active` 옵션을 주지 않으면 다음과 같은 warning msg 가 나온다.
+
+```
+warning: Ignoring unsupported Python request `[virtualenv]` in version file: [package_path]/.python-version
+warning: `VIRTUAL_ENV=.../.pyenv/versions/3.12.10/envs/[virtualenv]` does not match the project environment path `.venv` and will be ignored; use `--active` to target the active environment instead
+```
+
+이후에 `.venv` 를 생성하고, 여기에 패키지를 설치하는데, 이렇게 되면 현재 사용 중인 가상 환경과 패키지가 설치된 환경이 달라 사용할 수 없다.
+
+# Reference
+
+- [github/uv](<https://github.com/astral-sh/uv?tab=readme-ov-file>)
