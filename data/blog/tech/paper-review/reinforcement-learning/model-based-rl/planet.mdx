@@ -89,23 +89,23 @@ $$
 [VAE](https://enfow.github.io/paper-review/generative-model/2020/03/28/VAE-auto_encoding_variational_bayes/)의 Lower Bound 식을 먼저 확인해보면 다음과 같다.
 
 $$
-\eqalign{
+\begin{align}
 \log p_\theta(x) &\geq \text{lower bound} \ L(\theta, \phi ; x) \\
 &= - D_{KL}(q_{\phi}(z \lvert x) \| p_\theta(x)) + E_{z \backsim q_{\phi}(z \lvert x)} [log p_\theta(x \lvert z)]
-}
+\end{align}
 $$
 
 여기서 우변의 첫 번째 KLD Term을 Prior $$p_\theta(x)$$와 Posterior $$q_{\phi}(z \lvert x)$$간의 거리를 줄이는 Regularizer, 즉 Encoder 부분이고, 두 번째 Expectation Term이 **Reconstruction Error**로 Decoder 부분이 된다. PlaNet에서는 Prior가 Action Sequence가 주어져 있을 때 그에 맞는 Observation Sequence를 구하는 것이므로 $$p(o_{1:T} \lvert a_{1:T})$$이 되며, 이를 Encoder 식과 함께 위 식에 적용하면 다음과 같다.
 
 $$
-\eqalign{
+\begin{align}
 &1. \text{Prior: } p_\theta (x) \rightarrow p(o_{1:T} \lvert a_{1:T}) = \Pi_t p(s_t \lvert s_{t-1}, a_{t-1}) p(p_t \lvert s_t) \\
 &2. \text{Posterior: } q_\theta(x \lvert x) \rightarrow q(s_{1:T} \lvert o_{1:T}, a_{1:T}) = \Pi_t q(s_t \lvert o_{\leq t}, a_{< t})\\ \\
-&\eqalign{
+&\begin{align}
 \Rightarrow \log p(o_{1:T} \lvert a_{1:T}) \geq & - E_{q(s_{t-1} \lvert o_{\leq t-1}, a_{< t-1})} [\text{D}_{\text{KL}} [q(s_t \lvert o_{\leq t}, a_{< t}) \lvert \rvert p(s_t \lvert s_{t-1}, a_{t-1}) ]] \\
-& + \Sigma_{t=1}^T (E_{q(s_t \lvert o_{\leq t}, a_{< t})} [\log p(o_t \lvert s_t)])\\
-}
-}
+& + \sum_{t=1}^T (E_{q(s_t \lvert o_{\leq t}, a_{< t})} [\log p(o_t \lvert s_t)])
+\end{align}
+\end{align}
 $$
 
 식을 풀이해보면 **Regularizer Term**은 인코딩을 통해 얻은 $$s_t$$의 분포 $$q(s_t \lvert o_{\leq t}, a_{< t})$$와 이전 State와 Action을 통해 얻은 $$s_t$$의 분포 $$p(s_t \lvert s_{t-1}, a_{t-1})$$가 최대한 유사해지도록 업데이트 된다는 것을 알 수 있다. 그리고 **Reconstruction Error Term**에서는 당연히 주어진 $$s_t$$로 그때의 Observation $$o_t$$를 잘 추정할 수 있는 방향으로 업데이트 된다. 위 식과 관련해 자세한 전개식은 논문의 Appendix에 나와있다.
@@ -136,10 +136,10 @@ $$
 $$d$$ 시점 이후의 State를 예측하도록 Lower Bound 식을 정리하면 다음과 같다. 편의상 $$a_{< t}$$는 모두 생략했으며, 식의 모든 $$s_t$$는 $$a_{< t}$$에 따라 결정된다.
 
 $$
-\eqalign{
-\log p_d (o_{1:T}) \geq&  \Sigma_{t=1}^T (E_{q(s_t \lvert o_{\leq t})}[\log p(o_t \lvert s_t)])\\
+\begin{align}
+\log p_d (o_{1:T}) \geq&  \sum_{t=1}^T (E_{q(s_t \lvert o_{\leq t})}[\log p(o_t \lvert s_t)])\\
 &- E_{p(s_{t-1} \lvert s_{t-d})q(s_{t-d} \lvert o_{\leq t-d})}[\text{D}_{\text{KL}}[q(s_t \lvert o_{\leq t}) \lvert \rvert p(s_t \lvert s_{t-1})]]
-}
+\end{align}
 $$
 
 위의 식과 One-Step Prediction 식의 차이는 $$E_{q(s_{t-1} \lvert o_{\leq t-1}, a_{< t-1})}$$이 $$E_{p(s_{t-1} \lvert s_{t-d})q(s_{t-d} \lvert o_{\leq t-d})}$$로 바뀌었다는 점에 있다. 기존에는 $$t-1$$시점에서 얻을 수 있는 정보들로 $$t$$시점을 예측했다면 Multi-Step이 되면서 $$t-d$$ 시점에서의 정보가 담겨있는 $$s_{t-d}$$로 $$t$$시점을 예측하게 되었다.
@@ -164,10 +164,10 @@ $$
 **Latent OverShooting**에서는 이러한 문제를 해결하기 위해 다음과 같이 식을 변경하게 된다.
 
 $$
-\eqalign{
-{1 \over D} \Sigma_{d=1}^D \log p_d (o_{1:T}) =&  \Sigma_{t=1}^T (E_{q(s_t \lvert o_{\leq t})}[\log p(o_t \lvert s_t)])\\
-&- {1 \over D} \Sigma_{d=1}^D \beta_d E_{p(s_{t-1} \lvert s_{t-d})q(s_{t-d} \lvert o_{\leq t-d})}[\text{D}_{\text{KL}}[q(s_t \lvert o_{\leq t}) \lvert \rvert p(s_t \lvert s_{t-1})]]
-}
+\begin{align}
+{1 \over D} \sum_{d=1}^D \log p_d (o_{1:T}) =&  \sum_{t=1}^T (E_{q(s_t \lvert o_{\leq t})}[\log p(o_t \lvert s_t)])\\
+&- {1 \over D} \sum_{d=1}^D \beta_d E_{p(s_{t-1} \lvert s_{t-d})q(s_{t-d} \lvert o_{\leq t-d})}[\text{D}_{\text{KL}}[q(s_t \lvert o_{\leq t}) \lvert \rvert p(s_t \lvert s_{t-1})]]
+\end{align}
 $$
 
 논문에 나와있는 이미지로 식의 의미를 이해하면 다음과 같다.
@@ -190,8 +190,8 @@ Latent OverShooting에서는 $$t$$시점에 접근 가능한 모든 Distance $$d
 Environment의 Dynamics를 정확하게 학습하기 위해서는 다양한 State-Action에 대해 경험하는 것이 중요하다. 그런데 Agent가 처음부터 모든 State를 방문하는 것은 대부분의 환경에서 불가능하며, Policy가 업데이트되면서 쉽게 방문할 수 있는 State 또한 달라지게 된다. 강화학습의 이러한 특성을 반영하여 PlaNet은 학습이 이뤄질 때마다 새로운 Episode를 Dataset에 추가하며, 이때 다양한 경험을 위해 매 Episode마다 Seed를 바꿔준다. 그리고 Planning Horizon을 줄이고, Action의 효과를 정확하게 반영하기 위해 Action을 $$R$$번 반복한다. 알고리즘 상에서는 13번째 줄에서 다음과 같이 표현된다.
 
 $$
-\eqalign{
+\begin{align}
 &\text{for action repeat } k = 1...R \text{ do}\\
 & \qquad r_t^k, o_{t+1}^k \leftarrow \text{ env.step} (a_t)
-}
+\end{align}
 $$

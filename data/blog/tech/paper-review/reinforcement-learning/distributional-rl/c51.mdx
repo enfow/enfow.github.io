@@ -35,13 +35,13 @@ summary: ''
 구체적으로 support의 값과 확률은 다음과 같이 $$z_i,\  p_i(s,a)$$로 표현된다.
 
 $$
-Z_\theta (s, a) = z_i \quad \quad w.p. \ p_i(s,a) = { {e^{\theta_i (s,a)}} \over {\Sigma_j e^{\theta_j (s,a)}}}
+Z_\theta (s, a) = z_i \quad \quad w.p. \ p_i(s,a) = { {e^{\theta_i (s,a)}} \over {\sum_j e^{\theta_j (s,a)}}}
 $$
 
 그리고 support 값과 확률을 곱해 모두 더하면 해당 action의 기대값, 즉 $$Q$$ value가 된다.
 
 $$
-Q(s,a) = \Sigma_i z_i p_i (s,a)
+Q(s,a) = \sum_i z_i p_i (s,a)
 $$
 
 ### Updating Policy

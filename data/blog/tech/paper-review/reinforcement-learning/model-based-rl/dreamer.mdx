@@ -36,11 +36,11 @@ summary: ''
 **Latent Dynamics Model**은 현재의 Policy가 실제 Environment와 상호작용하며 얻은 Trajectory들을 대상으로 학습한다. 이를 통해 Environment로부터 주어지는 Observation이 어떠한 Latent State로 매핑되는지, Latent State에서 Action이 주어졌을 때 Next Latent State는 어떻게 되는지, 그리고 각각의 Latent State에서 주어지는 Reward는 어떠한지 학습하게 된다. 수식으로 이를 표현하면 아래 세 가지가 된다.
 
 $$
-\eqalign{
+\begin{align}
 \text{Representation Model:  } & p(s_t \lvert s_{t+1}, a_{t+1}, o_t)\\
 \text{Transition Model:  } & q(s_t \lvert s_{t-1}, a_{t-1})\\
-\text{Reward Model:  } & q(r_t \lvert s_t)\\
-}
+\text{Reward Model:  } & q(r_t \lvert s_t)
+\end{align}
 $$
 
 Representation model은 확률 함수가 $$p$$로 표기되어 있지만 Transition Model과 Reward Model은 $$q$$로 되어 있다. 이는 실제 Environment에서 받은 정보를 사용하여 Sample을 만들어내는 역할을 하는지, 아니면 Latent Space 상에서 Planning을 수행하는 역할을 하는지 구분하기 위해서이다.
@@ -55,10 +55,10 @@ Representation model은 확률 함수가 $$p$$로 표기되어 있지만 Transit
 Latent Dynamics Model을 만드는 이유는 결국 좋은 Aciton이 무엇인지 정확히 Prediction 할 수 있는 모델을 만들기 위함이다. Dreamer에서는 이러한 Action을 계산하는 알고리즘으로 **Actor-Critic 구조**를 사용하고 있으며, 따라서 Action Model과 Value Model 두 모델을 학습시켜야 한다. 구체적으로 Action Model은 Latent Space 상에서 Reward를 극대화할 것으로 예상되는 Action을 선택하는 Policy이고, Value Model은 Latent Space 상에서 Action Model이 선택한 Action과 그에 따라 결정된 다음 Latent Space에서 기대 Reward가 어떻게 되는지 예측하는 역할을 한다.
 
 $$
-\eqalign{
+\begin{align}
 \text{Action Model:  } & a_\tau \backsim q_\phi (a_\tau \lvert s_\tau) \\
-\text{Value Model:  } & v_\psi(s_\tau) \approx E_{q(\cdot \lvert s_\tau)} ( \Sigma_{\tau = t}^{t+H} \gamma^{\tau-t} r_\tau)
-}
+\text{Value Model:  } & v_\psi(s_\tau) \approx E_{q(\cdot \lvert s_\tau)} ( \sum_{\tau = t}^{t+H} \gamma^{\tau-t} r_\tau)
+\end{align}
 $$
 
 Action Model은 $$\tau$$시점에서 Latent State $$s_\tau$$가 주어졌을 때 그에 맞는 Action $$a_\tau$$가 무엇인지 알려준다. Value Model은 이에 대해 알고 있을 때 $$s_\tau$$에서의 Value를 근사하는 역할을 한다. 이렇게 보면 Actor-Critic 구조가 가지는 장점은 Finite Horizon $$H$$를 가정할 때 보다 확실해진다. 왜냐하면 Value Model으로 Horizon 이후에 받을 것으로 기대되는 Reward를 구해 이를 고려하여 Action을 결정할 수 있기 때문이다.
@@ -76,11 +76,11 @@ $$
 State Value는 다양한 방법으로 추정할 수 있는데 방법에 따라 Bias와 Variance 간의 Trade-off가 나타난다. 참고로 여기서 말하는 Value Estimation이란 Value Model이 맞춰야 할 Target이라고 할 수 있다. 당연히 이를 어떻게 설정하느냐에 따라 학습의 양상 또한 달라질 수 있다. 논문에서는 아래 세 가지 방법을 제시하고 있다.
 
 $$
-\eqalign{
-V_R (s_\tau) &= E_{q_\theta, q_\phi} (\Sigma_{n=\tau}^{t+H} r_n)\\
-V_N^k(s_\tau) &= E_{q_\theta, q_\phi} (\Sigma_{n=\tau}^{h-1} \gamma^{n-\tau} r_n + \gamma^{h-\tau} v_{\psi}(s_h) ) \quad h = \min (\tau+k, t+H)\\
-V_\lambda(s_\tau) &= (1-\lambda) \Sigma_{n=\tau}^{h-1} \gamma^{n-\tau} V_N^n(s_\tau) + \lambda^{H-1}V_N^H(s_\tau)
-}
+\begin{align}
+V_R (s_\tau) &= E_{q_\theta, q_\phi} (\sum_{n=\tau}^{t+H} r_n)\\
+V_N^k(s_\tau) &= E_{q_\theta, q_\phi} (\sum_{n=\tau}^{h-1} \gamma^{n-\tau} r_n + \gamma^{h-\tau} v_{\psi}(s_h) ) \quad h = \min (\tau+k, t+H)\\
+V_\lambda(s_\tau) &= (1-\lambda) \sum_{n=\tau}^{h-1} \gamma^{n-\tau} V_N^n(s_\tau) + \lambda^{H-1}V_N^H(s_\tau)
+\end{align}
 $$
 
 첫 번째 $$V_R (s_\tau)$$는 가장 단순하지만 Horizon 이후의 Reward는 고려하지 않는다는 단점이 있다. 두 번째 $$V_N^k(s_\tau)$$는 $$v_{\psi}(s_h)$$를 도입하여 Horizon 이후 $$k$$ Step까지의 Value를 고려하도록 하고 있다. Dreamer에서 사용하는 방법은 세 번째 $$V_\lambda(s_\tau)$$로 여러 $$k$$에 따른 Estimation에 대해 exponentially-weighted average를 취하여 Bias와 Variance 간의 균형을 잡는 방법이다. 당연히 성능은 세 번째 방법이 가장 좋았다고 한다.
@@ -90,10 +90,10 @@ $$
 Action Model의 목표는 Value Estimation $$V_\lambda(s_\tau)$$가 가장 높은 Action을 찾는 것이고 Value Model은 Value Estimate $$V_\lambda(s_\tau)$$를 정확하게 추정(regression)하는 것이다. 따라서 각각의 Objective Function은 다음과 같이 정의된다.
 
 $$
-\eqalign{
-\text{Action Model Obj:  }& \max_\phi E_{q_\theta, q_\phi}(\Sigma_{\tau=t}^{t+H} V_{\lambda}(s_\tau) )\\
-\text{Value Model Obj:  }& \min_\psi E_{q_\theta, q_\phi}(\Sigma_{\tau=t}^{t+H} {1 \over 2} \| v_\psi(s_\tau) - V_\lambda(s_\tau) \|^2  )
-}
+\begin{align}
+\text{Action Model Obj:  }& \max_\phi E_{q_\theta, q_\phi}(\sum_{\tau=t}^{t+H} V_{\lambda}(s_\tau) )\\
+\text{Value Model Obj:  }& \min_\psi E_{q_\theta, q_\phi}(\sum_{\tau=t}^{t+H} {1 \over 2} \| v_\psi(s_\tau) - V_\lambda(s_\tau) \|^2  )
+\end{align}
 $$
 
 ## Algorithm

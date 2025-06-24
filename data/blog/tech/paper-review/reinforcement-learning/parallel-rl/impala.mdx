@@ -52,7 +52,7 @@ IMPALA는 기본적으로 Actor-Critic 구조를 가지고 있어, Policy $$\pi$
 Importance Sampling은 이러한 두 Policy 간의 차이로 인해 발생하는 데이터의 Variance를 줄이는 방법이다. 어떤 한 분포의 기대 값을 구하기 위해 다른 분포에서 샘플링한 샘플들을 중요도(Importance)에 따라 사용하자는 것인데, 강화학습의 Off-Policy 개념에 적용해보면 Behavior Policy를 따라 샘플링한 Trajectory가 업데이트의 대상이 되는 Target Policy에서 나타날 확률에 따라 가중치를 부여하여 학습에 사용할 수 있다. Reinforcement Learning: The Introduction(Sutton)에서는 Behavior Policy $$\mu$$에서 수집한 Trajectory가 Target Policy $$\pi$$에서도 나타날 확률(Importance Sampling Ratio)을 다음과 같이 정의한다.
 
 $$
-\rho_{t : T - 1} = {\Pi_{k=t}^{T-1} \pi(A_k \vert S_k) p(S_{k+1} \vert S_k, A_k) \over \Pi_{k=t}^{T-1} \mu(A_k \vert S_k) p(S_{k+1} \vert S_k, A_k)} = \Pi_{k=t}^{T-1} {\pi (A_k \vert S_k) \over \mu (A_k \vert S_k)}
+\rho_{t : T - 1} = \frac{\Pi_{k=t}^{T-1} \pi(A_k \vert S_k) p(S_{k+1} \vert S_k, A_k)}{\Pi_{k=t}^{T-1} \mu(A_k \vert S_k) p(S_{k+1} \vert S_k, A_k)} = \Pi_{k=t}^{T-1} \frac{\pi (A_k \vert S_k)}{\mu (A_k \vert S_k)}
 $$
 
 ### Update Direction for Actor-Critic
@@ -60,13 +60,13 @@ $$
 Actor-Critic의 기본이 되는 Policy Graident 식은 다음과 같다.
 
 $$
-\nabla_\theta J(\theta) = E_\tau [\Sigma_{t=0}^{T-1} \nabla_\theta \log \pi_\theta(a_t \vert s_t) G_t]
+\nabla_\theta J(\theta) = E_\tau [\sum_{t=0}^{T-1} \nabla_\theta \log \pi_\theta(a_t \vert s_t) G_t]
 $$
 
 Actor-Critic은 Return $$G_t$$를 Action Value Function $$Q$$로 대체한 것이라 할 수 있다.
 
 $$
-\nabla_\theta J(\theta) = E_\tau [\Sigma_{t=0}^{T-1} \nabla_\theta \log \pi_\theta(a_t \vert s_t) Q(s_t, a_t)]
+\nabla_\theta J(\theta) = E_\tau [\sum_{t=0}^{T-1} \nabla_\theta \log \pi_\theta(a_t \vert s_t) Q(s_t, a_t)]
 $$
 
 식을 보게되면 어떤 한 State $$s_t$$에서의 Policy의 업데이트 방향은 다음과 같이 결정됨을 알 수 있다. $$q_t$$는 $$Q(s_t, a_t)$$를 근사한 값이다.
@@ -78,7 +78,7 @@ $$
 On-Policy가 아닌 Off-Policy로서 Behavior Policy $$\mu$$와 Target Policy $$\pi$$가 서로 다르다면 Importance Sampling Ratio를 곱해주어 다음과 같이 업데이트 방향을 결정할 수 있다.
 
 $$
-E_{a_t \sim \mu(\cdot \vert s_t)} [ {\pi (a_t \vert s_t) \over \mu(a_t \vert s_t)} \nabla \log \pi(a_t \vert s_t) q_t \vert s_t]
+E_{a_t \sim \mu(\cdot \vert s_t)} [ \frac{\pi (a_t \vert s_t)}{\mu(a_t \vert s_t)} \nabla \log \pi(a_t \vert s_t) q_t \vert s_t]
 $$
 
 ## V-Trace Actor-Critic Algorithm
@@ -120,11 +120,10 @@ $$
 여기서 $$c_i, \rho_k$$는 Importance Sampling의 Truncation level로서, 다음과 같이 정의된다.
 
 $$
-\eqalign{
-& c_i = \min (\bar c, {\pi (a_i, \vert s_i) \over \mu (a_i, \vert s_i)})\\
-& \rho_k = \min (\bar \rho, {\pi (a_k, \vert s_k) \over \mu (a_k, \vert s_k)})
-
-}
+\begin{align}
+& c_i = \min (\bar c, \frac{\pi (a_i, \vert s_i)}{\mu (a_i, \vert s_i)})\\
+& \rho_k = \min (\bar \rho, \frac{\pi (a_k, \vert s_k)}{\mu (a_k, \vert s_k)})
+\end{align}
 $$
 
 Importance Sampling을 적용하되, 일정 수준 이하로는 Weight가 떨어지지 않도록 Lower Bound($$\bar c, \bar \rho$$)를 설정하고 있다. 이를 Truncated Importance Sampling Weight라고 한다.
@@ -132,7 +131,7 @@ Importance Sampling을 적용하되, 일정 수준 이하로는 Weight가 떨어
 위의 식은 Summation 을 풀어 써보면 다음과 같다.
 
 $$
-\eqalign{
+\begin{align}
 v_{s_t} =^{def}
 V(s_t) &+ \gamma^0 \rho_t (r_t + \gamma V(s_{t+1}) - V(s_t) ) \qquad \qquad  \because \Pi_{i = t}^{t - 1} c_i =^{def} 1 \\
 
@@ -141,7 +140,7 @@ V(s_t) &+ \gamma^0 \rho_t (r_t + \gamma V(s_{t+1}) - V(s_t) ) \qquad \qquad  \be
 &+ \gamma^2 c_t c_{t+1} \rho_{t+2} (r_{t+2} + \gamma V(s_{t+3}) - V(s_{t+2}) )\\
 
 &+...
-}
+\end{align}
 $$
 
 $$n$$-step Target을 구할 때 $$k-1$$ step까지는 $$c$$가 적용되고 마지막 $$k$$번째 Step에서는 $$\rho$$가 적용됨을 알 수 있다. 이러한 점에서 $$\rho$$는 $$k$$번째 Step의 Temporal Difference $$r_k + \gamma V(s_{k+1}) - V(s_k)$$에 적용되는 Weight이고, $$c$$는 $$k$$번째 Step에 도달하는 과정에서의 누적되는 Weight라고 할 수 있다. 논문에서는 Temporal Difference Term을 아예 다음과 같이 정의하여 이를 보다 명확하게 하고 있다.
@@ -155,10 +154,10 @@ $$
 이러한 점에서 Temporal Difference 값에 곧바로 적용되는 $$\rho$$는 Value Function의 수렴 방향(Fixed Point)에 영향을 미친다. Value Function이 달라지므로 Policy의 수렴 방향도 아래와 같이 달라진다고 하는데, 증명은 논문의 Appendix에 정리되어 있다.
 
 $$
-\pi_{\bar \rho} (a \vert s) =^{def} { \min (\bar \rho \mu (a \vert s), \pi(a \vert s)) \over \Sigma_{b \in A} \min (\bar \rho \mu (b \vert s), \pi(b \vert s)}
+\pi_{\bar \rho} (a \vert s) =^{def} \frac{ \min (\bar \rho \mu (a \vert s), \pi(a \vert s))}{ \sum_{b \in A} \min (\bar \rho \mu (b \vert s), \pi(b \vert s))}
 $$
 
-만약 $$\bar \rho$$의 값이 무한이라면 $$\rho$$의 값은 항상 $${\pi (a, \vert s) \over \mu (a, \vert s)}$$ 가 된다. Importance Sampling Weight에 대한 Truncation이 전혀 되지 않는다는 것이고, 따라서 Value Function은 Target Policy $$\pi$$의 그것과 동일해진다. 반대로 $$\bar \rho$$의 값이 0에 가까워질수록 Behavior Policy $$\mu$$의 그것에 보다 가까워게 된다.
+만약 $$\bar \rho$$의 값이 무한이라면 $$\rho$$의 값은 항상 $$\frac{\pi (a, \vert s)}{\mu (a, \vert s)}$$ 가 된다. Importance Sampling Weight에 대한 Truncation이 전혀 되지 않는다는 것이고, 따라서 Value Function은 Target Policy $$\pi$$의 그것과 동일해진다. 반대로 $$\bar \rho$$의 값이 0에 가까워질수록 Behavior Policy $$\mu$$의 그것에 보다 가까워게 된다.
 
 반면 $$c$$는 Temporal Difference에 곧장 적용되는 것이 아니므로 Value Function의 업데이트 방향에는 영향을 미치지 않는다. 다만 현재 사용하고 있는 Trajectory가 얼마나 빈번하게 발생하는지에 따라 업데이트 속도를 조절하는 역할을 한다고 볼 수 있다.
 

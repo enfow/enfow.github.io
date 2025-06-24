@@ -84,14 +84,12 @@ World Model은 $$M(s,a;\theta_M)$$로 표현할 수 있으며, State와 Dialogue
 />
 
 $$
-\eqalign{
+\begin{align}
     &h = \text{tanh}(W_h(s,a) + b_h)\\
     &r = W_r h + b_r\\
     &a^u = \text{softmax}(W_a h + b_a)\\
     &t = \text{sigmoid}(W_t h + b_t)
-}
-
-
+\end{align}
 $$
 
 Planning과 관련하여 특이한 점이 있다면 어떤 Transaction을 생성할 것인지 사용자 목표(Goal)을 전달하고 그에 맞춰 시뮬레이팅 한다는 것이다.

@@ -33,13 +33,13 @@ Maximum Entropy Framework는 쉽게 말해 강화학습 모델을 학습하는 �
 일반적인 강화학습의 목적함수는 다음과 같이 Reward 기대값의 총합으로 정의되며, 이를 극대화하는 방향으로 학습하게 된다.
 
 $$
-J(\pi) = \Sigma_t E_{(s_t, a_t) \backsim \rho_\pi} [r(s_t, a_t)]
+J(\pi) = \sum_t E_{(s_t, a_t) \backsim \rho_\pi} [r(s_t, a_t)]
 $$
 
 반면 Maximum Entropy Framework 에서는 Policy의 Entropy를 높이는 것에도 관심을 가진다. 여기서 $$\alpha$$는 Entropy Term이 얼마나 반영될지 결정하는 Temperature Parameter로, 이것이 0이 되면 위의 일반적인 강화학습 목적함수와 동일해진다.
 
 $$
-J(\pi) = \Sigma_t E_{(s_t, a_t) \backsim \rho_\pi} [r(s_t, a_t) + \alpha \mathcal H (\pi( \cdot \lvert s_t) )]
+J(\pi) = \sum_t E_{(s_t, a_t) \backsim \rho_\pi} [r(s_t, a_t) + \alpha \mathcal H (\pi( \cdot \lvert s_t) )]
 $$
 
 여기서 Entropy Term $$\mathcal H (\pi( \cdot \lvert s_t) )$$는 일반적인 Entropy의 정의에 따라 다음과 같이 구해진다.
@@ -84,12 +84,12 @@ $$
 라고 한다면 일반적인 Policy Evaluation과 동일해진다는 점에서 수렴성을 보이고 있다. 논문에 나와있는 Lemma는 다음과 같다.
 
 $$
-\eqalign{
+\begin{align}
 &\text{[Lemma 1] Soft Policy Evaluation} \\
 &\text{ Consider the soft Bellman Backup Operator} \mathcal T^{\pi} \text{ and a mapping } Q^0: \mathcal S \times \mathcal A \rightarrow R \\
 &\text{with } \lvert A \rvert < \infty, \text{ and define } Q^{k+1} = \mathcal T^\pi Q^k. \text{ Then the sequence } Q^k \text{ will converge }\\
 &\text{to the soft Q-value of } \pi \text{ as } k \rightarrow \infty
-}
+\end{align}
 $$
 
 ### Soft Policy Improvement
@@ -103,12 +103,12 @@ $$
 이때 Normalizer로 도입된 Partition function $$Z(s_t)$$는 일반적으로 Intractable 하지만 Gradient에 영향을 주지 않으므로 업데이트 과정에서는 무시된다. 논문에서는 이를 Lemma2로 정의하고 있다.
 
 $$
-\eqalign{
+\begin{align}
 &\text{[Lemma 2] Soft Policy Improvement} \\
 &\text{ Let } \pi_{old} \in \Pi \text{ and let } \pi_{new} \text{ be the optimizer of the minimization problem of }\\
 & \qquad \qquad \pi_{new} = \arg \min_{\pi' \in \Pi} \text{KLD} ( \pi' (\cdot \lvert s_t) \| { \exp (Q^{\pi_{old}}(s_t, \cdot)) \over Z^{\pi_{old}} (s_t)} )\\
 & \text{Then } Q^{\pi_{new}}(s_t, a_t) \geq Q^{\pi_{old}}(s_t, a_t) \text{ for all } (s_t, a_t) \in \mathcal S \times \mathcal A \text{ with } \lvert \mathcal A \rvert < \infty
-}
+\end{align}
 $$
 
 증명은 다음과 같은 KLD의 특성에서 출발한다.

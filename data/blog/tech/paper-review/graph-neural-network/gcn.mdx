@@ -50,7 +50,7 @@ $$
 
 ### Laplacian Matrix
 
-먼저 일반적으로 말하는 Laplacian Matrix $$L$$이란 다음과 같이 Degree Matrix에 Adjecency Matrux를 뺀 것이다. 참고로 Degree Matrix는 $$D_{ii} = \Sigma_j A_{ij}$$, 즉 Node $$i$$의 이웃 Node 갯수를 Diagonal Element로 갖는 Diagonal Matrix를 말한다.
+먼저 일반적으로 말하는 Laplacian Matrix $$L$$이란 다음과 같이 Degree Matrix에 Adjecency Matrux를 뺀 것이다. 참고로 Degree Matrix는 $$D_{ii} = \sum_j A_{ij}$$, 즉 Node $$i$$의 이웃 Node 갯수를 Diagonal Element로 갖는 Diagonal Matrix를 말한다.
 
 $$
 L = D - A
@@ -59,7 +59,7 @@ $$
 논문에서 사용하고 있는 Laplacian Matrix는 Normalized Laplacian Matrix이다.
 
 $$
-L = I_N - D^{-{1 \over 2}}AD^{-{1 \over 2}}
+L = I_N - D^{-\frac{1}{2}}AD^{-\frac{1}{2}}
 $$
 
 [위키](https://en.wikipedia.org/wiki/Laplacian_matrix)에 따르면 Laplacian Matrix가 가지는 주요 특징으로 다음과 같은 것들이 있다고 한다.
@@ -97,24 +97,24 @@ $$
 하지만 위의 식을 곧바로 딥러닝에 적용하기에는 몇 가지 문제점이 있다. 첫 번째는 연산 비용 문제로 Graph의 크기가 크면 클수록 Laplacian Matrix를 Eigen Decomposition 비용이 늘어나게 되고, 이들 간의 곱을 수행하는 것 또한 큰 연산 비용을 요구한다. 그리고 딥러닝으로 모사할 대상이 무엇인지 애매하다는 점 또한 문제라고 할 수 있다. 이와 관련하여 **Chebyshev Polynomial $$T_k(x)$$**를 적용하여 다음과 같이 파라미터 $$\theta'$$를 Neural Net으로 모사해 학습하는 방법이 제시되었다.
 
 $$
-g_{\theta'}(\Lambda) \approx \Sigma_{k=0}^{K} \theta'_k T_k(\tilde \Lambda)
+g_{\theta'}(\Lambda) \approx \sum_{k=0}^{K} \theta'_k T_k(\tilde \Lambda)
 $$
 
 이때 $$K$$ 값의 크기는 Chebyshev Polynomial $$T_k(x)$$를 몇 번 근사할 것인가를 의미하며, $$\theta'_k \in R^K$$는 Chebyshev 계수 벡터를 의미한다. Chebyshev Polynomial $$T_k(x)$$와 관련된 특성은 다음과 같다.
 
 $$
-\eqalign{
+\begin{align}
 &T_k(x) = 2xT_{k-1}(x) - T_{k-2}(x)\\
 &T_0(x) = 1 \\
 &T_1(x) = x \\
-&\tilde \Lambda = {2 \over \lambda_{\text{max}}} \Lambda - I_N
-}
+&\tilde \Lambda = \frac{2}{\lambda_{\text{max}}} \Lambda - I_N
+\end{align}
 $$
 
 정리하면 시그널 $$x$$에 대한 filter $$g_{\theta'}$$로의 Chebyshev Spectral Convolution은 다음과 같다.
 
 $$
-g_{\theta'}\star x \approx \Sigma_{k=0}^{K} \theta'_k T_k(\tilde \Lambda)x
+g_{\theta'}\star x \approx \sum_{k=0}^{K} \theta'_k T_k(\tilde \Lambda)x
 $$
 
 ## Graph Convolution Neural Network
@@ -127,21 +127,21 @@ $$
 위 두 조건을 적용하면 Chebyshev Spectral Convolution 식을 다음과 같이 정리할 수 있다.
 
 $$
-\eqalign{
-g_{\theta'}\star x &\approx \Sigma_{k=0}^{K} \theta'_k T_k(\tilde \Lambda)x\\
+\begin{align}
+g_{\theta'}\star x &\approx \sum_{k=0}^{K} \theta'_k T_k(\tilde \Lambda)x\\
 &=\theta'_0 T_0(\tilde L)x + \theta'_1 T_1(\tilde L)x \qquad ... \ (K=1)\\
 &= \theta'_0 x + \theta'_1 \tilde L x \qquad \qquad ... \ (T_0=1, T_1 = x)\\
-&= \theta'_0 x + \theta'_1({2 \over \lambda_{\text{max}}} \Lambda - I_N)x \\
-&= \theta'_0 x + \theta'_1({2 \over 2} \Lambda - I_N)x \qquad ... (\lambda_{\text{max}} = 2)\\
-&= \theta'_0 x + \theta'_1((I_N - D^{-{1 \over 2}}AD^{-{1 \over 2}}) - I_N)x \\
-&= \theta'_0 x + \theta'_1(D^{-{1 \over 2}}AD^{-{1 \over 2}})x \\
-}
+&= \theta'_0 x + \theta'_1(\frac{2}{\lambda_{\text{max}}} \Lambda - I_N)x \\
+&= \theta'_0 x + \theta'_1(\frac{2}{2} \Lambda - I_N)x \qquad ... (\lambda_{\text{max}} = 2)\\
+&= \theta'_0 x + \theta'_1((I_N - D^{-\frac{1}{2}}AD^{-\frac{1}{2}}) - I_N)x \\
+&= \theta'_0 x + \theta'_1(D^{-\frac{1}{2}}AD^{-\frac{1}{2}})x \\
+\end{align}
 $$
 
 이렇게 되면 파라미터 $$\theta'$$가 $$\theta'_0$$, $$\theta'_1$$ 두 개가 된다. 오버피팅의 가능성을 낮추고 연산량을 줄이기 위해서는 레이어 당 파라미터의 숫자를 줄이는 것이 좋으므로 다음과 같이 하나의 $$\theta$$로 바꾸어 구성했다고 한다.
 
 $$
-g_{\theta'}\star x \approx \theta (I_N + D^{-{1 \over 2}}AD^{-{1 \over 2}})x \qquad ... (\theta = \theta'_0 = -\theta'_1)
+g_{\theta'}\star x \approx \theta (I_N + D^{-\frac{1}{2}}AD^{-\frac{1}{2}})x \qquad ... (\theta = \theta'_0 = -\theta'_1)
 $$
 
 이렇게 했을 때 $$I_N + D^{-{1 \over 2}}AD^{-{1 \over 2}}$$는 $$[0,2]$$의 범위를 가지는 EigenValue들을 가지게 된다고 한다. 그런데 이와 같은 연산을 반복적으로 여러 레이어에 거쳐 수행하면 불안정할 수 있고, Gradient Vanishing 문제에도 취약할 수 있다고 한다. 이러한 가능성을 줄이고 안정적인 학습을 위해 한 번 더 Normalize 해주는 Normalization Trick을 도입하고 있다.

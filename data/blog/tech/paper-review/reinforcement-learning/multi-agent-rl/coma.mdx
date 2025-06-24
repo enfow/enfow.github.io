@@ -60,11 +60,11 @@ Multi Agent에서는 Agent가 복수가 되면서 Global과 Local(individual)을
 위의 표기법에 따라 Multi-Agent Task에서 State-Value Function, Action-Value Function, Advantage function을 다음과 같이 정의할 수 있다.
 
 $$
-\eqalign{
+\begin{align}
 &V_\pi(s_t) = E_{s_{t+1}:\infty, \boldsymbol{u_t:\infty}}[R_t \lvert s_t]\\
 &Q_\pi(s_t, \boldsymbol{u_t}) = E_{s_{t+1}:\infty, \boldsymbol{u_t:\infty}}[R_t \lvert s_t, \boldsymbol{u_t}]\\
 &A_\pi(s_t, \boldsymbol{u_t}) = Q_\pi(s_t, \boldsymbol{u_t}) - V_\pi(s_t)
-}
+\end{align}
 $$
 
 ## Multi Agent with Actor Critic
@@ -75,7 +75,7 @@ $$
 
 Actor Crirtic은 Policy Gradient 알고리즘 중 하나로 Expected Discounted Total Reward $$J = E_\pi[R_0]$$을 극대화하기 위해 Policy Parameter $$\theta_\pi$$의 Gradient를 구하는 것에서 출발한다. 대표적인 Policy Gradient 알고리즘인 REINFORCE의 Gradient는 다음과 같이 구해진다.
 
-$$g = E_{s_{0:\infty, u_{0:\infty}}}[\Sigma_{t=1}^{T} R_t \nabla_{\theta_\pi} \log \pi(u_t \lvert s_t)]$$
+$$g = E_{s_{0:\infty, u_{0:\infty}}}[\sum_{t=1}^{T} R_t \nabla_{\theta_\pi} \log \pi(u_t \lvert s_t)]$$
 
 이러한 REINFORCE 알고리즘의 gradient 값의 variance가 매우 커 안정적인 학습이 어렵다는 문제점을 가지고 있다는 것은 잘 알려져 있다. Actor-Critic은 이러한 전통적인 Policy Gradient의 문제를 Baseline $$b$$를 도입하여 해결하려는 방법론이라 할 수 있다. 보다 구체적으로 Action을 선택하는 Actor를 안정적으로 학습시키기 위해(Gradient의 Variance를 줄이기 위해) 위 수식에서 $$R_t$$를 $$Q(s_t, u_t) - b(s_t)$$로 바꾸게 되며, 이때 Critic은 Value Function을 추정하는 역할을 하게 된다. 참고로 $$b(s_t) = V(s_t)$$로 하는 것이 일반적이며 이 경우 $$R_t$$는 Advantage Function $$A_t({s,a})$$로 대체된다.
 
@@ -116,11 +116,11 @@ $$
 두 가지 문제를 한 번에 해결하기 위해 COMA에서는 Centralised Critic를 가지고 Difference Reward를 계산하는 방법을 도입했다. 구체적으로 다음과 같이 Agent $$a$$에 대한 Advantage Function를 위의 Difference Reward 형태로 변환하고, 이를 구하기 위해 Centralised Critic $$Q(s, \boldsymbol{u})$$를 적극적으로 활용하는 것이다.
 
 $$
-\eqalign{
+\begin{align}
 A^a(s, \boldsymbol{u})
 &= Q(s, \boldsymbol{u}) - V(s) \\
-&= Q(s, \boldsymbol{u}) - \Sigma_{u'^a} \pi^a ({u'}^a \lvert \tau^a) Q(s, ( \boldsymbol{u}^{-a}, {u'}^a)) \\
-}
+&= Q(s, \boldsymbol{u}) - \sum_{u'^a} \pi^a ({u'}^a \lvert \tau^a) Q(s, ( \boldsymbol{u}^{-a}, {u'}^a)) \\
+\end{align}
 $$
 
 이를 **counterfactual advantage**라고 부른다.

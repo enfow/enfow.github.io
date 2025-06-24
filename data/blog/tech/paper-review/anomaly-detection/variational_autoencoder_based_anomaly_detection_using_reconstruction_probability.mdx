@@ -89,7 +89,7 @@ $$\mu_{(\hat x)}^{(i,l)}, \sigma_{(\hat x)}^{(i,l)} = g_\phi(x\lvert z^{(i,l)})$
 
 4. 이렇게 얻어진 L개의 분포에 대해 입력 값 $$x^{(i)}$$가 나올 확률을 평균한다
 
-$$\text{recon probability(i)} = {1 \over L} \Sigma_{l=1}^L p_\theta (x^{(i)} \lvert \mu_{(\hat x)}^{(i,l)}, \sigma_{(\hat x)}^{(i,l)} ) $$
+$$\text{recon probability(i)} = \frac{1}{L} \sum_{l=1}^L p_\theta (x^{(i)} \lvert \mu_{(\hat x)}^{(i,l)}, \sigma_{(\hat x)}^{(i,l)} ) $$
 
 5. 확률 값이 $$\alpha$$ 이상인 경우 정상 데이터로, 미만인 경우 이상 데이터로 분류한다.
 
