@@ -4,7 +4,7 @@ import { genPageMetadata } from 'app/seo'
 import { notFound } from 'next/navigation'
 import ListLayout from '@/layouts/ListLayoutWithTags'
 
-const POSTS_PER_PAGE = 5
+const POSTS_PER_PAGE = 10
 const VALID_CATEGORIES = ['tech', 'daily', 'finance']
 
 export const metadata = genPageMetadata({ title: 'Blog' })
