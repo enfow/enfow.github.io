@@ -28,7 +28,7 @@ summary: ''
 Bellman equation은 expectatation exquation과 optimality equation 두 가지가 있다.
 
 - expectation equation : $$q_\pi(s, a) = R_{t+1} + \gamma q_\pi(s', a')$$
-- optimality equation : $$ q^\*(s, a) = \max*\pi q*\pi(s, a) $$
+- optimality equation : $$ q^*(s, a) = \max_\pi q_\pi(s, a) $$
 
 여기서 q 함수는 현재 policy $$\pi$$를 따라 state $$s$$ 에서 action $$a$$ 를 취했을 때 기대되는 return 의 기대값이다. expectation 식을 보면 state $$s$$ 에서 action $$a$$를 했을 때 환경으로부터 주어지는 보상 $$R_{t+1}$$ 과 다음 state $$s'$$과 policy $$\pi$$에 따라 결정된 다음 action $$a'$$의 q value 값의 합으로 되어 있다. 여기서 $$\gamma$$는 감가항이다.
 
@@ -44,11 +44,11 @@ Bellman optimality equation에 따라 action을 결정하게 되면 항상 retur
 
 - expectation q value
 
-$$ q*i = Q(s, a; \theta*{i-1}) $$
+$$ q_i = Q(s, a; \theta_{i-1}) $$
 
 - target q value
 
-$$ y*i = r + \gamma \max*{a'}Q(s', a'; \theta\_{i-1}) $$
+$$ y_i = r + \gamma \max_{a'}Q(s', a'; \theta\_{i-1}) $$
 
 - MSE loss
 
@@ -60,7 +60,7 @@ $$ L_i(\theta_i) = (y_i - Q(s, a; \theta_i))^2 $$
 
 ### TD - Temporal difference
 
-DQN에 가장 큰 영향을 미친 방법론은 **Temporal difference(TD)** 라고 할 수 있다. TD란 강화학습의 발전 과정에서 나온 두 가지 방법론 Monte Carlo와 Dynamic Programming 을 합친 개념으로, Monte Carlo 방식을 통해 샘플로 학습이 이뤄지고, Dynamic Programming처럼 전체 Episode가 끝나는 것을 기다리지 않고도 학습이 이뤄질 수 있도록 하는 방법이다.
+DQN에 가장 큰 영향을 미친 방법론은 **Temporal difference(TD)** 로, 강화학습의 발전 과정에서 나온 두 가지 방법론 Monte Carlo와 Dynamic Programming 의 특징을 조합한 방법이다. 구체적으로 말해 샘플링으로 학습을 진행하는 Monte Carlo 적인 특성과, Episode가 끝나기 전에 학습을 진행하는 Dynamic Programming 의 특성을 동시에 갖는다.
 
 Monte Carlo 를 수식으로 표현하면 다음과 같이 value function을 업데이트하게 된다.
 
@@ -68,11 +68,11 @@ $$ V(S_t) \leftarrow V(S_t) + \gamma(G_t - V(S_t)) $$
 
 반면 TD는 다음과 같다.
 
-$$ V(S*t) \leftarrow V(S_t) + \alpha ( R_t + \gamma V(S*{t+1}) - V(S_t) ) $$
+$$ V(S_t) \leftarrow V(S_t) + \alpha ( R_t + \gamma V(S_{t+1}) - V(S_t) ) $$
 
-Monte Carlo의 전체 episode return $$G_t$$가 $$R_t + \gamma V(S_{t+1})$$로 대체되었다. 즉, 매 step의 reward를 극대화하면 결과적으로 전체 episode의 return을 크게 할 수 있을 것이라는 아이디어이다. 전체 episode를 단위로 학습할 경우 variance가 크기 때문에 발산하지만 step 단위로 학습이 이뤄지는 TD 에서는 이러한 문제가 줄어들어 학습이 보다 쉬워진다. 이 과정에서 추정치를 이용하므로 overestimation bias 등이 생기기도 하나 학습이 이뤄지도록 하는 주된 방법이 된다(이를 보완하기 위해 DDQN이 나오게 되며, 나아가 Actor Critic 계열에서는 Twin critic 등의 방법들도 제안된다).
+Monte Carlo의 전체 episode return $$G_t$$가 $$R_t + \gamma V(S_{t+1})$$로 대체되었다. 이는 는 step의 reward를 극대화하면 결과적으로 전체 episode의 return을 크게 할 수 있을 것이라는 아이디어라고 할 수 있다. 전체 episode를 단위로 학습할 경우 variance가 크기 때문에 발산하지만 step 단위로 학습이 이뤄지는 TD 에서는 이러한 문제가 줄어들어 학습이 보다 쉬워진다. 이 과정에서 추정치를 이용하므로 overestimation bias 등이 생기기도 하나 학습이 이뤄지도록 하는 주된 방법이 된다(이를 보완하기 위해 DDQN이 나오게 되며, 나아가 Actor Critic 계열에서는 Twin critic 등의 방법들도 제안된다).
 
-TD 에 따르면 학습되는 크기는 target v value **$$R_t + \gamma V(S_{t+1})$$**와 current v value **$$V(S_t)$$** 간의 차이가 된다. 이때 이 차이를 **TD error**라고 한다.
+TD 에 따르면 학습되는 크기는 target v value $$R_t + \gamma V(S_{t+1})$$와 current v value **$$V(S_t)$$** 간의 차이가 된다. 이때 이 차이를 **TD error**라고 한다.
 
 ### model-free
 
