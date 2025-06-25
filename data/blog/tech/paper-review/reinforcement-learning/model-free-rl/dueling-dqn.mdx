@@ -36,17 +36,17 @@ summary: ''
 - 여기서 문제 중 하나는 더해진 Q로는 V와 A의 값을 recover 하기 어렵다는 점이다.
   - "unidentifiable in the sense athe given Q we cannot recover V and A uniquely"
   - 이는 적절한 학습을 방해하는 요인이 되며 결과적으로 performance에 부정적인 영향을 준다.
-- 이러한 문제를 해결하기 위해 A 에 max(A)의 값을 빼주어 A의 모든 element가 0 또는 음수의 값을 가지도록 하는 방법이 있다.
+- 이러한 문제를 해결하기 위해 A 에 $$\max(A)$$의 값을 빼주어 A의 모든 element가 0 또는 음수의 값을 가지도록 하는 방법이 있다.
   - $$Q(s,a; \theta, \alpha, \beta) = V (s; \theta, \beta) + (A(s,a; \theta, \alpha)− \max A(s,a';\theta,\alpha))$$.
   - $$Q(s, a^*; \theta, \alpha, \beta) = V (s; \theta, \beta)$$ 가 성립하게 되어 V 값을 판단할 수 있게 된다.
-- 안정적인 optimization을 위해 max A의 값이 아닌 A의 평균값을 빼주는 것도 가능하다. 논문에서는 이 방법을 사용했다.
+- 안정적인 optimization을 위해 $$\max(A)$$의 값이 아닌 A의 평균값을 빼주는 것도 가능하다. 논문에서는 이 방법을 사용했다.
 
 ## Advantage updating
 
 - value function과 advantage function 두 개로 나누는 아이디어는 1993년 Baird에 의해 처음 사용되었다.
   - 일반적인 Q-learning보다 빠른 수렴 속도가 특징이다.
 - Advantage function은 다음과 같이 정의된다.
-  - $$Q_\pi (s, a) = E_{s'}[r + \gamma max_{a'} Q^*(s',a')\lvert s, a]$$.
+  - $$Q_\pi (s, a) = E_{s'}[r + \gamma \max_{a'} Q^*(s',a')\lvert s, a]$$.
   - $$\pi(s, a) = Q_\pi(s, a) - V_\pi(s)$$.
 - 즉 Advantage function $$A(s, a)$$ 는 Q function 값에 V function 값을 뺀 것이다. 이러한 점에서 $$A(s, a)$$는 각 action의 상대적인 가치를 나타낸대고 할 수 있다.
   - "The advantage function subtracts the state value from Q to obtain a relative measure of the importance of each action"
@@ -56,3 +56,4 @@ summary: ''
 
 - "The key idea was to increase the replay probability of experience tuples that have a high expected learning process"
 - priority replay를 통해 DDQN 등 여러 RL 기법들이 SOTA를 찍었다.
+ㄹ
