@@ -28,7 +28,9 @@ replay memory에 새로운 방법을 적용한다고 한다면 (1) 어떤 경험
 
 어떤 transation을 학습에 이용하는 것이 효율적인가의 문제는 곧 각 경험의 중요도(importance of each transition)를 판단하는 기준이 필요하다는 것을 의미한다. 이와 관련하여 **TD error**가 있다.
 
-$$TD error = R_{t+1} + \gamma V(S_{t+1}) - V(S_t)$$
+$$
+\text{TD error} = R_{t+1} + \gamma V(S_{t+1}) - V(S_t)
+$$
 
 즉, TD error란 '새롭게 업데이트 된 V(s)의 값과 기존 V(s) 값의 차이' 라고 할 수 있다. 이는 곧 현재의 value function에 있어 어떤 경험이 얼마나 충격적인지에 대한 지표로도 볼 수 있다.
 
@@ -69,7 +71,7 @@ $$
 
 #### proportional prioritization
 
-이 방법은 TD error의 절대값을 곧바로 p𝚒 로 이용하는 방법이다.
+이 방법은 TD error의 절대값을 곧바로 $$p_𝚒$$ 로 이용하는 방법이다.
 
 $$p_i = |\delta | + \epsilon$$
 
