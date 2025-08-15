@@ -1,12 +1,12 @@
 ---
-title: Pyenv and Virtualenv
+title: python-env-setup
 date: '2020-02-02'
 tags: ['Python']
 draft: false
 summary: ''
 ---
 
-# PYENV
+# pyenv
 
 [PYENV GITHUB](<https://github.com/pyenv/pyenv>)
 
@@ -144,4 +144,23 @@ pyenv deactivate
 
 ```
 pyenv uninstall <virtualenv_name>
+```
+
+# pipx
+
+## Installation
+
+```
+# ubuntu
+sudo apt update
+sudo apt install pipx
+pipx ensurepath
+sudo pipx ensurepath --global # optional to allow pipx actions with --global argument
+```
+
+```
+# mac
+brew install pipx
+pipx ensurepath
+sudo pipx ensurepath --global # optional to allow pipx actions with --global argument
 ```
