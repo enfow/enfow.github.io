@@ -1,4 +1,5 @@
 {
+  "tech/paper-review/vlm": 1,
   "tech/dev/python": 2,
   "tech/blog/statistics": 1,
   "tech/blog/mle": 1,
@@ -38,8 +39,6 @@
   "tech/paper-review/auto-encoder": 3,
   "tech/paper-review/segmentation": 2,
   "tech/paper-review/3d": 1,
-  "tech/blog/reinforcement-learning": 9,
-  "tech/blog/sutton": 9,
   "tech/paper-review/distributional-rl": 1,
   "tech/paper-review/batch-rl": 2,
   "tech/paper-review/transfer-learning": 1
