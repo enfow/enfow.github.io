@@ -1,14 +1,37 @@
 ---
 title: 'This Week I learned 2'
 date: '2025-08-23'
-tags: []
+tags: ['Robotics', 'VLA', 'Agent', 'VLM']
 draft: false
 summary: ''
 ---
 
 # Summary
 
-TDB
+1. [Paper] Rt-1: ROBOTICS TRANSFORMER FOR REAL-WORLD CONTROL AT SCALE
+
+- 이미지와 텍스트를 입력으로 받아, Transformer 로 처리하여 Robotics Action 을 결정하도록 하는 방법
+- EfficientNet 으로 이미지 임베딩으로 추출하는 단계에서부터 FiLM 을 적용, 텍스트의 의미를 고려한 추출이 이뤄지도록 함
+- 연속적인 Robitics Action 공간을 256 개의 bin 으로 쪼개어 tokenize 하는 방법 제안
+
+2. [Paper] Rt-2: Vision-Language-Action Models Transfer Web Knowledge to Robotic Control
+
+- 강력한 일반화 성능을 보이는 VLM 을 적용하여 Robot의 Action 을 결정하는, VLA 방법론 제안
+- Low-level control, 즉 robot 이 취해야하는 실제 Action 을 결정하는 모델
+- 파인튜닝 시 Co-Fine-Tuning, 즉 새로 수집한 Robot Action 데이터만 사용하는 것보다 VLM 모델을 프리 트레이닝 할 때 사용한 데이터를 함께 섞어서 하는 것이 더욱 잘 됨
+
+3. [Docs] Building Effective Agents
+
+- Workflow 와 Agent 의 구분:
+  - Workflows: 사전에 정의된 순서대로 LLM과 tool이 실행되는 시스템
+  - Agents: LLM 이 task 를 수행하기 위해 동적으로 tool 을 사용하는 시스템
+- 문제의 복잡성과 비용 간의 트레이드 오프: Agent 는 보통 비싸고 느리다. 따라서 필요할 때만 쓰는 것이 좋다
+
+4. [Paper] LLaVA: Visual Instruction Tuning
+
+- Large Multimodal Model 제안
+- Image embedding 을 2개의 Fully Connected 로 구성된 Projection Layer 를 사용하여 Word Embedding Space 로 사영
+- Image + Text 의 환경에서 사용할 수 있는 Instruction Tuning Dataset 확보
 
 # [Paper] Rt-1: ROBOTICS TRANSFORMER FOR REAL-WORLD CONTROL AT SCALE
 
@@ -319,7 +342,7 @@ TDB
     - poka-yoke: 실수 방지 를 뜻하는 일본어, 제조 공학 용어 - 인간의 실수를 방지하거나, 실수가 발생하더라도 피해를 최소화하는 구조 및 설계를 지칭
     - “모델이 루트 디렉토리 밖으로 이동한 후 상대 파일 경로를 사용하는 도구에서 실수를 저지르는 것"을 발견 →  도구가 항상 절대 파일 경로를 요구하도록 변경 (실수하지 않도록 방지함)
 
-# LLaVA
+# [Paper] LLaVA: Visual Instruction Tuning
 
 ## contribution
 
