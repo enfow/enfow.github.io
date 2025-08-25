@@ -321,4 +321,97 @@ TDB
 
 # LLaVA
 
-TBD
+## contribution
+
+- Dataset: Multimodal instruction-following dataset
+  - language-only GPT-4 모델을 사용하여 multimodal language-image instruction-following dataset 을 생성함
+- Large multimodal model 제안: LLaVA(Large Language and Vision Assistant)
+  - vision encoder 와 LLM 을 연결하는 End-to-End Model
+  - Image Encoder(CLIP) + Language Decoder(Viduna)
+  - Fine-Tuning 도 진행함
+- Benchmark: LLaVA-Bench
+
+## GPT-assisted Visual Instruction Data Generation
+
+<img
+  src="/static/images/twil/llava-1.png"
+  alt="llava-1.png"
+  className="mx-auto block w-[80%]"
+/>
+
+- 이미지와 그에 대한 캡션이 있다고 할 때, 그것에 맞는 질문을 생성하고, 묶는 것만으로는 다양하고 추론을 요구하는 문제를 만드는 것에 한계가 있음
+- 이를 해결하기 위해 GPT-4, ChatGPT 와 같은 language-only 모델들을 visual content 를 포함하는 instruction-following 데이터셋을 만드는 데 있어 strong teacher 로 사용함
+  - 두 가지 symbolic representations 사용: Captions, Bounding boxes
+  - 이 두 가지는 LLM 이 이해할 수 있는 sequence 형태로 이미지를 인코딩할 수 있게 해줌
+- COCO 데이터셋의 이미지를 사용했으며, 최종적으로 세 가지 종류의 instruction-following data 를 생성함
+  - Conversation: 이미지에 대해 질의하는 사람과 그것에 대해 응답하는 assistant 에 대한 대화.
+  - Detailed description: 이미지에 대한 제세하고 풍부한 설명.
+  - Complex reasoning: step-by-step reasoning process 를 통해 복잡한 추론을 요구하는 질문과 응답.
+- 총 158K 개의 샘플 추출
+  - 58K conversation, 23K detailed description, 77K complex reasoning
+
+## Visual Instruction Tuning
+
+<img
+  src="/static/images/twil/llava-1.png"
+  alt="llava-1.png"
+  className="mx-auto block w-[80%]"
+/>
+
+- Vision Encoder
+  - CLIP 의 visual encoder ViT-L/14 를 사용
+  - trainable 한 projection layer 를 붙여, word embedding space 로 사영
+
+  $$H_v = W \cdot Z_v, \text{ with } Z_v = g(X_v)$$
+
+  - 단순함이 핵심, 아래와 같이 더 복잡한 방법들이 있었지만 단순하고 효율적인 방법을 쓰고 싶었다.
+    - Flamingo → gated cross-attention
+    - BLIP-2 → Q-former
+- large language model 로는 Vicuna 사용
+
+## Training
+
+- Conversation 데이터의 경우 question, answer 가 반복되는 구조로 되어 있음
+
+$$(X_q^1, X_a^1, \ldots, X_q^T, X_a^T)$$
+
+- Intruction 은 다음 수식 처럼, 첫 step 에 question 이 먼저 올지, image 가 먼저 올지 랜덤하게 샘플링하여 입력으로 전달.
+  - 두 번째 부터는 question 만 instruction 으로 사용
+
+$$X_{\text{instruct}}^t = \begin{cases}
+\text{Randomly choose } [X_q^t, X_v] \text{ or } [X_v, X_q^t], & \text{the first turn } t = 1 \\
+X_q^t, & \text{the remaining turns } t > 1
+\end{cases}$$
+
+- 만들어진 instruction 은 아래 이미지처럼 사용됨
+
+<img
+  src="/static/images/twil/llava-1.png"
+  alt="llava-1.png"
+  className="mx-auto block w-[80%]"
+/>
+
+- auto-regressive training objective function
+  - 위의 이미지와 아래 objective function 의 녹색 부분이 예측 대상이자 loss 계산 시 사용되는 부분
+    - <STOP>=### 을 예측해야 함
+    - Assistant 의 답변을 예측해야 함
+    - 그 외 system message 나 human 이 주는 것으로 간주하는 x_instruction 등은 loss 계산에 포함되지 않음
+
+$$
+p(X_a | X_v, X_{\text{instruct}}) = \prod_{i=1}^{L} p_\theta(x_i | X_v, X_{\text{instruct}}, <i, X_{a,<i})
+$$
+
+- Stage1: Pre-training for Feature Alignment
+  - LLaVA 모델이 시각적 특징과 언어 모델의 임베딩 공간을 서로 조율하는 것을 목표
+  - 데이터셋: CC3M 에서 필터링한 이미지-텍스트 쌍 사용
+  - naive expansion 방법을 사용하여 단일 턴(single-turn) 대화 형식의 instruction following data 로 변환
+    - 이미지 + “이 이미지를 설명해줘” 와 같은 단순한 instruction → caption 생성
+  - image encoder 와 LLM 은 고정, projection layer 만 학습
+  - 이 단계를 거치지 않을 경우 성능이 5.11% 감소하는 것을 확인함
+- Stage2: Fine-tuning End-to-End
+  - image encoder 는 고정, projection layer 와 LLM 은 업데이트
+  - 데이터셋: 앞에서 설명한 GPT4 로 생성한 데이터셋 사용
+
+Experiment
+
+- 다음 두 가지 use case 에 대해 실험: Multimodal Chatbot, Science QA
