@@ -8,26 +8,26 @@ summary: ''
 
 # Summary
 
-1. [Paper] Rt-1: ROBOTICS TRANSFORMER FOR REAL-WORLD CONTROL AT SCALE
+### 1. [Paper] Rt-1: ROBOTICS TRANSFORMER FOR REAL-WORLD CONTROL AT SCALE
 
 - 이미지와 텍스트를 입력으로 받아, Transformer 로 처리하여 Robotics Action 을 결정하도록 하는 방법
 - EfficientNet 으로 이미지 임베딩으로 추출하는 단계에서부터 FiLM 을 적용, 텍스트의 의미를 고려한 추출이 이뤄지도록 함
 - 연속적인 Robitics Action 공간을 256 개의 bin 으로 쪼개어 tokenize 하는 방법 제안
 
-2. [Paper] Rt-2: Vision-Language-Action Models Transfer Web Knowledge to Robotic Control
+### 2. [Paper] Rt-2: Vision-Language-Action Models Transfer Web Knowledge to Robotic Control
 
 - 강력한 일반화 성능을 보이는 VLM 을 적용하여 Robot의 Action 을 결정하는, VLA 방법론 제안
 - Low-level control, 즉 robot 이 취해야하는 실제 Action 을 결정하는 모델
 - 파인튜닝 시 Co-Fine-Tuning, 즉 새로 수집한 Robot Action 데이터만 사용하는 것보다 VLM 모델을 프리 트레이닝 할 때 사용한 데이터를 함께 섞어서 하는 것이 더욱 잘 됨
 
-3. [Docs] Building Effective Agents
+### 3. [Docs] Building Effective Agents
 
 - Workflow 와 Agent 의 구분:
   - Workflows: 사전에 정의된 순서대로 LLM과 tool이 실행되는 시스템
   - Agents: LLM 이 task 를 수행하기 위해 동적으로 tool 을 사용하는 시스템
 - 문제의 복잡성과 비용 간의 트레이드 오프: Agent 는 보통 비싸고 느리다. 따라서 필요할 때만 쓰는 것이 좋다
 
-4. [Paper] LLaVA: Visual Instruction Tuning
+### 4. [Paper] LLaVA: Visual Instruction Tuning
 
 - Large Multimodal Model 제안
 - Image embedding 을 2개의 Fully Connected 로 구성된 Projection Layer 를 사용하여 Word Embedding Space 로 사영
@@ -384,9 +384,7 @@ summary: ''
 - Vision Encoder
   - CLIP 의 visual encoder ViT-L/14 를 사용
   - trainable 한 projection layer 를 붙여, word embedding space 로 사영
-
-  $$H_v = W \cdot Z_v, \text{ with } Z_v = g(X_v)$$
-
+  -  $$H_v = W \cdot Z_v, \text{ with } Z_v = g(X_v)$$
   - 단순함이 핵심, 아래와 같이 더 복잡한 방법들이 있었지만 단순하고 효율적인 방법을 쓰고 싶었다.
     - Flamingo → gated cross-attention
     - BLIP-2 → Q-former
@@ -395,16 +393,16 @@ summary: ''
 ## Training
 
 - Conversation 데이터의 경우 question, answer 가 반복되는 구조로 되어 있음
-
-$$(X_q^1, X_a^1, \ldots, X_q^T, X_a^T)$$
-
+- $$(X_q^1, X_a^1, \ldots, X_q^T, X_a^T)$$
 - Intruction 은 다음 수식 처럼, 첫 step 에 question 이 먼저 올지, image 가 먼저 올지 랜덤하게 샘플링하여 입력으로 전달.
   - 두 번째 부터는 question 만 instruction 으로 사용
 
-$$X_{\text{instruct}}^t = \begin{cases}
+$$
+X_{\text{instruct}}^t = \begin{cases}
 \text{Randomly choose } [X_q^t, X_v] \text{ or } [X_v, X_q^t], & \text{the first turn } t = 1 \\
 X_q^t, & \text{the remaining turns } t > 1
-\end{cases}$$
+\end{cases}
+$$
 
 - 만들어진 instruction 은 아래 이미지처럼 사용됨
 
@@ -416,7 +414,7 @@ X_q^t, & \text{the remaining turns } t > 1
 
 - auto-regressive training objective function
   - 위의 이미지와 아래 objective function 의 녹색 부분이 예측 대상이자 loss 계산 시 사용되는 부분
-    - <STOP>=### 을 예측해야 함
+    - `<STOP>=###` 을 예측해야 함
     - Assistant 의 답변을 예측해야 함
     - 그 외 system message 나 human 이 주는 것으로 간주하는 x_instruction 등은 loss 계산에 포함되지 않음
 

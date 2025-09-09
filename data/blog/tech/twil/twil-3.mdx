@@ -1,6 +1,6 @@
 ---
 title: 'This Week I learned 3'
-date: '2025-08-23'
+date: '2025-08-30'
 tags: ["API", "Redis", "Multi-Agent", "Minecraft", "VLA"]
 draft: false
 summary: ''
@@ -8,25 +8,25 @@ summary: ''
 
 # Summary
 
-1. [Dev] API 인증 방식
+### 1. [Dev] API 인증 방식
 
 - Basic 과 Bearer 가 대표적
 - Basic 은 `USER:PASSWORD` 를 base64 로 단순 인코딩
 - Bearer는 Token 기반 인증으로, 무기명 채권(Bearer bond)에서 유래
 - 토큰 단위로 유효기간 설정, blacklist 처리가 가능해 Bearer 가 더 안전
 
-2. [Dev] Redis 가 빠른 이유
+### 2. [Dev] Redis 가 빠른 이유
 
 - In memory, simple key-value 구조($$O(1)$$), 싱글 스레드
 - 싱글 스레드의 경우 동시성 처리에 따른 비용과 단순한 구조의 이점이 있음
 
-3. [Paper] A Survey on Large Language Model based Autonomous Agents
+### 3. [Paper] A Survey on Large Language Model based Autonomous Agents
 
 - Autonomous Agent 를 구성하는 네 가지 요소: Profiling, Memory, Planning, Action
 - Memory 는 Short-term(in-context) 과 Long-term(external storage) 으로 나누어짐
 - Planning 은 외부 피드백의 적용 여부, Reasoning Tree 의 구조 등으로 나누어짐
 
-4. [Paper] VOYAGER: An Open-Ended Embodied Agent with Large Language Models
+### 4. [Paper] VOYAGER: An Open-Ended Embodied Agent with Large Language Models
 
 - Minecraft 에서 자율적으로 세계를 탐색하고 스스로 발전하는 embodied agent
 - Automatic Curriculum: 다양한 작업을 시도하는 방향으로 프롬프팅(Novelty Search)
@@ -34,7 +34,7 @@ summary: ''
 - Iterative Prompting Mechanism: 환경 피드백, 실행 오류 및 반복적인 자가 검증으로 적절하고 안전한 Skill 구성
 - VLM, VLA 를 사용하지 않음
 
-5. [Paper] ROCKET-1: Mastering Open-World Interaction with Visual-Temporal Context Prompting
+### 5. [Paper] ROCKET-1: Mastering Open-World Interaction with Visual-Temporal Context Prompting
 
 - Minecraft 에서 VLA 를 사용하여 다양한 테스크를 수행하는 방법에 대해 다룸
 - 두 가지 프레임워크: End-to-End와 Hierarchical, Hierarchical 은 communication protocol 에 따라 분류 가능
@@ -42,7 +42,7 @@ summary: ''
 - RGB 이미지와 대상 객체를 하이라이트하는 Segmentation map 을 함께 이미지 입력으로 활용
 - Segmentation Map 을 생성하기 위해 Molmo와 SAM-2 를 사용함
 
-6. [Paper] JARVIS-VLA: Post-Training Large-Scale Vision Language Models to Play Visual Games with Keyboards and Mouse
+### 6. [Paper] JARVIS-VLA: Post-Training Large-Scale Vision Language Models to Play Visual Games with Keyboards and Mouse
 
 - Minecraft 에서 VLA 를 사용하여 다양한 테스크를 수행하는 방법에 대해 다룸
 - ActVLP: Trajectory 로 파인튜닝 하는 것을 넘어 world 에 대한 이해를 높이기 위해 추가적인 post-training 제안
@@ -517,9 +517,8 @@ Objective Evaluation
 - 다양한 작업들을 시도해 볼 수 있도록 유도하는 프롬프트를 함께 입력으로 주어 GPT-4 가 다음 Task 를 정하도록 함
     - “… My ultimate goal is to discover as many diverse things as possible, accomplish as many diverse tasks as possible and become the best Minecraft player in the world. …”
 - Novelty Search 에서 영감을 받음
-    - DIVERSITY IS ALL YOU NEED: LEARNING SKILLS WITHOUT A REWARD FUNCTION https://arxiv.org/pdf/1802.06070
-    - Improving exploration in evolution strategies for deep reinforcement learning via
-    a population of novelty-seeking agents. https://arxiv.org/pdf/1712.06560
+    - [DIVERSITY IS ALL YOU NEED: LEARNING SKILLS WITHOUT A REWARD FUNCTION](<https://arxiv.org/pdf/1802.06070>)
+    - [Improving exploration in evolution strategies for deep reinforcement learning via a population of novelty-seeking agents](<https://arxiv.org/pdf/1712.06560>)
 - 이외에 프롬프트에는 에이전트의 현재 상태, 과거에 완료했거나 실패했던 작업들, CoT 프롬프트 등이 포함됨
 
 <img
@@ -655,7 +654,7 @@ $$
     1. 에이전트와 대상 간의 상호작용이 발생하는 프레임 식별
     2. Open-Vocabulary Grounding 모델(Molmo)로 상호작용 대상이 되는 객체의 위치를 식별함
     3. SAM-2 를 활용하여 상호작용 프레임 뿐만 아니라 과거 시점의 프레임에서도 동일한 객체를 식별하고, 이들의 segmentation map 을 생성함
-- OpenAI 의 contractor data 의 1.6billion 프레임을 이와 같은 방식으로 relabeling 함 - https://openai.com/index/vpt/
+- OpenAI 의 contractor data 의 1.6billion 프레임을 이와 같은 방식으로 relabeling 함 - [OpenAI VPT](<https://openai.com/index/vpt/>)
 
 ## Overall Architecture
 
@@ -711,7 +710,7 @@ $$
     - discrete: 관련성이 높은 Action 들을 하나의 범주로 만들고, 각 범주를 토큰화함
     - continuous: action space 를 bin 으로 쪼개어 토큰화함
     - 가장 사용 빈도가 낮은 51개의 토큰을 Action 토큰으로 대체하는 방식 사용(VLA 의 가장 기본적인 방식)
-        - 22 토큰 → 마우스 컨트롤에 사용, VPT 에서 사용한 방식 적용 - https://arxiv.org/pdf/2206.11795
+        - 22 토큰 → 마우스 컨트롤에 사용, VPT 에서 사용한 방식 적용 - [Video PreTraining (VPT)](<https://arxiv.org/pdf/2206.11795>)
         - 29 토큰 → 키보드 입력에 사용
 
 Training Pipeline
@@ -745,7 +744,7 @@ $$
 - Stage3: Imitation Learning on Trajectories
     - expert action 을 mimic 하는 trajectory data 로 학습
     - vision과 관련된 모듈은 frozen. language model 만 action token 을 적절히 생성해낼 수 있도록 파인튜닝(full-parameter fine-tuning)
-    - action chuck $$a_{t:t+\tau}$$ 를 생성하도록 하고 있음 - Diffusion Policy  https://arxiv.org/pdf/2303.04137
+    - action chuck $$a_{t:t+\tau}$$ 를 생성하도록 하고 있음 - [Diffusion Policy](<https://arxiv.org/pdf/2303.04137>)
 
 $$
 \mathcal{L}_{\text{IL}} = -\sum_{t=1}^T \log \pi_\theta(a_{t:t+\tau} | o_t, x_{\text{ins}})
