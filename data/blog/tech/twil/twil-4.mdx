@@ -1,14 +1,37 @@
 ---
-title: 'This Week I learned 3'
+title: 'This Week I learned 4'
 date: '2025-08-23'
-tags: ["API", "Redis", "Multi-Agent", "Minecraft", "VLA"]
+tags: ["Cooperative Multi-Agent", "Planning", "ProAgent", "LLM+P", "STEPWISER", "CoELA"]
 draft: false
 summary: ''
 ---
 
 # Summary
 
-# ProAgent: Building Proactive Cooperative Agents with Large Language Models
+### 1.  [Paper] ProAgent: Building Proactive Cooperative Agents with Large Language Models
+
+- LLM을 Cooperatvie Multi-Agent 환경(Overcooked Game)에 적용하는 프레임워크를 제안함
+- 비언어적이고, 그리드와 같은 구조화던 데이터를 잘 처리할 수 있도록 게임 보드의 상태와 그것을 설명해주는 자연어를 함께 프롬프트 입력으로 넣어줌으로써 LLM 의 환경에 대한 이해도를 높임
+- CoT 는 필수적, 어떻게 잘 활용할 것인가가 문제임
+
+### 2. [Paper] LLM+P: Empowering Large Language Models with Optimal Planning Proficiency
+
+- Classic Planner 를 LLM 이 잘 활용하도록 만드는 프레임워크를 제안함
+- 특정 도메인에 대한 적절한 Solver 가 존재하고, 그 Solver 가 일정한 구조의 입력을 받도록 되어 있다면 유용한 방법이 될 것
+
+### [Paper] STEPWISER: STEPWISE GENERATIVE JUDGES FOR WISER REASONING
+
+- CoT 를 적용하여 여러 Reasoning Step 을 거쳐 최종 결과를 생성할 때, 어떤 Reasoning Step 이 최종 결과에 얼마나 좋은 영향을 미쳤는지 판별하는 judge 를 생성하는 법을 제안함
+- Root 부터 Leaf 에 도달하는 과정 중간의 Reasoning Step 에 대해 적절히 평가하기 위해서는 각 Step 이 단일성을 갖고, 중단 없는 논리적인 흐름을 구성해야 함. 이러한 질 좋은 Chunks-of-Thought 를 생성하기 위해 자체 분할 능력을 갖는 모델을 파인튜닝함
+- 잘 쪼개어진 Reasoning Step 별로 롤아웃(16회) 하여 최종 출력을 수집하고, 정답률에 따라 해당 Reasoning Step 이 얼마나 도움을 주었는지 계산할 수 있음. 이를 Annotation 삼아 강화학습(GRPO)을 통해 judge model 을 트레이닝함.
+
+### [Paper] CoELA: BUILDING COOPERATIVE EMBODIED AGENTS MODULARLY WITH LARGE LANGUAGE MODELS
+
+- 실내 시뮬레이션 환경에서 Multi-Agent cooperation problem 을 해결하는 CoELA 프레임워크 제안
+- 효율적인 의사소통을 위해 메시지를 작성하는 Communication Module 과, 완성된 메시지를 보낼 것인지 여부를 포함하여 Action 을 결정하는 Planning Module 을 분리함
+- RGB-D 정보를 활용하여 3D point cloud 를 Perception Module 에서 구축하고, 여기서 추출된 정보를 Memory Module 에 저장하여 사용함
+
+# [Paper] ProAgent: Building Proactive Cooperative Agents with Large Language Models
 
 [paper](<https://arxiv.org/pdf/2308.11339>)
 
