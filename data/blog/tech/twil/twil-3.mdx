@@ -578,6 +578,8 @@ Objective Evaluation
 
 # [Paper] ROCKET-1: Mastering Open-World Interaction with Visual-Temporal Context Prompting
 
+[Paper](<https://arxiv.org/pdf/2410.17856>)
+
 - 마인크래프트에서 VLA 를 사용하여 다양한 테스크를 수행하는 방법에 관해 다룸
 
 ## Main contributions
@@ -589,14 +591,24 @@ Objective Evaluation
 ## Existing approaches for embodied decision making in open-world environment
 
 - 크게 end-to-end 와 hierarchical 로 나누어 볼 수 있음
-- End-to-end Approach:
-    - VLA가 환경의 observation 과 text instruction 을 입력받아 Action 을 직접 결정하는 방법
-    - 학습하기 위해서는 annotated trajectory data 대량으로 필요함 - 수집이 어려움
-    - RT-2, Octo, LEO, OpenVLA
-- Hierarchical Approach:
-    - high-level reasoner 와 low-level policy 가 분리되어 있고, 계층적으로 동작하도록 하는 방법
-    - 두 컴포넌트들은 서로 독립적으로 학습될 수 있음
-    - 두 컴포넌트 간의 communication protocol 을 어떻게 설정하느냐에 따라 모델의 능력이 달라짐
+
+End-to-end Approach
+
+- VLA가 환경의 observation 과 text instruction 을 입력받아 Action 을 직접 결정하는 방법
+- 학습하기 위해서는 annotated trajectory data 대량으로 필요함 - 수집이 어려움
+- RT-2, Octo, LEO, OpenVLA
+
+Hierarchical Approach:
+
+<img
+  src="/static/images/twil/twil3-10.png"
+  alt="twil3-10.png"
+  className="mx-auto block w-[80%]"
+/>
+
+- high-level reasoner 와 low-level policy 가 분리되어 있고, 계층적으로 동작하도록 하는 방법
+- 두 컴포넌트들은 서로 독립적으로 학습될 수 있음
+- 두 컴포넌트 간의 communication protocol 을 어떻게 설정하느냐에 따라 모델의 능력이 달라짐
 - Communication protocol 에 따른 Hierarchical Approach 의 분류
     - Language Prompting
         - High-level reasoner 가 Low-level policy 에게 **language-based sub-tasks** 로 전달하는 방식
@@ -659,8 +671,8 @@ $$
 ## Overall Architecture
 
 <img
-  src="/static/images/twil/twil3-1.png"
-  alt="twil3-1.png"
+  src="/static/images/twil/twil3-7.png"
+  alt="twil3-7.png"
   className="mx-auto block w-[80%]"
 />
 
