@@ -3,8 +3,40 @@ title: 'This Week I learned 5'
 date: '2025-09-08'
 tags: []
 draft: false
-summary: ''
+summary: 'MongoDB, ViT, VLA, RL, Chain-of-Affordances'
 ---
+
+# Summary
+
+### 1. [Dev] MongoDB
+
+- MongoDB 에서는 Collection 의 여러 개의 Document 를 `Page 단위`로 그룹화하여 저장함
+- MongoDB 에서도 인덱스 기능이 있으며, `B+tree` 를 사용하여 서치함
+- 적절한 인덱싱 기능, 캐싱 기능을 활용하는 것이 성능의 핵심, RDBMS 보다 빠르게 동작할 수 있다!
+- Motor 는 MongoDB 의 Python async driver 이고, beanie 는 motor 기반의 비동기 MongoDB ODM 이다. 이를 활용하여 Schema 를 도입할 수 있다.
+
+### 2. [Paper] ViT: AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE
+
+- Image specific 한 inductive bias 를 가진 구조(e.g. CNN)를 사용하지 않고, Transformer Encoder 만으로도 충분히 좋은 Image 모델을 만들 수 있다.
+- 이미지를 patch 로 쪼개어 Sequential 하게 정렬한 다음, Learnable Position Encoding 과 함께 Transformer 에 입력으로 전달하여 image classification 문제에서 높은 성능을 기록하였다.
+- pixel 단위가 아닌 patch 로 쪼개어 하는 것은 계산 효율성 때문이다. patch의 크기가 작아질수록 성능은 더 좋아지는 면이 있다.
+- Attention distance 를 통해 global 한 정보에 집중하는지 local 한 정보에 집중하는지 확인할 수 있다.
+
+### 3. [Paper] VLA-RL: Towards Masterful and General Robotic Manipulation with Scalable Reinforcement Learning
+
+- VLA 에 강화학습을 적용하여 학습을 하는 방법 제안
+- 강화학습의 강점 중 하나는 탐색과 외부와의 상호작용을 통해 끊임없이 새로운 데이터를 접할 수 있다는 점 -> Static Dataset 을 학습한 VLM 의 단점 극복
+- RPRM(Robotic Process Reward Model) 을 도입하여 Sparse Reward 문제를 해소함
+
+### 4. [Paper] The Landscape of Agentic Reinforcement Learning for LLMs: A Survey
+
+- RL in Embodied Agents 파트만 정리
+
+### 5. [Paper] CoA-VLA: Improving Vision-Language-Action Models via Visual-Textual Chain-of-Affordance
+
+- object, grasp, spatial, and movement 등 네 가지 종류의 affordance 를 활용하여 Chain of Affordance 를 구성함
+- 각 Affordance 는 Textual, Visual 의 두 종류를 가짐
+- 이들 Affordance 로 Chain of Affordances(CoA)를 구성하고, Action 을 결정하는 데에 사용함
 
 # [Dev] MongoDB
 
