@@ -1,9 +1,9 @@
 ---
-title: 'This Week I learned 5'
-date: '2025-09-08'
-tags: []
+title: 'This Week I learned 6'
+date: '2025-09-15'
+tags: ['NextJS', 'Affordance Grasping', '3D Object Affordance Grounding']
 draft: false
-summary: 'NextJS, Affordance Grasping, 3D Object Affordance Grounding'
+summary: ''
 ---
 
 # Summary
@@ -164,7 +164,7 @@ app/
 <img
   src="/static/images/twil/twil6-1.png"
   alt="twil6-1"
-  className="mx-auto block w-[80%]"
+  className="mx-auto block w-[70%]"
 />
 
 ### AffordGrasp
@@ -177,7 +177,7 @@ app/
 <img
   src="/static/images/twil/twil6-2.png"
   alt="twil6-2"
-  className="mx-auto block w-[80%]"
+  className="mx-auto block w-[100%]"
 />
 
 ### In-Context Affordance Reasoning
@@ -197,7 +197,7 @@ app/
 <img
   src="/static/images/twil/twil6-3.png"
   alt="twil6-3"
-  className="mx-auto block w-[80%]"
+  className="mx-auto block w-[100%]"
 />
 
 - RGB 이미지와 part, affordance 를 입력으로 받아, object bbox 와 affordance mask 를 생성하는 단계
@@ -265,7 +265,7 @@ app/
 <img
   src="/static/images/twil/twil6-5.png"
   alt="twil6-5"
-  className="mx-auto block w-[80%]"
+  className="mx-auto block w-[100%]"
 />
 
 - RAM, GraspNet, ThinkGrasp 와 비교해 볼 때 가장 성능이 좋음
@@ -294,8 +294,8 @@ $$
     - mug 를 안전히 드는 방법에 대해 물어보면 LLM 은 손잡이 부분을 집어야 한다는 것을 알고 있음
     - 이를 활용하면 unseen context 에서도 잘할 것
 - 두 개의 main component
-    - point cloud multimodal model: point cloud 와 사용자의 instruction 을 받아 special token <AFF> 를 포함하는 response 생성
-    - Affordance Decoder(AFD): point cloud 와 <AFF> 토큰을 통해 segmentation point feature 를 생성
+    - Point Cloud Multimodal Model: Point Cloud 와 사용자의 instruction 을 받아 `Special Token <AFF>` 를 포함하는 response 생성
+    - Affordance Decoder(AFD): point cloud 와 `<AFF>` 토큰을 통해 segmentation point feature 를 생성
 - 3D-LLM 관련 연구들은 있었음
     - 한계: 텍스트, bbox 를 출력함, 하지만 segmentation mask 를 출력하지는 않음
         - [3D-LLM: Injecting the 3D World into Large Language Models](https://arxiv.org/pdf/2307.12981)
@@ -306,7 +306,7 @@ $$
 <img
   src="/static/images/twil/twil6-6.png"
   alt="twil6-6"
-  className="mx-auto block w-[80%]"
+  className="mx-auto block w-[100%]"
 />
 
 ### Model Architecture
@@ -323,14 +323,13 @@ $$
     - output: point token $$Y = (y_1, y_2, \ldots, y_m) \in \mathbb{R}^{m \times c''}$$
 - Language Model
     - input: text token 과 3d point cloud tokens - $$Z = (z_1, z_2, \ldots, z_k) \in \mathbb{R}^{k \times c''}$$
-    - output: output tokens - $$\hat{Z} = (\hat{z}_1, \hat{z}_2, \ldots, \hat{z}_k) \in \mathbb{R}^{k \times c''}
-    $$
+    - output: output tokens - $$\hat{Z} = (\hat{z}_1, \hat{z}_2, \ldots, \hat{z}_k) \in \mathbb{R}^{k \times c''}$$
 - Affordance Decoder
     - query based method 적용
     - LLM 이 이해한 instruction 과 3D point cloud 정보를 연결해 Affordance Mask 를 통합하여 출력
 - `<AFF>` 토큰
     - LLM 이 추출한 정보를 잘 다루기 위해 추가한 special token
-    - LLM 의 출력은 다음과 같은 형태로 이뤄짐 $$\hat{\mathbf{y}}_{\text{txt}} $$ = “Sure, it is <AFF>.”
+    - LLM 의 출력은 다음과 같은 형태로 이뤄짐 $$\hat{\mathbf{y}}_{\text{txt}} $$ = “Sure, it is `<AFF>`.”
         - $$\hat{\mathbf{y}}_{\text{txt}} = F_{\text{3D-ADLLM}}(\mathbf{P}_{\text{cloud}}, \mathbf{Q}_{\text{aff}})$$
     - 이때 affordance mask 를 만드는 데에 필요한 정보는 `<AFF>` 에 들어 있음.
     - `<AFF>` 토큰($$\hat{\mathbf{h}}_{\text{aff}}$$) 을 MLP 레이어에 통과시켜 얻은 $$h_{\text{aff}}$$ 를 decoder 에 전달함
@@ -341,7 +340,7 @@ $$
 <img
   src="/static/images/twil/twil6-7.png"
   alt="twil6-7"
-  className="mx-auto block w-[80%]"
+  className="mx-auto block w-[100%]"
 />
 
 - 데이터셋이 부족하여 multi-stage 로 학습을 진행함
@@ -359,7 +358,7 @@ $$
 <img
   src="/static/images/twil/twil6-8.png"
   alt="twil6-8"
-  className="mx-auto block w-[80%]"
+  className="mx-auto block w-[100%]"
 />
 
 - Metrics
@@ -383,7 +382,7 @@ $$
 <img
   src="/static/images/twil/twil6-9.png"
   alt="twil6-9"
-  className="mx-auto block w-[80%]"
+  className="mx-auto block w-[100%]"
 />
 
 - affordance 의 다양한 스케일을 가정함
@@ -419,7 +418,7 @@ $$
 <img
   src="/static/images/twil/twil6-11.png"
   alt="twil6-11"
-  className="mx-auto block w-[80%]"
+  className="mx-auto block w-[60%]"
 />
 
 ### Method Overview
@@ -427,7 +426,7 @@ $$
 <img
   src="/static/images/twil/twil6-12.png"
   alt="twil6-12"
-  className="mx-auto block w-[80%]"
+  className="mx-auto block w-[100%]"
 />
 
 - Architecture
@@ -462,7 +461,7 @@ $$
 <img
   src="/static/images/twil/twil6-13.png"
   alt="twil6-13"
-  className="mx-auto block w-[80%]"
+  className="mx-auto block w-[100%]"
 />
 
 1. 입력으로 Point Cloud(Nx3) 와 Image(3xHxW) 를 받음
@@ -475,7 +474,7 @@ $$와 $$\mathbf{F}_i \in \mathbb{R}^{C \times H_1 \times W_1}$$ 를 얻음
 5. **Cross-Modal Adaptive Fusion Module(CMAFM)** 을 통해 Point Cloud 정보와 MHACoT 로 부터 추출한 정보를 통합함. 
 6. 디코딩하여 최종 3D Affordance 를 출력함.
 
-# [Paper] **Grounding 3D Object Affordance with Language Instructions, Visual Observations and Interactions**
+# [Paper] Grounding 3D Object Affordance with Language Instructions, Visual Observations and Interactions
 
 ### Concept
 
@@ -495,7 +494,7 @@ $$와 $$\mathbf{F}_i \in \mathbb{R}^{C \times H_1 \times W_1}$$ 를 얻음
 <img
   src="/static/images/twil/twil6-15.png"
   alt="twil6-15"
-  className="mx-auto block w-[80%]"
+  className="mx-auto block w-[100%]"
 />
 
 1. 입력으로 Instruction(text), Image(2D), Point Cloud(3D) 를 받음
