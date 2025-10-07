@@ -46,42 +46,47 @@ summary: ''
     1. 다른 데이터셋에서 object mesh 와 human grasp 데이터를 추출함
     2. Hand-Object Interaction Retargeting(HOIR) 를 활용하여 human grasp 를 dexterous grasp 로 변환함
     3. LLM-assisted Language Guidance Annotation System 을 활용하여 language guidance 를 생성함
-- **Hand-Object Interaction Retargeting(HOIR)** - 위 그림의 (a)
-    - 사람 손-객체 상호작용 데이터를 로봇 손-객체 상호작용 데이터로 변환하는 데에 사용
-    - 여기서 $$G_{dex} = (r, t, q)$$ 는 dexterous pose 를 의미
-        - rotation $$r$$ 은 global rotation 을 의미함
-        - translation $$t$$ 이란 로봇 손이 3차원 공간(world coordinates) 에서 어디에 있는지를 나타내는 위치 정보를 말함(로봇 손 기준점의 위치)
-        - $$q$$ 는 $$j$$-DoF 차원의 손목 관절 각도를 뜻함
-    - 세 가지 step 으로 구성
-        - Pose Initialization
-            - 사람의 손 포즈 데이터를 카피하여 초기 dexterous pose 를 생성하는 단계
-            - dexterous pose 의 파라미터를 사람 손의 포즈를 고려하여 초기화
-        - Fingertip Alignment
-            - 손가락의 끝 위치를 조정하여 사람의 손과 유사하도록 개선하는 단계
-            - 사람의 Fingertip 위치 $$p^{mano,ft}_k$$ 와 dexterous pose 의 Fingertip 위치 $$p^{dex,ft}_k$$ 를 맞춰주는 식으로 개선
-            - Objective Function: $$\min_{G_{dex}=(r,t,q)} \sum_k |p^{dex,ft}_k - p^{mano,ft}_k|_2^2 \quad$$
-        - Interaction Refinement
-            - 일관성을 유지하면서 물리적 상호작용의 실현 가능성을 높이는 단계
-            - 손-객체 상호작용 데이터와 물리적 제약 조건을 고려하여 최적화 진행
-            - 최적화된 자세의 접촉 영역이 step 2의 결과와 일관되도록 함 + 손의 기준점(translation)을 고정함 → 접촉 영역 유지 + 회전과 관절 각도만을 조정하는 단계
-            - Objective Function: $$\min_{(r,q)} (\lambda_1 L_{pen} + \lambda_1 L_{spen} + \lambda_1 L_{joint} + \lambda_1 L_{cmap}) \quad$$
-                - $$L_{pen}$$ : 손-객체 침투 깊이에 대한 페널티
-                - $$L_{spen}$$: 손의 다른 부분 간의 자체 침투에 대한 페널티
-                - $$L_{joint}$$: 로봇 손의 물리적 구조 제한(지정된 상한 및 하한)을 벗어나는 관절 각도에 대한 페널티
-                - $$L_{cmap}$$: 객체 위의 접촉 맵이 2단계의 출력과 일관되도록 보장
-- LLM-Assisted Language Guidance Annotation
-    - coarse-to-fine automation
-    - 다음 두 논문에서 영감
-        - Anyskill: Learning open-vocabulary physical skill for interactive agents
-        - Semgrasp: Semantic grasp generation via language aligned discretization.
-    - 세 단계로 구성
-        1. 객체의 카테고리와 사람의 간략한 의도를 기반으로 간략한 가이던스를 생성함
-            - 사람의 의도 예시: “use a lotion pump”
-            - human dataset(Oakink) 에서 수집한 정보들임
-        2. 손 위의 접촉 앵커(contact anchors)와 객체의 다양한 부분(different parts of the object) 간의 거리를 구해 contact information 을 컴파일함
-            - 접촉 앵커는 손 위에 미리 정의된 지점들 - 거리 계산의 기준 점
-        3. 1 에서 생성한 간략한 가이던스와 2에서 생성한 contact information 을 GPT3.5 로 자연어 가이던스 주석으로 생성함
-            - 사용한 프롬프트는 다음과 같음
+
+Hand-Object Interaction Retargeting(HOIR)
+
+- 위 그림의 (a)
+- 사람 손-객체 상호작용 데이터를 로봇 손-객체 상호작용 데이터로 변환하는 데에 사용
+- 여기서 $$G_{dex} = (r, t, q)$$ 는 dexterous pose 를 의미
+    - rotation $$r$$ 은 global rotation 을 의미함
+    - translation $$t$$ 이란 로봇 손이 3차원 공간(world coordinates) 에서 어디에 있는지를 나타내는 위치 정보를 말함(로봇 손 기준점의 위치)
+    - $$q$$ 는 $$j$$-DoF 차원의 손목 관절 각도를 뜻함
+- 세 가지 step 으로 구성
+    - Pose Initialization
+        - 사람의 손 포즈 데이터를 카피하여 초기 dexterous pose 를 생성하는 단계
+        - dexterous pose 의 파라미터를 사람 손의 포즈를 고려하여 초기화
+    - Fingertip Alignment
+        - 손가락의 끝 위치를 조정하여 사람의 손과 유사하도록 개선하는 단계
+        - 사람의 Fingertip 위치 $$p^{mano,ft}_k$$ 와 dexterous pose 의 Fingertip 위치 $$p^{dex,ft}_k$$ 를 맞춰주는 식으로 개선
+        - Objective Function: $$\min_{G_{dex}=(r,t,q)} \sum_k |p^{dex,ft}_k - p^{mano,ft}_k|_2^2 \quad$$
+    - Interaction Refinement
+        - 일관성을 유지하면서 물리적 상호작용의 실현 가능성을 높이는 단계
+        - 손-객체 상호작용 데이터와 물리적 제약 조건을 고려하여 최적화 진행
+        - 최적화된 자세의 접촉 영역이 step 2의 결과와 일관되도록 함 + 손의 기준점(translation)을 고정함 → 접촉 영역 유지 + 회전과 관절 각도만을 조정하는 단계
+        - Objective Function: $$\min_{(r,q)} (\lambda_1 L_{pen} + \lambda_1 L_{spen} + \lambda_1 L_{joint} + \lambda_1 L_{cmap}) \quad$$
+            - $$L_{pen}$$ : 손-객체 침투 깊이에 대한 페널티
+            - $$L_{spen}$$: 손의 다른 부분 간의 자체 침투에 대한 페널티
+            - $$L_{joint}$$: 로봇 손의 물리적 구조 제한(지정된 상한 및 하한)을 벗어나는 관절 각도에 대한 페널티
+            - $$L_{cmap}$$: 객체 위의 접촉 맵이 2단계의 출력과 일관되도록 보장
+
+LLM-Assisted Language Guidance Annotation
+
+- coarse-to-fine automation
+- 다음 두 논문에서 영감
+    - Anyskill: Learning open-vocabulary physical skill for interactive agents
+    - Semgrasp: Semantic grasp generation via language aligned discretization.
+- 세 단계로 구성
+    1. 객체의 카테고리와 사람의 간략한 의도를 기반으로 간략한 가이던스를 생성함
+        - 사람의 의도 예시: “use a lotion pump”
+        - human dataset(Oakink) 에서 수집한 정보들임
+    2. 손 위의 접촉 앵커(contact anchors)와 객체의 다양한 부분(different parts of the object) 간의 거리를 구해 contact information 을 컴파일함
+        - 접촉 앵커는 손 위에 미리 정의된 지점들 - 거리 계산의 기준 점
+    3. 1 에서 생성한 간략한 가이던스와 2에서 생성한 contact information 을 GPT3.5 로 자연어 가이던스 주석으로 생성함
+        - 사용한 프롬프트는 다음과 같음
             
 ```
 System Prompt: "You are an assistant in creating language instruction, aimed at guiding robot on how to grasp objects. Given a brief instruction and a fine-gained interaction information. Your task is generate a natural and more informative instruction. The instruction should start with the given brief instruction, which is limited in a sentence and about 10-15 words."
