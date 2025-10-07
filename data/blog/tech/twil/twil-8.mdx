@@ -92,10 +92,11 @@ User Prompt: "Brief instruction: To <brief intention> a <object category>. Hand-
 
 - 객체의 전체 point cloud 와 language guidance 가 입력으로 주어져 있을 때, 의도에 맞게 dexterous grasp 를 생성하는 것이 목표
     - intention alignment, high diversity, high quality
-- Objectives
-    - 일반적으로 사용하는 penetration loss 를 높이는 것은 object penetration 은 줄여주더라도 다른 사이드 이펙트들이 있었음 → 두 개의 Objectives 를 추가함
-    - First Objective - Generative: 퀄리티보다는 사람의 의도와 생성 다양성에 맞춰 grasp distribution 을 학습함
-    - Second Objective - Regressive: 간략한 grasp 를 의도는 유지하며 높은 수준의 grasp 로 정제함
+
+Objectives
+- 일반적으로 사용하는 penetration loss 를 높이는 것은 object penetration 은 줄여주더라도 다른 사이드 이펙트들이 있었음 → 두 개의 Objectives 를 추가함
+- First Objective - Generative: 퀄리티보다는 사람의 의도와 생성 다양성에 맞춰 grasp distribution 을 학습함
+- Second Objective - Regressive: 간략한 grasp 를 의도는 유지하며 높은 수준의 grasp 로 정제함
 
 <img
   src="/static/images/twil/twil8-2.png"
@@ -103,52 +104,57 @@ User Prompt: "Brief instruction: To <brief intention> a <object category>. Hand-
   className="mx-auto block w-[100%]"
 />
 
-- Progressive Grasp Components
-    - 두 개의 component 로 구성
-    - Intention and Diversity Grasp Component(IDGC)
-        - 의도에 맞춰 다양한 손 동작을 생성하는 Grasp distribution 을 효율적으로 배우는 것을 목표로 함
-        - conditional diffusion model 을 사용하여 노이즈가 추가된 $$G^{dex}_T$$ 로부터 dexterous pose $$G^{dex}_0$$를 예측함 - due to distribution modeling objective(?)
-        - Object Point Cloud 는 Pointer++ 로 encoding
-        - instruction 은 CLIP 으로 encoding
-        - sampling process 로 DDPM 을 사용함
-    - Quality Grasp Component
-        - IDGC 로 생성된 grasp 는 객체를 관통하는 등 질적으로 좋지 못함
-        - 입력으로 Coarse Pose $$\hat{G}^{dex}$$, Coarse hand point cloud $$H(\hat{G}^{dex})$$, Object Point Cloud $$O$$ 를 받음
-        - 출력으로 자세 변화량 $$\Delta G^{dex}$$ 을 내놓음. 이를 통해 개선된 grasp 를 구할 수 있음 $$\tilde{G}^{dex} = \hat{G}^{dex} + \Delta G^{dex}$$
-- Progressive Grasp Loss
-    - loss function 도 두 가지로 구성됨
-    - Intention and Diversity Grasp Loss
-        - regression loss 는 사용하고, penetration loss 는 배제함 - penetration loss 는 품질 향상과 관련, 여기서 포함시키면 다양한 포즈 생성에 어려움을 겪음
-        - loss function 을 보게 되면, 예측한 손 모양이 정답과 유사해지도록 학습이 이뤄짐
-        - $$\mathbf{L_{IDG}} = \lambda^2_{para} L_{para}(G^{dex}_0, \hat{G}^{dex}) + \lambda^2_{chamfer} L_{chamfer}(H(G^{dex}_0), H(\hat{G}^{dex}))$$
-            - $$L_{para}$$ 는 l2 loss(MSE) 로 손이 가지는 파라미터의 차이를 계산한 것 → 손의 파라미터가 얼마나 유사한가
-            - $$L_{chamfer}$$ 는 hand point cloud 의 예측과 정답 간의 차이를 계산한 것 → 손 모양이 얼마나 유사한가
-                - $$L_{chamfer} = \sum_{x \in H(G_{dex})} \min_{y \in H(\hat{G}{dex})} |x-y|{x \in H(\hat{G}{dex})} \min_{y \in H(G_{dex})} |x-y|_2^2$$
-            - 이때 point cloud 는 Hand mesh 를 샘플링해서 얻어짐
-    - Quality Grasp Loss
-        - penetration loss 를 포함하여 생성된 손 모양을 질적으로 개선하도록 Loss 를 구성함
-        - $$\mathbf{L_{QG}} = \lambda^3_{para} L_{para} + \lambda^3_{chamfer} L_{chamfer} + \lambda^3_{pen} L_{pen} + \lambda^3_{cmap} L_{cmap} + \lambda^3_{spen} L_{spen}$$
-            - $$L_{para}$$ **:** 위와 동일
-            - $$L_{chamfer}$$ **:** 위와 동일
-            - $$L_{pen}$$ 은 손이 객체를 관통한 깊이를 계산한 것 → 객체를 관통하지 못하도록
-            - $$L_{cmap}$$ **:** 객체 위의 예측된 접촉 맵과 목표 접촉 맵 간의 차이를 계산한 것 → 목표와 유사한 곳에 손이 닿도록
-            - $$L_{spen}$$ 은 손의 부분 간의 관통한 깊이를 계산한 것 → 다른 손도 관통하지 못하도록
+Progressive Grasp Components
+
+- 다음 두 component 로 구성
+- Intention and Diversity Grasp Component(IDGC)
+    - 의도에 맞춰 다양한 손 동작을 생성하는 Grasp distribution 을 효율적으로 배우는 것을 목표로 함
+    - conditional diffusion model 을 사용하여 노이즈가 추가된 $$G^{dex}_T$$ 로부터 dexterous pose $$G^{dex}_0$$를 예측함 - due to distribution modeling objective(?)
+    - Object Point Cloud 는 Pointer++ 로 encoding
+    - instruction 은 CLIP 으로 encoding
+    - sampling process 로 DDPM 을 사용함
+- Quality Grasp Component
+    - IDGC 로 생성된 grasp 는 객체를 관통하는 등 질적으로 좋지 못함
+    - 입력으로 Coarse Pose $$\hat{G}^{dex}$$, Coarse hand point cloud $$H(\hat{G}^{dex})$$, Object Point Cloud $$O$$ 를 받음
+    - 출력으로 자세 변화량 $$\Delta G^{dex}$$ 을 내놓음. 이를 통해 개선된 grasp 를 구할 수 있음 $$\tilde{G}^{dex} = \hat{G}^{dex} + \Delta G^{dex}$$
+
+Progressive Grasp Loss
+
+- loss function 도 두 가지로 구성됨
+- Intention and Diversity Grasp Loss
+    - regression loss 는 사용하고, penetration loss 는 배제함 - penetration loss 는 품질 향상과 관련, 여기서 포함시키면 다양한 포즈 생성에 어려움을 겪음
+    - loss function 을 보게 되면, 예측한 손 모양이 정답과 유사해지도록 학습이 이뤄짐
+    - $$\mathbf{L_{IDG}} = \lambda^2_{para} L_{para}(G^{dex}_0, \hat{G}^{dex}) + \lambda^2_{chamfer} L_{chamfer}(H(G^{dex}_0), H(\hat{G}^{dex}))$$
+        - $$L_{para}$$ 는 l2 loss(MSE) 로 손이 가지는 파라미터의 차이를 계산한 것 → 손의 파라미터가 얼마나 유사한가
+        - $$L_{chamfer}$$ 는 hand point cloud 의 예측과 정답 간의 차이를 계산한 것 → 손 모양이 얼마나 유사한가
+            - $$L_{chamfer} = \sum_{x \in H(G_{dex})} \min_{y \in H(\hat{G}{dex})} |x-y|{x \in H(\hat{G}{dex})} \min_{y \in H(G_{dex})} |x-y|_2^2$$
+        - 이때 point cloud 는 Hand mesh 를 샘플링해서 얻어짐
+
+Quality Grasp Loss
+
+- penetration loss 를 포함하여 생성된 손 모양을 질적으로 개선하도록 Loss 를 구성함
+- $$\mathbf{L_{QG}} = \lambda^3_{para} L_{para} + \lambda^3_{chamfer} L_{chamfer} + \lambda^3_{pen} L_{pen} + \lambda^3_{cmap} L_{cmap} + \lambda^3_{spen} L_{spen}$$
+    - $$L_{para}$$: 위와 동일
+    - $$L_{chamfer}$$: 위와 동일
+    - $$L_{pen}$$ 은 손이 객체를 관통한 깊이를 계산한 것 → 객체를 관통하지 못하도록
+    - $$L_{cmap}$$: 객체 위의 예측된 접촉 맵과 목표 접촉 맵 간의 차이를 계산한 것 → 목표와 유사한 곳에 손이 닿도록
+    - $$L_{spen}$$ 은 손의 부분 간의 관통한 깊이를 계산한 것 → 다른 손도 관통하지 못하도록
 
 ### Experiments
 
-- metric
-    - intention consistency
-        - FID(Frechet Inception Distance) 로 생성된 hand 와 정답을 비교함
-        - CD(Chamfer Distance): 예측된 손 Point cloud 와 정답 손 Point Cloud 간의 거리 측정
-        - Con(Contact Distance): 예측된 객체 접촉 맵과 정답 접촉 맵 간의 L2 거리 측정
-    - grasp quality
-        - Success Rate: Issac Simulator 환경에서 안정적으로 물체를 잡는 데에 성공했는지 여부
-        - Q1: 접촉 임계값 1cm, 관통 임계값 5mm 로 설정하고 Grasp 의 안정성 측정
-            - 다음 논문 참고 - Planning Optimal Grasps
-        - Maximal Penetration Depth: Point Cloud 에서의 최대 관통 깊이
-    - grasp diversity
-        - 동일한 입력으로 8개의 출력 생성, 각 샘플 간의 transition, rotation, joint angle 의 표준편차 계산
-        - 다양성이 높을 수록 좋음 - 인간의 명령이 구체적이지 않을 가능성이 높은 만큼 여러 가지 가능성이 높은 파지를 제안할 수 있어야 함
+metric
+- intention consistency
+    - FID(Frechet Inception Distance) 로 생성된 hand 와 정답을 비교함
+    - CD(Chamfer Distance): 예측된 손 Point cloud 와 정답 손 Point Cloud 간의 거리 측정
+    - Con(Contact Distance): 예측된 객체 접촉 맵과 정답 접촉 맵 간의 L2 거리 측정
+- grasp quality
+    - Success Rate: Issac Simulator 환경에서 안정적으로 물체를 잡는 데에 성공했는지 여부
+    - Q1: 접촉 임계값 1cm, 관통 임계값 5mm 로 설정하고 Grasp 의 안정성 측정
+        - 다음 논문 참고 - Planning Optimal Grasps
+    - Maximal Penetration Depth: Point Cloud 에서의 최대 관통 깊이
+- grasp diversity
+    - 동일한 입력으로 8개의 출력 생성, 각 샘플 간의 transition, rotation, joint angle 의 표준편차 계산
+    - 다양성이 높을 수록 좋음 - 인간의 명령이 구체적이지 않을 가능성이 높은 만큼 여러 가지 가능성이 높은 파지를 제안할 수 있어야 함
 
 # [Paper] GraspMolmo: Generalizable Task-Oriented Grasping via Large-Scale Synthetic Data Generation
 
