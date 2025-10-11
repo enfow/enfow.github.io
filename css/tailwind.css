@@ -58,3 +58,7 @@ input:-webkit-autofill:focus {
   display: inline-block;
   vertical-align: middle;
 }
+
+table td, table th {
+  font-size: 1.125rem;
+}

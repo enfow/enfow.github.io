@@ -60,7 +60,12 @@ module.exports = {
               letterSpacing: theme('letterSpacing.tight'),
             },
             h3: {
-              fontSize: '1.25rem',
+              fontSize: '1.45rem',
+              fontWeight: '600',
+              marginBottom: theme('spacing.1'),
+            },
+            h4: {
+              fontSize: '1.3rem',
               fontWeight: '600',
               marginBottom: theme('spacing.1'),
             },
@@ -68,22 +73,23 @@ module.exports = {
               color: theme('colors.indigo.500'),
             },
             p: {
-              fontSize: '1.2rem', // Base size (16px)
+              fontSize: '1.25rem', // Base size (16px)
               lineHeight: '1.75', // Adjust line height
               fontFamily: theme('fontFamily.sans').join(','),
               fontColor: theme('colors.black'),
             },
             li: {
+              fontWeight: '500',
               marginTop: '0.25rem', // Add spacing between list items
               marginBottom: '0.25rem',
               paddingLeft: '0.25rem',
-              fontSize: '1.2rem', // Adjust font size for list items
+              fontSize: '1.25rem', // Adjust font size for list items
               lineHeight: '1.75',
               fontColor: theme('colors.black'),
             },
             'p::first-letter': {
               marginLeft: theme('spacing.1'), // Add space to the right of the first letter
-              fontSize: '1.2rem', // Optional: increase the font size of the first letter
+              fontSize: '1.25rem', // Optional: increase the font size of the first letter
             },
           },
         },
