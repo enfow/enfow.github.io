@@ -1,4 +1,9 @@
 {
+  "tech/twil/dexerous-grasp": 1,
+  "tech/twil/affordance-understanding": 1,
+  "tech/twil/reward-shaping": 1,
+  "tech/twil/reward-code-generation": 1,
+  "tech/twil/agent": 2,
   "tech/twil/nextjs": 1,
   "tech/twil/affordance-grasping": 1,
   "tech/twil/3d-object-affordance-grounding": 1,
@@ -18,7 +23,6 @@
   "tech/twil/multi-agent": 1,
   "tech/twil/minecraft": 1,
   "tech/twil/robotics": 1,
-  "tech/twil/agent": 1,
   "tech/twil/vlm": 1,
   "tech/twil/motion-planning": 1,
   "tech/twil/obejct-navigation": 1,
